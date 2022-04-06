@@ -14,4 +14,4 @@ spring:
     listener:
       ack-mode: manual-immediate
     topic:
-      book-status-topic: ${kafka.topic:book-status-topic}
+      notifications-topic: ${kafka.topic:notifications-topic}

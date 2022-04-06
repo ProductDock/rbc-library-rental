@@ -11,7 +11,7 @@ public class Publisher {
     private final KafkaTemplate kafkaTemplate;
     private final RecordProducer recordProducer;
 
-    @Value("${spring.kafka.topic.book-status-topic}")
+    @Value("${spring.kafka.topic.notifications-topic}")
     private String KAFKA_TOPIC;
 
     public Publisher(KafkaTemplate kafkaTemplate, RecordProducer recordProducer) {
