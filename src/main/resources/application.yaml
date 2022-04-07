@@ -15,3 +15,12 @@ spring:
       ack-mode: manual-immediate
     topic:
       notifications-topic: ${kafka.topic:notifications-topic}
+
+  data:
+    mongodb:
+      authentication-database: rental-db
+      host: localhost
+      port: 27020
+      username: root1
+      password: root1
+      database: rental-db

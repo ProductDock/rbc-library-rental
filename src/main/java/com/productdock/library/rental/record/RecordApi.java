@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/record")
-public record RecordApi(Publisher publisher) {
+public record RecordApi(RecordService recordService) {
     @PostMapping
-    public void sendRecord(@RequestBody Notification notification) {
-        publisher.sendMessage(new RecordEntity(1L, notification));
+    public void sendRecord(@RequestBody RecordDTO recordDTO) {
+        recordService.create(recordDTO);
     }
 }

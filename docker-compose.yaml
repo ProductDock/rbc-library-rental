@@ -11,3 +11,15 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: localhost #This needs to be localhost when targeting locally
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  mongo-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root2
+      MONGO_INITDB_ROOT_PASSWORD: root2
+      MONGO_INITDB_DATABASE: rental-db
+    ports:
+      - 27020:27017
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js

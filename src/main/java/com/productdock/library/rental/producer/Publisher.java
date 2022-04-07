@@ -1,5 +1,6 @@
 package com.productdock.library.rental.producer;
 
+import com.productdock.library.rental.producer.messages.Notification;
 import com.productdock.library.rental.record.RecordEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -19,8 +20,8 @@ public class Publisher {
         this.recordProducer = recordProducer;
     }
 
-    public void sendMessage(RecordEntity recordEntity) {
-        var kafkaRecord = recordProducer.createKafkaRecord(KAFKA_TOPIC, recordEntity);
+    public void sendMessage(Notification notification) {
+        var kafkaRecord = recordProducer.createKafkaRecord(KAFKA_TOPIC, notification);
         try {
             var resp = kafkaTemplate.send(kafkaRecord).get();
             System.out.print(resp);
