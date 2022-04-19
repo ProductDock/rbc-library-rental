@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecordDTO {
-
     public String bookId;
     public String bookStatus;
-    public String userEmail;
 }
