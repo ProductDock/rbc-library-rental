@@ -1,0 +1,17 @@
+spring:
+  mongodb:
+    embedded:
+      version: 3.5.5
+
+  kafka:
+    bootstrap-servers: localhost:9093
+    producer:
+      client-id: kafka-message-producer
+      acks: all
+      value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: rbc-library
+    topic:
+      rental-record-topic: test-rental-record-topic
+      rental-record-warning-topic: test-rental-record-warning-topic
