@@ -8,19 +8,24 @@ spring:
       value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      enable-auto-commit: false #necessary setting
+      enable-auto-commit: true #necessary setting
       auto-offset-reset: latest
       group-id: ${consumer.group:group}
-    listener:
-      ack-mode: manual-immediate
+#    listener:
+#      ack-mode: manual-immediate
     topic:
-      notifications-topic: ${kafka.topic:notifications-topic}
+      rental-record-topic: ${kafka.topic:rental-record-topic}
+      rental-record-warning-topic: ${kafka.topic:rental-record-warning-topic}
 
   data:
     mongodb:
       authentication-database: rental-db
       host: localhost
-      port: 27020
+      port: 29017
       username: root1
       password: root1
       database: rental-db
+
+server:
+  error:
+    include-message: always
