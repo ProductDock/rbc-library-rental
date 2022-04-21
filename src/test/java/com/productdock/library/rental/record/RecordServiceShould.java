@@ -39,7 +39,7 @@ class RecordServiceShould {
 
     @Test
     void verifyRentRecordEntityIsSavedAndPublished() {
-        var recordDTO = new RecordDTO("1", "RENT");
+        var recordDTO = new RecordDto("1", "RENT");
         var recordEntity = Optional.of(mock(RecordEntity.class));
 
         given(recordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);
@@ -51,7 +51,7 @@ class RecordServiceShould {
     }
 
     void verifyReserveRecordEntityIsSavedAndPublished() {
-        var recordDTO = new RecordDTO("1", "RESERVE");
+        var recordDTO = new RecordDto("1", "RESERVE");
         var recordEntity = Optional.of(mock(RecordEntity.class));
 
         given(recordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);

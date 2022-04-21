@@ -14,17 +14,17 @@ public record RecordService(RecordMapper recordMapper, Publisher publisher, Reco
         recordRepository.save(recordEntity);
     }
 
-    public void create(RecordDTO recordDTO, String authToken) {
+    public void create(RecordDto recordDTO, String authToken) {
         RecordEntity recordEntity = getRecordEntity(recordDTO);
         addBookInteraction(recordDTO.bookStatus, recordEntity, getUserEmailFromToken(authToken));
         recordRepository.save(recordEntity);
         publisher.sendMessage(recordEntity);
     }
 
-    private RecordEntity getRecordEntity(RecordDTO recordDTO) {
+    private RecordEntity getRecordEntity(RecordDto recordDTO) {
         Optional<RecordEntity> recordEntity = recordRepository.findById(recordDTO.bookId);
         if (recordEntity.isEmpty()) {
-            return createIfRecordNotExist(recordDTO);
+            return recordMapper.toEntity(recordDTO);
         } else {
             return recordEntity.get();
         }
@@ -35,11 +35,6 @@ public record RecordService(RecordMapper recordMapper, Publisher publisher, Reco
         String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
         JSONObject jsonObject = (JSONObject) JSONValue.parse(payload);
         return (String) jsonObject.get("email");
-    }
-
-    private RecordEntity createIfRecordNotExist(RecordDTO recordDTO) {
-        var recordEntity = recordMapper.toEntity(recordDTO);
-        return recordEntity;
     }
 
     private void addBookInteraction(String bookStatus, RecordEntity recordEntity, String userEmail) {

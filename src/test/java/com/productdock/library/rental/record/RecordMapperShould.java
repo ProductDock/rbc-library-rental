@@ -17,7 +17,7 @@ class RecordMapperShould {
 
     @Test
     void mapRecordEntityToRecordDto() {
-        var recordDTO = new RecordDTO("1", "RENT");
+        var recordDTO = new RecordDto("1", "RENT");
         var recordEntity = recordMapper.toEntity(recordDTO);
         assertThat(recordEntity.getBookId()).isEqualTo(recordDTO.bookId);
     }

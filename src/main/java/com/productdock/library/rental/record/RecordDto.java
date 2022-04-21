@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecordDTO {
+public class RecordDto {
     public String bookId;
     public String bookStatus;
 }
