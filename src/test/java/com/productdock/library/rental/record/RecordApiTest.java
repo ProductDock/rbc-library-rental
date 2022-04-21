@@ -1,20 +1,16 @@
 package com.productdock.library.rental.record;
 
-import com.productdock.library.rental.consumer.KafkaTestConsumer;
-import org.jetbrains.annotations.NotNull;
+import com.productdock.library.rental.data.provider.KafkaTestBase;
+import com.productdock.library.rental.data.provider.KafkaTestConsumer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,14 +26,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-@Testcontainers
-@DirtiesContext
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9093", "port=9093" })
-class RecordApiTest {
+class RecordApiTest extends KafkaTestBase {
 
     public static final String FIRST_BOOK = "1";
     public static final String TEST_FILE = "testRecord.txt";
+    private String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAcHJvZHVjdGRvY2suY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.ElsZ_Vc_4O9YlL6QO85hjxSdiJ8S41HodjOIUydcGH4";
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,7 +51,7 @@ class RecordApiTest {
 
     @AfterEach
     final void after() {
-        File f = new File("TEST_FILE");
+        File f = new File(TEST_FILE);
         f.delete();
     }
 
@@ -73,7 +66,7 @@ class RecordApiTest {
 
         RecordEntity recordEntity = getRecordEntityFromConsumersFile(TEST_FILE);
         assertThat(recordEntity.getBookId().equals(FIRST_BOOK));
-        assertThat(recordEntity.getRents().get(0)).isNotNull();
+        assertThat(recordEntity.getRents()).isNotNull();
     }
 
     @Test
@@ -120,9 +113,24 @@ class RecordApiTest {
         assertThat(recordEntity.getReservations().get(0)).isNotNull();
     }
 
+    @Test
+    @WithMockUser
+    void postTwoReserveRecords_whenTheSecondFails() throws Exception {
+        mockApiRequest("RESERVE");
+        mockBadApiRequest("RESERVE");
+        Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
+        await()
+                .atMost(Duration.ofSeconds(20))
+                .until(checkForFile);
+
+        RecordEntity recordEntity = getRecordEntityFromConsumersFile(TEST_FILE);
+        assertThat(recordEntity.getBookId().equals(FIRST_BOOK));
+        assertThat(recordEntity.getReservations().get(0)).isNotNull();
+    }
 
     private void mockBadApiRequest(String request) throws Exception {
-        mockMvc.perform(post("/api/record")
+        mockMvc.perform(post("/api/rental")
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"bookId\": \""+FIRST_BOOK+"\",\n" +
@@ -133,7 +141,8 @@ class RecordApiTest {
     }
 
     private void mockApiRequest(String request) throws Exception {
-        mockMvc.perform(post("/api/record")
+        mockMvc.perform(post("/api/rental")
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"bookId\": \""+FIRST_BOOK+"\",\n" +

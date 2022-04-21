@@ -1,4 +1,10 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://placeholder
+          jwk-set-uri: http://placeholder
   mongodb:
     embedded:
       version: 3.5.5
@@ -11,6 +17,7 @@ spring:
       value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
+      auto-offset-reset: earliest
       group-id: rbc-library
     topic:
       rental-record-topic: test-rental-record-topic
