@@ -6,24 +6,28 @@ import com.productdock.library.rental.producer.Publisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 public record RecordService(RecordMapper recordMapper, Publisher publisher, RecordRepository recordRepository) {
-
     public void saveRecordEntity(RecordEntity recordEntity) {
         recordRepository.save(recordEntity);
     }
 
     public void create(RecordDTO recordDTO, String authToken) {
-        RecordEntity recordEntity;
-        if(recordRepository.findById(recordDTO.bookId).isEmpty()) {
-            recordEntity = createIfRecordNotExist(recordDTO);
-        } else {
-            recordEntity = recordRepository.findById(recordDTO.bookId).get();
-        }
+        RecordEntity recordEntity = getRecordEntity(recordDTO);
         addBookInteraction(recordDTO.bookStatus, recordEntity, getUserEmailFromToken(authToken));
         recordRepository.save(recordEntity);
         publisher.sendMessage(recordEntity);
+    }
+
+    private RecordEntity getRecordEntity(RecordDTO recordDTO) {
+        Optional<RecordEntity> recordEntity = recordRepository.findById(recordDTO.bookId);
+        if (recordEntity.isEmpty()) {
+            return createIfRecordNotExist(recordDTO);
+        } else {
+            return recordEntity.get();
+        }
     }
 
     private String getUserEmailFromToken(String authToken) {
@@ -37,10 +41,11 @@ public record RecordService(RecordMapper recordMapper, Publisher publisher, Reco
         var recordEntity = recordMapper.toEntity(recordDTO);
         return recordEntity;
     }
-    private void addBookInteraction(String bookStatus, RecordEntity recordEntity, String userEmail){
-        if(bookStatus.equals("RENT")) {
+
+    private void addBookInteraction(String bookStatus, RecordEntity recordEntity, String userEmail) {
+        if (bookStatus.equals("RENT")) {
             recordEntity.rentBook(userEmail);
-        } else if(bookStatus.equals("RESERVE")) {
+        } else if (bookStatus.equals("RESERVE")) {
             recordEntity.reserveBook(userEmail);
         } else {
             recordEntity.returnBook(userEmail);

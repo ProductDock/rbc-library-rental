@@ -129,7 +129,7 @@ class RecordApiTest extends KafkaTestBase {
     }
 
     private void mockBadApiRequest(String request) throws Exception {
-        mockMvc.perform(post("/api/rental")
+        mockMvc.perform(post("/api/rental/record")
                         .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
@@ -141,7 +141,7 @@ class RecordApiTest extends KafkaTestBase {
     }
 
     private void mockApiRequest(String request) throws Exception {
-        mockMvc.perform(post("/api/rental")
+        mockMvc.perform(post("/api/rental/record")
                         .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
