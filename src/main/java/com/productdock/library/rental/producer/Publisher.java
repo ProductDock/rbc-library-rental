@@ -20,9 +20,9 @@ public class Publisher {
     }
 
     public void sendMessage(RecordEntity recordEntity) {
-        var kafkaRecord = recordProducer.createKafkaRecord(KAFKA_TOPIC, recordEntity);
         try {
-            var resp = kafkaTemplate.send(kafkaRecord).get();
+            var kafkaRecord = recordProducer.createKafkaRecord(KAFKA_TOPIC, recordEntity);
+            kafkaTemplate.send(kafkaRecord).get();
         } catch (Exception e) {
             e.printStackTrace();
         }

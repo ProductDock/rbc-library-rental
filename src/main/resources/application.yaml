@@ -8,11 +8,9 @@ spring:
       value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      enable-auto-commit: true #necessary setting
+      enable-auto-commit: true
       auto-offset-reset: latest
       group-id: ${consumer.group:group}
-#    listener:
-#      ack-mode: manual-immediate
     topic:
       rental-record-topic: ${kafka.topic:rental-record-topic}
       rental-record-warning-topic: ${kafka.topic:rental-record-warning-topic}
@@ -25,6 +23,13 @@ spring:
       username: root1
       password: root1
       database: rental-db
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: accounts.google.com
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
 
 server:
   error:

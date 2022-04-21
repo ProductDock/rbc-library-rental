@@ -12,7 +12,6 @@ public record RecordConsumer(RecordService recordService, RecordEntityDeserializ
     @KafkaListener(topics = "${spring.kafka.topic.rental-record-warning-topic}")
     public synchronized void listen(ConsumerRecord<String, String> record) {
         var recordEntity = recordEntityDeserializer.deserializeRecordEntity(record);
-        System.out.println(recordEntity.toString());
         recordService.saveRecordEntity(recordEntity);
     }
 }

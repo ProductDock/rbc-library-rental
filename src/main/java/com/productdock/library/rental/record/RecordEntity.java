@@ -2,42 +2,48 @@ package com.productdock.library.rental.record;
 
 import com.productdock.library.rental.book.BookInteraction;
 import com.productdock.library.rental.exception.NotFoundException;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 
 @Data
 @Document("rental-record")
-@NoArgsConstructor
+@Builder
 public class RecordEntity implements Serializable {
-
-    private final static long serialVersionUID = 22222L;
 
     @Id
     private String bookId;
-    private List<BookInteraction> reservations = new ArrayList<BookInteraction>();
-    private List<BookInteraction> rents = new ArrayList<BookInteraction>();
+    private List<BookInteraction> reservations;
+    private List<BookInteraction> rents;
+
+    public RecordEntity(String bookId, List<BookInteraction> reservations, List<BookInteraction> rents) {
+        this.bookId = bookId;
+        this.reservations = new ArrayList<BookInteraction>();
+        this.rents = new ArrayList<BookInteraction>();
+    }
+
+    public RecordEntity() {
+        this.reservations = new ArrayList<BookInteraction>();
+        this.rents = new ArrayList<BookInteraction>();
+    }
 
     public void rentBook(String email) {
-        this.isBookRentedByUser(email);
-        this.cancelReservation(email);
-        this.addRent(new BookInteraction(email, new Date()));
+        isBookRentedByUser(email);
+        cancelReservation(email);
+        addRent(new BookInteraction(email, new Date()));
     }
 
     public void reserveBook(String email) {
-        this.isBookRentedByUser(email);
-        this.isBookReservedByUser(email);
-        this.addReservation(new BookInteraction(email, new Date()));
+        isBookRentedByUser(email);
+        isBookReservedByUser(email);
+        addReservation(new BookInteraction(email, new Date()));
     }
 
     public void returnBook(String email) {
@@ -54,12 +60,10 @@ public class RecordEntity implements Serializable {
 
     private void addReservation(BookInteraction bookInteraction) {
         reservations.add(bookInteraction);
-        System.out.println("Book reserved!");
     }
 
     private void addRent(BookInteraction bookInteraction) {
         rents.add(bookInteraction);
-        System.out.println("Book rented!");
     }
 
     private void isBookRentedByUser(String email) {
