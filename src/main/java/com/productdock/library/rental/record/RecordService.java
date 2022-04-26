@@ -2,39 +2,36 @@ package com.productdock.library.rental.record;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jose.shaded.json.JSONValue;
-import com.productdock.library.rental.domain.BookAction;
-import com.productdock.library.rental.domain.BookActionFactory;
+import com.productdock.library.rental.domain.BookRentalActionFactory;
+import com.productdock.library.rental.domain.BookRentalRecords;
 import com.productdock.library.rental.producer.Publisher;
 import org.springframework.stereotype.Service;
-
 import java.util.Base64;
-import java.util.Optional;
 
 @Service
-public record RecordService(RecordMapper recordMapper, Publisher publisher, RecordRepository recordRepository) {
+public record RecordService(RecordMapper recordMapper, Publisher publisher, RecordRepository recordRepository, BookRentalRecordsCreator bookRentalRecordsCreator) {
     public void saveRecordEntity(RecordEntity recordEntity) {
         recordRepository.save(recordEntity);
     }
 
-    public void create(RecordDto recordDTO, String authToken) {
-        RecordEntity recordEntity = getRecordEntity(recordDTO);
+    public void create(RecordDto rentalRecordDto, String authToken) {
+        var bookRentalRecords = makeBookRentalRecords(rentalRecordDto);
 
-        BookAction action = BookActionFactory.create(recordDTO.bookStatus, getUserEmailFromToken(authToken));
-        action.apply();
+        var userEmail = getUserEmailFromToken(authToken);
+        var rentalAction = BookRentalActionFactory.create(rentalRecordDto.bookStatus, userEmail);
+        bookRentalRecords.applyAction(rentalAction);
 
+        //construct entity again, logic required here
+        var freshRecordEntity = new RecordEntity();
+        recordRepository.save(freshRecordEntity);
 
-        //addBookInteraction(recordDTO.bookStatus, recordEntity, getUserEmailFromToken(authToken));
-        recordRepository.save(recordEntity);
-        publisher.sendMessage(recordEntity);
+        //from DTO
+        //publisher.sendMessage(newRentalEvent);
     }
 
-    private RecordEntity getRecordEntity(RecordDto recordDTO) {
-        Optional<RecordEntity> recordEntity = recordRepository.findById(recordDTO.bookId);
-        if (recordEntity.isEmpty()) {
-            return recordMapper.toEntity(recordDTO);
-        } else {
-            return recordEntity.get();
-        }
+    private BookRentalRecords makeBookRentalRecords(RecordDto rentalRecordDto) {
+        var recordEntity = recordRepository.findById(rentalRecordDto.bookId);
+        return bookRentalRecordsCreator.makeFrom(rentalRecordDto, recordEntity);
     }
 
     private String getUserEmailFromToken(String authToken) {
@@ -44,14 +41,4 @@ public record RecordService(RecordMapper recordMapper, Publisher publisher, Reco
         return (String) jsonObject.get("email");
     }
 
-    //moved to  factory
-    private void addBookInteraction(String bookStatus, RecordEntity recordEntity, String userEmail) {
-        if (bookStatus.equals("RENT")) {
-            recordEntity.rentBook(userEmail);
-        } else if (bookStatus.equals("RESERVE")) {
-            recordEntity.reserveBook(userEmail);
-        } else {
-            recordEntity.returnBook(userEmail);
-        }
-    }
 }
