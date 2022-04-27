@@ -1,9 +1,9 @@
 package com.productdock.library.rental.consumer;
 
 
-import com.productdock.library.rental.data.provider.KafkaTestProducer;
 import com.productdock.library.rental.data.provider.KafkaTestBase;
-import com.productdock.library.rental.record.RecordRepository;
+import com.productdock.library.rental.data.provider.KafkaTestProducer;
+import com.productdock.library.rental.record.RentalRecordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 
-import static com.productdock.library.rental.data.provider.RecordEntityMother.defaultRecordEntityBuilder;
+import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
@@ -23,23 +23,23 @@ public class KafkaConsumerTest extends KafkaTestBase {
     private KafkaTestProducer producer;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private RentalRecordRepository rentalRecordRepository;
 
     @Value("${spring.kafka.topic.rental-record-warning-topic}")
     private String topic;
 
     @BeforeEach
     final void before() {
-        recordRepository.deleteAll();
+        rentalRecordRepository.deleteAll();
     }
 
     @Test
     void shouldSaveBookIndex_whenMessageReceived() {
-        var recordEntity = defaultRecordEntityBuilder().build();
-        producer.send(topic, recordEntity);
+        var rentalRecordEntity = defaultRentalRecordEntityBuilder().build();
+        producer.send(topic, rentalRecordEntity);
         await()
                 .atMost(Duration.ofSeconds(20))
-                .until(() -> recordRepository.findById("1").isPresent());
-        assertThat(recordRepository.findById("1").get().getRents()).isNotNull();
+                .until(() -> rentalRecordRepository.findById("1").isPresent());
+        assertThat(rentalRecordRepository.findById("1").get().getRents()).isNotNull();
     }
 }

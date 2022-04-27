@@ -5,7 +5,7 @@ import org.mapstruct.NullValueMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-public interface RecordMapper {
+public interface RentalRecordMapper {
 
-    RecordEntity toEntity(RecordDto recordDTO);
+    RentalRecordEntity toEntity(RentalRecordDto rentalRecordDTO);
 }

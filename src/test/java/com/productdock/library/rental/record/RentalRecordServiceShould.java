@@ -10,22 +10,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.productdock.library.rental.record.RentalStatus.RENT;
+import static com.productdock.library.rental.record.RentalStatus.RESERVE;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class RecordServiceShould {
+class RentalRecordServiceShould {
 
     @InjectMocks
-    private RecordService recordService;
+    private RentalRecordService rentalRecordService;
 
     @Mock
-    private RecordRepository recordRepository;
+    private RentalRecordRepository rentalRecordRepository;
 
     @Mock
-    private RecordMapper recordMapper;
+    private RentalRecordMapper recordMapper;
 
     @Mock
     private Publisher publisher;
@@ -34,31 +35,31 @@ class RecordServiceShould {
 
     @BeforeEach
     final void before() {
-        recordRepository.deleteAll();
+        rentalRecordRepository.deleteAll();
     }
 
     @Test
     void verifyRentRecordEntityIsSavedAndPublished() {
-        var recordDTO = new RecordDto("1", "RENT");
-        var recordEntity = Optional.of(mock(RecordEntity.class));
+        var recordDTO = new RentalRecordDto("1", RENT);
+        var recordEntity = Optional.of(mock(RentalRecordEntity.class));
 
-        given(recordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);
+        given(rentalRecordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);
 
-        recordService.create(recordDTO, token);
+        rentalRecordService.create(recordDTO, token);
 
         verify(publisher).sendMessage(recordEntity.get());
-        verify(recordRepository).save(recordEntity.get());
+        verify(rentalRecordRepository).save(recordEntity.get());
     }
 
     void verifyReserveRecordEntityIsSavedAndPublished() {
-        var recordDTO = new RecordDto("1", "RESERVE");
-        var recordEntity = Optional.of(mock(RecordEntity.class));
+        var recordDTO = new RentalRecordDto("1", RESERVE);
+        var recordEntity = Optional.of(mock(RentalRecordEntity.class));
 
-        given(recordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);
+        given(rentalRecordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);
 
-        recordService.create(recordDTO, token);
+        rentalRecordService.create(recordDTO, token);
 
         verify(publisher).sendMessage(recordEntity.get());
-        verify(recordRepository).save(recordEntity.get());
+        verify(rentalRecordRepository).save(recordEntity.get());
     }
 }

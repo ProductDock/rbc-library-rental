@@ -16,20 +16,20 @@ import java.util.List;
 @Data
 @Document("rental-record")
 @Builder
-public class RecordEntity implements Serializable {
+public class RentalRecordEntity implements Serializable {
 
     @Id
     private String bookId;
     private List<BookInteraction> reservations;
     private List<BookInteraction> rents;
 
-    public RecordEntity(String bookId, List<BookInteraction> reservations, List<BookInteraction> rents) {
+    public RentalRecordEntity(String bookId, List<BookInteraction> reservations, List<BookInteraction> rents) {
         this.bookId = bookId;
         this.reservations = new ArrayList<BookInteraction>();
         this.rents = new ArrayList<BookInteraction>();
     }
 
-    public RecordEntity() {
+    public RentalRecordEntity() {
         this.reservations = new ArrayList<BookInteraction>();
         this.rents = new ArrayList<BookInteraction>();
     }
@@ -67,16 +67,16 @@ public class RecordEntity implements Serializable {
     }
 
     private void isBookRentedByUser(String email) {
-        for(BookInteraction b : rents) {
-            if(b.getUserEmail().equals(email)) {
+        for (BookInteraction b : rents) {
+            if (b.getUserEmail().equals(email)) {
                 throw new NotFoundException();
             }
         }
     }
 
     private void isBookReservedByUser(String email) {
-        for(BookInteraction b : reservations) {
-            if(b.getUserEmail().equals(email)) {
+        for (BookInteraction b : reservations) {
+            if (b.getUserEmail().equals(email)) {
                 throw new NotFoundException();
             }
         }

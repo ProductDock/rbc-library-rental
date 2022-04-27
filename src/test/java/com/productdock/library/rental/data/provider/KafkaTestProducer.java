@@ -2,7 +2,7 @@ package com.productdock.library.rental.data.provider;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.productdock.library.rental.record.RecordEntity;
+import com.productdock.library.rental.record.RentalRecordEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ public class KafkaTestProducer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void send(String topic, RecordEntity recordEntity) {
+    public void send(String topic, RentalRecordEntity rentalRecordEntity) {
         String message = "";
         try {
-            message = OBJECT_MAPPER.writeValueAsString(recordEntity);
+            message = OBJECT_MAPPER.writeValueAsString(rentalRecordEntity);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

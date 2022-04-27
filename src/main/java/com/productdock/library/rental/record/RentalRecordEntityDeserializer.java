@@ -6,20 +6,20 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RecordEntityDeserializer {
+public class RentalRecordEntityDeserializer {
 
     private final ObjectMapper objectMapper;
 
-    public RecordEntityDeserializer(ObjectMapper objectMapper) {
+    public RentalRecordEntityDeserializer(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-    public RecordEntity deserializeRecordEntity(ConsumerRecord<String, String> consumerRecord) {
+    public RentalRecordEntity deserializeRecordEntity(ConsumerRecord<String, String> consumerRecord) {
         try {
-            return objectMapper.readValue(consumerRecord.value(), RecordEntity.class);
+            return objectMapper.readValue(consumerRecord.value(), RentalRecordEntity.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return new RecordEntity();
+        return new RentalRecordEntity();
     }
 }

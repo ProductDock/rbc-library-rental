@@ -13,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class BookInteraction implements Serializable {
+
     private String userEmail;
     private Date date;
 }

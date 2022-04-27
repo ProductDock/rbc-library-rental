@@ -2,21 +2,15 @@ package com.productdock.library.rental.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
-import com.productdock.library.rental.producer.RecordProducer;
-import com.productdock.library.rental.record.RecordEntity;
-import org.json.JSONArray;
+import com.productdock.library.rental.record.RentalRecordEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import static com.productdock.library.rental.data.provider.RecordEntityMother.defaultRecordEntity;
-import static com.productdock.library.rental.data.provider.RecordEntityMother.defaultRecordEntityBuilder;
+import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -30,20 +24,20 @@ public class KafkaProducerShould {
 
     @Test
     void produceCorrectMessage() throws JsonProcessingException {
-        var recordEntity = defaultRecordEntityBuilder().rents(Collections.emptyList()).reservations(Collections.emptyList()).build();
-        var producerRecord = recordProducer.createKafkaRecord(topic, recordEntity);
+        var rentalRecordEntity = defaultRentalRecordEntityBuilder().rents(Collections.emptyList()).reservations(Collections.emptyList()).build();
+        var producerRecord = recordProducer.createKafkaRecord(topic, rentalRecordEntity);
         Gson gson = new Gson();
-        String desiredValue = "{\"bookId\":\"" + recordEntity.getBookId() + "\",\"reservations\":" + gson.toJson(recordEntity.getReservations()) +
-                ",\"rents\":" + gson.toJson(recordEntity.getRents()) + "}";
+        String desiredValue = "{\"bookId\":\"" + rentalRecordEntity.getBookId() + "\",\"reservations\":" + gson.toJson(rentalRecordEntity.getReservations()) +
+                ",\"rents\":" + gson.toJson(rentalRecordEntity.getRents()) + "}";
 
         assertThat(producerRecord.value()).isEqualTo(desiredValue);
     }
 
     @Test
     void throwExceptionWhenProducingBadEntity() {
-        RecordEntity recordEntity = mock(RecordEntity.class);
+        RentalRecordEntity rentalRecordEntity = mock(RentalRecordEntity.class);
         assertThrows(JsonProcessingException.class, () -> {
-                var producerRecord = recordProducer.createKafkaRecord(topic, recordEntity);
+            var producerRecord = recordProducer.createKafkaRecord(topic, rentalRecordEntity);
         });
     }
 }

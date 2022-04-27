@@ -1,6 +1,6 @@
 package com.productdock.library.rental.producer;
 
-import com.productdock.library.rental.record.RecordEntity;
+import com.productdock.library.rental.record.RentalRecordEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -19,9 +19,9 @@ public class Publisher {
         this.recordProducer = recordProducer;
     }
 
-    public void sendMessage(RecordEntity recordEntity) {
+    public void sendMessage(RentalRecordEntity rentalRecordEntity) {
         try {
-            var kafkaRecord = recordProducer.createKafkaRecord(KAFKA_TOPIC, recordEntity);
+            var kafkaRecord = recordProducer.createKafkaRecord(KAFKA_TOPIC, rentalRecordEntity);
             kafkaTemplate.send(kafkaRecord).get();
         } catch (Exception e) {
             e.printStackTrace();

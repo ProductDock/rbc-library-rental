@@ -2,11 +2,14 @@ package com.productdock.library.rental.record;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecordDto {
+public class RentalRecordDto {
+
+    @NonNull
     public String bookId;
-    public String bookStatus;
+    public RentalStatus bookStatus;
 }

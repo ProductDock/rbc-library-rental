@@ -6,18 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static com.productdock.library.rental.record.RentalStatus.RENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RecordMapperImpl.class})
-class RecordMapperShould {
+@ContextConfiguration(classes = {RentalRecordMapperImpl.class})
+class RentalRecordMapperShould {
 
     @Autowired
-    private RecordMapper recordMapper;
+    private RentalRecordMapper recordMapper;
 
     @Test
     void mapRecordEntityToRecordDto() {
-        var recordDTO = new RecordDto("1", "RENT");
+        var recordDTO = new RentalRecordDto("1", RENT);
         var recordEntity = recordMapper.toEntity(recordDTO);
         assertThat(recordEntity.getBookId()).isEqualTo(recordDTO.bookId);
     }
