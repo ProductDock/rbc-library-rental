@@ -2,8 +2,6 @@ package com.productdock.library.rental.record;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jose.shaded.json.JSONValue;
-import com.productdock.library.rental.domain.BookAction;
-import com.productdock.library.rental.domain.BookActionFactory;
 import com.productdock.library.rental.producer.Publisher;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +16,7 @@ public record RecordService(RecordMapper recordMapper, Publisher publisher, Reco
 
     public void create(RecordDto recordDTO, String authToken) {
         RecordEntity recordEntity = getRecordEntity(recordDTO);
-
-        BookAction action = BookActionFactory.create(recordDTO.bookStatus, getUserEmailFromToken(authToken));
-        action.apply();
-
-
-        //addBookInteraction(recordDTO.bookStatus, recordEntity, getUserEmailFromToken(authToken));
+        addBookInteraction(recordDTO.bookStatus, recordEntity, getUserEmailFromToken(authToken));
         recordRepository.save(recordEntity);
         publisher.sendMessage(recordEntity);
     }
@@ -44,7 +37,6 @@ public record RecordService(RecordMapper recordMapper, Publisher publisher, Reco
         return (String) jsonObject.get("email");
     }
 
-    //moved to  factory
     private void addBookInteraction(String bookStatus, RecordEntity recordEntity, String userEmail) {
         if (bookStatus.equals("RENT")) {
             recordEntity.rentBook(userEmail);
