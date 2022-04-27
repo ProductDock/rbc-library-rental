@@ -2,6 +2,8 @@ package com.productdock.library.rental.record;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jose.shaded.json.JSONValue;
+import com.productdock.library.rental.domain.ActivityFactory;
+import com.productdock.library.rental.domain.BookRentalRecord;
 import com.productdock.library.rental.producer.Publisher;
 import org.springframework.stereotype.Service;
 
@@ -9,12 +11,24 @@ import java.util.Base64;
 import java.util.Optional;
 
 @Service
-public record RentalRecordService(RentalRecordMapper recordMapper, Publisher publisher, RentalRecordRepository rentalRecordRepository) {
+public record RentalRecordService(RentalRecordMapper recordMapper, Publisher publisher,
+                                  RentalRecordRepository rentalRecordRepository,
+                                  BookRentalRecordMapper bookRentalRecordMapper) {
+
     public void saveRecordEntity(RentalRecordEntity rentalRecordEntity) {
         rentalRecordRepository.save(rentalRecordEntity);
     }
 
     public void create(RentalRecordDto rentalRecordDTO, String authToken) {
+        BookRentalRecord bookRentalRecord = new BookRentalRecord(rentalRecordDTO.bookId);
+        var activity = ActivityFactory.create(rentalRecordDTO.bookStatus, getUserEmailFromToken(authToken));
+        bookRentalRecord.trackActivity(activity);
+        RentalRecordEntity entity = bookRentalRecordMapper.map(bookRentalRecord);
+        rentalRecordRepository.save(entity);
+        //publisher.sendMessage(rentalRecordEntity);
+    }
+
+    public void create1(RentalRecordDto rentalRecordDTO, String authToken) {
         RentalRecordEntity rentalRecordEntity = getRecordEntity(rentalRecordDTO);
         addBookInteraction(rentalRecordDTO.bookStatus, rentalRecordEntity, getUserEmailFromToken(authToken));
         rentalRecordRepository.save(rentalRecordEntity);
