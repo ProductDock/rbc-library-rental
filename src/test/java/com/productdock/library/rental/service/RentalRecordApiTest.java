@@ -1,4 +1,4 @@
-package com.productdock.library.rental.record;
+package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.data.provider.KafkaTestBase;
 import com.productdock.library.rental.data.provider.KafkaTestConsumer;
@@ -19,7 +19,7 @@ import java.io.ObjectInputStream;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 
-import static com.productdock.library.rental.record.RentalStatus.*;
+import static com.productdock.library.rental.service.RentalStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

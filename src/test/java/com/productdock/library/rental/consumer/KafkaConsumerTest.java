@@ -3,7 +3,7 @@ package com.productdock.library.rental.consumer;
 
 import com.productdock.library.rental.data.provider.KafkaTestBase;
 import com.productdock.library.rental.data.provider.KafkaTestProducer;
-import com.productdock.library.rental.record.RentalRecordRepository;
+import com.productdock.library.rental.service.RentalRecordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

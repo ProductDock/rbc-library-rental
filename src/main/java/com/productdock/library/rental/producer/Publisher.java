@@ -1,6 +1,6 @@
 package com.productdock.library.rental.producer;
 
-import com.productdock.library.rental.record.RentalRecordEntity;
+import com.productdock.library.rental.service.RentalRecordEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;

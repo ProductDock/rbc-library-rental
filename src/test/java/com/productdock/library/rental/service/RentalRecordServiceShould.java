@@ -1,4 +1,4 @@
-package com.productdock.library.rental.record;
+package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.producer.Publisher;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.productdock.library.rental.record.RentalStatus.RENT;
-import static com.productdock.library.rental.record.RentalStatus.RESERVE;
+import static com.productdock.library.rental.service.RentalStatus.RENT;
+import static com.productdock.library.rental.service.RentalStatus.RESERVE;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

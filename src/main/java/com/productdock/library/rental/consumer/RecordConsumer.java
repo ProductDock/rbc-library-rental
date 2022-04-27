@@ -1,7 +1,7 @@
 package com.productdock.library.rental.consumer;
 
-import com.productdock.library.rental.record.RentalRecordEntityDeserializer;
-import com.productdock.library.rental.record.RentalRecordService;
+import com.productdock.library.rental.kafka.RentalRecordEntityDeserializer;
+import com.productdock.library.rental.service.RentalRecordService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,7 @@ package com.productdock.library.rental.data.provider;
 
 
 import com.productdock.library.rental.book.BookInteraction;
-import com.productdock.library.rental.record.RentalRecordEntity;
+import com.productdock.library.rental.service.RentalRecordEntity;
 
 import java.util.Arrays;
 import java.util.Date;

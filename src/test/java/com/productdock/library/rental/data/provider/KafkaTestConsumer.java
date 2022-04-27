@@ -1,7 +1,7 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.record.RentalRecordEntity;
-import com.productdock.library.rental.record.RentalRecordEntityDeserializer;
+import com.productdock.library.rental.service.RentalRecordEntity;
+import com.productdock.library.rental.kafka.RentalRecordEntityDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

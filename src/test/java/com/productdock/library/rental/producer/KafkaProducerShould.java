@@ -2,7 +2,7 @@ package com.productdock.library.rental.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
-import com.productdock.library.rental.record.RentalRecordEntity;
+import com.productdock.library.rental.service.RentalRecordEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

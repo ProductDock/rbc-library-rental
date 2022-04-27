@@ -1,4 +1,4 @@
-package com.productdock.library.rental.record;
+package com.productdock.library.rental.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,12 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.record.RentalStatus;
+import com.productdock.library.rental.book.BookInteraction;
+import com.productdock.library.rental.service.RentalStatus;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BookRentalRecord {
     private final String bookId;
@@ -43,11 +46,34 @@ public class BookRentalRecord {
         return bookCopies.stream().filter(book -> book.getPatron().equals(initiator)).findFirst();
     }
 
-    static class BookCopy {
-        private String patron;
-        private RentalStatus status;
+    public String getBookId() {
+        return bookId;
+    }
 
-        public BookCopy(String initiator, RentalStatus rent) {
+    public List<BookCopy> getReservations() {
+        return bookCopies.stream().filter(bookCopy -> bookCopy.isReservation()).collect(Collectors.toList());
+    }
+
+    public List<BookCopy> getBorrows() {
+        return bookCopies.stream().filter(bookCopy -> bookCopy.isBorrow()).collect(Collectors.toList());
+    }
+
+    public static class BookCopy {
+
+        private final Date date;
+        private final String patron;
+        private final RentalStatus status;
+
+        public BookCopy(String patron, RentalStatus status) {
+            this.patron = patron;
+            this.status = status;
+            this.date = new Date();
+        }
+
+        public BookCopy(Date date, String patron, RentalStatus status) {
+            this.date = date;
+            this.patron = patron;
+            this.status = status;
         }
 
         public String getPatron() {
