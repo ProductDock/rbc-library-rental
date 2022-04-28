@@ -2,42 +2,31 @@ package com.productdock.library.rental.service;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jose.shaded.json.JSONValue;
-import com.productdock.library.rental.book.BookInteraction;
-import com.productdock.library.rental.domain.ActivityFactory;
 import com.productdock.library.rental.domain.BookRentalRecord;
-import com.productdock.library.rental.producer.Publisher;
+import com.productdock.library.rental.kafka.RentalsPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.productdock.library.rental.domain.UserActivityFactory.createUserActivity;
 
 @Service
-public record RentalRecordService(RentalRecordMapper recordMapper, Publisher publisher,
+public record RentalRecordService(RentalRecordMapper recordMapper, RentalsPublisher publisher,
                                   RentalRecordRepository rentalRecordRepository,
                                   BookRentalRecordMapper bookRentalRecordMapper,
-                                  BookInteractionMapper bookInteractionMapper) {
+                                  BookCopyMapper bookInteractionMapper, RentalRecordsMessageMapper rentalRecordsMessageMapper) {
 
-    public void saveRecordEntity(RentalRecordEntity rentalRecordEntity) {
-        rentalRecordRepository.save(rentalRecordEntity);
-    }
+    public void create(RentalRequest rentalRequest, String authToken) throws Exception {
+        BookRentalRecord bookRentalRecord = createBookRentalRecord(rentalRequest.bookId);
 
-    public void create(RentalRecordDto rentalRecordDTO, String authToken) {
-        BookRentalRecord bookRentalRecord = createBookRentalRecord(rentalRecordDTO.bookId);
-        var activity = ActivityFactory.create(rentalRecordDTO.bookStatus, getUserEmailFromToken(authToken));
+        var activity = createUserActivity(rentalRequest.requestedStatus, getUserEmailFromToken(authToken));
         bookRentalRecord.trackActivity(activity);
-        RentalRecordEntity entity = toEntity(bookRentalRecord);
-        rentalRecordRepository.save(entity);
-        //publisher.sendMessage(rentalRecordEntity);
-    }
 
-    private RentalRecordEntity toEntity(BookRentalRecord bookRentalRecord) {
-        List<BookInteraction> reservations = bookRentalRecord.getReservations().stream().map(bookInteractionMapper::toEntity).collect(Collectors.toList());
-        List<BookInteraction> rents = bookRentalRecord.getBorrows().stream().map(bookInteractionMapper::toEntity).collect(Collectors.toList());
-        RentalRecordEntity rentalRecordEntity = new RentalRecordEntity(bookRentalRecord.getBookId(), reservations, rents);
-        return rentalRecordEntity;
+        saveRentalRecord(bookRentalRecord);
+
+        var rentalRecordsMessage = rentalRecordsMessageMapper.toMessage(bookRentalRecord);
+        publisher.sendMessage(rentalRecordsMessage);
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {
@@ -45,18 +34,13 @@ public record RentalRecordService(RentalRecordMapper recordMapper, Publisher pub
         if (recordEntity.isEmpty()) {
             return new BookRentalRecord(bookId);
         } else {
-            List<BookRentalRecord.BookCopy> bookCopies = from(recordEntity.get());
-            return new BookRentalRecord(bookId, bookCopies);
+            return bookRentalRecordMapper.toDomain(recordEntity.get());
         }
     }
 
-    private List<BookRentalRecord.BookCopy> from(RentalRecordEntity recordEntity) {
-        return Stream.concat(
-                recordEntity.getReservations().stream()
-                        .map(r -> new BookRentalRecord.BookCopy(r.getUserEmail(), RentalStatus.RESERVE)),
-                recordEntity.getRents().stream()
-                        .map(r -> new BookRentalRecord.BookCopy(r.getUserEmail(), RentalStatus.RENT)))
-                .collect(Collectors.toList());
+    private void saveRentalRecord(BookRentalRecord bookRentalRecord) {
+        RentalRecordEntity entity = bookRentalRecordMapper.toEntity(bookRentalRecord);
+        rentalRecordRepository.save(entity);
     }
 
     private String getUserEmailFromToken(String authToken) {

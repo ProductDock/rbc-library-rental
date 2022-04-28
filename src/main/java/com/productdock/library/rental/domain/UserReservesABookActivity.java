@@ -11,11 +11,11 @@ public class UserReservesABookActivity extends UserBookActivity {
     }
 
     @Override
-    public Optional<BookRentalRecord.BookCopy> executeWithRespectTo(Optional<BookRentalRecord.BookCopy> previousRecord) {
+    public Optional<BookRentalRecord.BookCopy> changeStatusFrom(Optional<BookRentalRecord.BookCopy> previousRecord) {
         if (previousRecord.isPresent()) {
             throw new RuntimeException("User has already reserved or rented this book");
         }
-        BookRentalRecord.BookCopy bookCopy = new BookRentalRecord.BookCopy(getInitiator(), RentalStatus.RESERVE);
+        BookRentalRecord.BookCopy bookCopy = new BookRentalRecord.BookCopy(getInitiator(), RentalStatus.RESERVED);
         return Optional.of(bookCopy);
     }
 }

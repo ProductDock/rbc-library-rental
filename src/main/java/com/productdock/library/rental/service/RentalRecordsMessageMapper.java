@@ -7,15 +7,12 @@ import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = { BookCopyMapper.class })
-public interface BookRentalRecordMapper {
+public interface RentalRecordsMessageMapper {
 
     @Mappings({
-            @Mapping(target="interactions", source="source.bookCopies"),
+            @Mapping(target="rentalRecords", source="source.bookCopies"),
     })
-    RentalRecordEntity toEntity(BookRentalRecord source);
+    RentalRecordsMessage toMessage(BookRentalRecord source);
 
-    @Mappings({
-            @Mapping(target="bookCopies", source="source.interactions"),
-    })
-    BookRentalRecord toDomain(RentalRecordEntity source);
+    RentalRecordsMessage.RentalRecordRequest map(BookRentalRecord.BookCopy value);
 }

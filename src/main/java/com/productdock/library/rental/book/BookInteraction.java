@@ -1,5 +1,6 @@
 package com.productdock.library.rental.book;
 
+import com.productdock.library.rental.service.RentalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class BookInteraction implements Serializable {
 
     private String userEmail;
     private Date date;
+    private RentalStatus status;
 }

@@ -7,9 +7,9 @@ import org.springframework.lang.NonNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class RentalRecordDto {
+public class RentalRequest {
 
     @NonNull
     public String bookId;
-    public RentalStatus bookStatus;
+    public RentalStatus requestedStatus;
 }

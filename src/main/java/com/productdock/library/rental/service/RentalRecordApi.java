@@ -1,5 +1,6 @@
 package com.productdock.library.rental.service;
 
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -7,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 public record RentalRecordApi(RentalRecordService rentalRecordService) {
 
     @PostMapping
-    public void createRecord(@RequestBody RentalRecordDto rentalRecordDTO, @RequestHeader("Authorization") String authToken) {
-        rentalRecordService.create(rentalRecordDTO, authToken);
+    @SneakyThrows
+    public void createRecord(@RequestBody RentalRequest rentalRequest, @RequestHeader("Authorization") String authToken) {
+        rentalRecordService.create(rentalRequest, authToken);
     }
 
 //    @PostMapping

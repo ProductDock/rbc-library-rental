@@ -14,5 +14,5 @@ public abstract class UserBookActivity {
         return initiator;
     }
 
-    abstract Optional<BookRentalRecord.BookCopy> executeWithRespectTo(Optional<BookRentalRecord.BookCopy> previousRecord);
+    abstract Optional<BookRentalRecord.BookCopy> changeStatusFrom(Optional<BookRentalRecord.BookCopy> previousRecord);
 }

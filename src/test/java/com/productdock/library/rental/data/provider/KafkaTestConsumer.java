@@ -1,7 +1,7 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.service.RentalRecordEntity;
-import com.productdock.library.rental.kafka.RentalRecordEntityDeserializer;
+import com.productdock.library.rental.kafka.RentalRecordsMessageDeserializer;
+import com.productdock.library.rental.service.RentalRecordsMessage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,20 +18,21 @@ public class KafkaTestConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaTestConsumer.class);
 
     @Autowired
-    private RentalRecordEntityDeserializer rentalRecordEntityDeserializer;
+    private RentalRecordsMessageDeserializer rentalRecordsMessageDeserializer;
+
 
     @KafkaListener(topics = "${spring.kafka.topic.rental-record-topic}")
     public void receive(ConsumerRecord<String, String> consumerRecord) {
         LOGGER.info("received payload='{}'", consumerRecord.toString());
-        var recordEntity = rentalRecordEntityDeserializer.deserializeRecordEntity(consumerRecord);
-        writeRecordToFile(recordEntity);
+        var rentalRecordsMessage = rentalRecordsMessageDeserializer.deserializeRentalRecordsMessage(consumerRecord);
+        writeRecordToFile(rentalRecordsMessage);
     }
 
-    private void writeRecordToFile(RentalRecordEntity rentalRecordEntity) {
+    private void writeRecordToFile(RentalRecordsMessage rentalRecordsMessage) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream("testRecord.txt");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(rentalRecordEntity);
+            objectOutputStream.writeObject(rentalRecordsMessage);
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception e) {

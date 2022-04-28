@@ -1,29 +1,30 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.book.BookInteraction;
 import com.productdock.library.rental.service.RentalStatus;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+@Data
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class BookRentalRecord {
-    private final String bookId;
+
+    private String bookId;
     private List<BookCopy> bookCopies;
 
     public BookRentalRecord(String bookId) {
         this.bookId = bookId;
-    }
-
-    public BookRentalRecord(String bookId, List<BookCopy> bookCopies) {
-        this.bookId = bookId;
-        this.bookCopies = bookCopies;
+        bookCopies = new ArrayList<>();
     }
 
     public void trackActivity(UserBookActivity activity) {
-        Optional<BookCopy> previousRecord = this.findByPatron(activity.getInitiator());
-        Optional<BookCopy> newRecord =  activity.executeWithRespectTo(previousRecord);
+        Optional<BookCopy> previousRecord = findByPatron(activity.getInitiator());
+        Optional<BookCopy> newRecord =  activity.changeStatusFrom(previousRecord);
         remove(previousRecord);
         add(newRecord);
     }
@@ -46,23 +47,16 @@ public class BookRentalRecord {
         return bookCopies.stream().filter(book -> book.getPatron().equals(initiator)).findFirst();
     }
 
-    public String getBookId() {
-        return bookId;
-    }
-
-    public List<BookCopy> getReservations() {
-        return bookCopies.stream().filter(bookCopy -> bookCopy.isReservation()).collect(Collectors.toList());
-    }
-
-    public List<BookCopy> getBorrows() {
-        return bookCopies.stream().filter(bookCopy -> bookCopy.isBorrow()).collect(Collectors.toList());
-    }
-
+    @Data
+    @AllArgsConstructor
     public static class BookCopy {
 
-        private final Date date;
-        private final String patron;
-        private final RentalStatus status;
+        private Date date;
+        private String patron;
+        private RentalStatus status;
+
+        public BookCopy() {
+        }
 
         public BookCopy(String patron, RentalStatus status) {
             this.patron = patron;
@@ -70,22 +64,12 @@ public class BookRentalRecord {
             this.date = new Date();
         }
 
-        public BookCopy(Date date, String patron, RentalStatus status) {
-            this.date = date;
-            this.patron = patron;
-            this.status = status;
-        }
-
-        public String getPatron() {
-            return patron;
-        }
-
         public boolean isReservation() {
-            return status.equals(RentalStatus.RESERVE);
+            return status.equals(RentalStatus.RESERVED);
         }
 
         public boolean isBorrow() {
-            return status.equals(RentalStatus.RENT);
+            return status.equals(RentalStatus.RENTED);
         }
     }
 }

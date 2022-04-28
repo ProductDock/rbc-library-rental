@@ -2,17 +2,17 @@ package com.productdock.library.rental.domain;
 
 import com.productdock.library.rental.service.RentalStatus;
 
-public class ActivityFactory {
+public class UserActivityFactory {
 
-    public static UserBookActivity create(RentalStatus bookStatus, String userEmail) {
+    public static UserBookActivity createUserActivity(RentalStatus bookStatus, String userEmail) {
         switch (bookStatus) {
-            case RENT -> {
+            case RENTED -> {
                 return new UserBorrowsABookActivity(userEmail);
             }
-            case RESERVE -> {
+            case RESERVED -> {
                 return new UserReservesABookActivity(userEmail);
             }
-            case RETURN -> {
+            case RETURNED -> {
                 return new UserReturnsABookActivity(userEmail);
             }
             default -> {

@@ -9,7 +9,7 @@ public class UserReturnsABookActivity extends UserBookActivity {
     }
 
     @Override
-    public Optional<BookRentalRecord.BookCopy> executeWithRespectTo(Optional<BookRentalRecord.BookCopy> previousRecord) {
+    public Optional<BookRentalRecord.BookCopy> changeStatusFrom(Optional<BookRentalRecord.BookCopy> previousRecord) {
         if (previousRecord.isEmpty() || !previousRecord.get().isBorrow()) {
             throw new RuntimeException("Book is not rented by this user!");
         }
