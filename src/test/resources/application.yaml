@@ -20,5 +20,5 @@ spring:
       auto-offset-reset: earliest
       group-id: rbc-library
     topic:
-      rental-record-topic: test-rental-record-topic
+      book-status: test-book-status
       rental-record-warning-topic: test-rental-record-warning-topic

@@ -1,7 +1,11 @@
 package com.productdock.library.rental.domain;
 
+import com.productdock.library.rental.service.FailedRequest;
 import com.productdock.library.rental.service.RentalStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,9 +28,17 @@ public class BookRentalRecord {
 
     public void trackActivity(UserBookActivity activity) {
         Optional<BookCopy> previousRecord = findByPatron(activity.getInitiator());
-        Optional<BookCopy> newRecord =  activity.changeStatusFrom(previousRecord);
+        Optional<BookCopy> newRecord = activity.changeStatusFrom(previousRecord);
         remove(previousRecord);
         add(newRecord);
+    }
+
+    public void undoBadRequest(FailedRequest failedRequest) {
+        var badRequestBookCopy = bookCopies.stream()
+                .filter(book -> book.getPatron().equals(failedRequest.getPatron()) && bookId.equals(failedRequest.getBookId()))
+                .findFirst()
+                .get();
+        bookCopies.remove(badRequestBookCopy);
     }
 
     private void add(Optional<BookCopy> newRecord) {

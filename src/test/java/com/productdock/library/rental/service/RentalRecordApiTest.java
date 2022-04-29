@@ -5,12 +5,20 @@ import com.productdock.library.rental.data.provider.KafkaTestConsumer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,15 +34,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
 class RentalRecordApiTest extends KafkaTestBase {
 
     public static final String FIRST_BOOK = "1";
     public static final String TEST_FILE = "testRecord.txt";
-    private String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAcHJvZHVjdGRvY2suY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.ElsZ_Vc_4O9YlL6QO85hjxSdiJ8S41HodjOIUydcGH4";
+    private String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAcHJvZHVjdGRvY2suY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.ElsZ_Vc_4O9YlL6QO85hjxSdiJ8S41HodjOIUydcGH4";
+
+//    @Autowired
+//    private WebTestClient webTestClient;
 
     @Autowired
     private MockMvc mockMvc;
+
+    private MockRestServiceServer mockServer;
 
     @Autowired
     private RentalRecordRepository rentalRecordRepository;
@@ -55,6 +70,16 @@ class RentalRecordApiTest extends KafkaTestBase {
         File f = new File(TEST_FILE);
         f.delete();
     }
+
+//    @BeforeEach
+//    final void beforeAll() throws ParseException {
+////        JWT jwtToken = JWTParser.parse(token);
+//        Jwt jwtToken = Jwt.tokenValue(token).build();
+//
+//        System.out.println(jwtToken.getTokenValue());
+//        Authentication authentication = new JwtAuthenticationToken(jwtToken);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//    }
 
     @Test
     @WithMockUser
@@ -144,18 +169,32 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     private void mockBadApiRequest(RentalStatus request) throws Exception {
-        mockMvc.perform(post("/api/rental/record")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
-                                "    \"requestedStatus\": \"" + request + "\"\n" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+//        RentalRequest rentalRequest = new RentalRequest("1", RentalStatus.RENTED);
+//        restTemplate.postForEntity("/api/rental/record", rentalRequest);
+
+
+//        mockServer.perform(post("/api/rental/record")
+//                        .header("Authorization", "Bearer " + token)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\n" +
+//                                "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
+//                                "    \"requestedStatus\": \"" + request + "\"\n" +
+//                                "}"))
+//                .andDo(print())
+//                .andExpect(status().isBadRequest());
     }
 
     private void mockApiRequest(RentalStatus request) throws Exception {
+//        webTestClient.post()
+//                .uri("/api/rental/record")
+//                .header("Authorization", "Bearer " + token)
+//                .bodyValue("{\n" +
+//                        "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
+//                        "    \"requestedStatus\": \"" + request + "\"\n" +
+//                        "}")
+//                .exchange()
+//                .expectStatus().isOk();
+
         mockMvc.perform(post("/api/rental/record")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)

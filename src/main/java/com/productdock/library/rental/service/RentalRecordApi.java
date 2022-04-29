@@ -1,22 +1,31 @@
 package com.productdock.library.rental.service;
 
 import lombok.SneakyThrows;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("api/rental/record")
 public record RentalRecordApi(RentalRecordService rentalRecordService) {
 
+//    @PostMapping
+//    @SneakyThrows
+//    public void createRecord(@RequestBody RentalRequest rentalRequest, @RequestHeader("Authorization") String authToken) {
+//        rentalRecordService.create(rentalRequest, authToken);
+//    }
+
     @PostMapping
     @SneakyThrows
-    public void createRecord(@RequestBody RentalRequest rentalRequest, @RequestHeader("Authorization") String authToken) {
-        rentalRecordService.create(rentalRequest, authToken);
+    public void createRecord(@RequestBody RentalRequest rentalRequest, Authentication authentication) {
+        rentalRecordService.create(rentalRequest, ((Jwt) authentication.getCredentials()).getClaim("email"));
     }
 
 //    @PostMapping
-//    public void createRecord(@RequestBody RentalRecordDto rentalRecordDTO, Principal principal) {
-//        UserDetails currentUser = (UserDetails) principal;
-//        System.out.println("Retrieved email is : " + currentUser);
-//        //rentalRecordService.create(rentalRecordDTO, authToken);
+//    @SneakyThrows
+//    public void createRecord(@RequestBody RentalRequest rentalRequest, Principal principal) {
+//        rentalRecordService.create(rentalRequest, ((Jwt) principal).getClaim("email"));
 //    }
 }

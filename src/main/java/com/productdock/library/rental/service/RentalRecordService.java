@@ -17,16 +17,21 @@ public record RentalRecordService(RentalRecordMapper recordMapper, RentalsPublis
                                   BookRentalRecordMapper bookRentalRecordMapper,
                                   BookCopyMapper bookInteractionMapper, RentalRecordsMessageMapper rentalRecordsMessageMapper) {
 
-    public void create(RentalRequest rentalRequest, String authToken) throws Exception {
-        BookRentalRecord bookRentalRecord = createBookRentalRecord(rentalRequest.bookId);
+    public void create(RentalRequest rentalRequest, String userEmail) throws Exception {
+        var bookRentalRecord = createBookRentalRecord(rentalRequest.bookId);
 
-        var activity = createUserActivity(rentalRequest.requestedStatus, getUserEmailFromToken(authToken));
+        var activity = createUserActivity(rentalRequest.requestedStatus, userEmail);
         bookRentalRecord.trackActivity(activity);
 
         saveRentalRecord(bookRentalRecord);
 
         var rentalRecordsMessage = rentalRecordsMessageMapper.toMessage(bookRentalRecord);
         publisher.sendMessage(rentalRecordsMessage);
+    }
+
+    public void processFailedRequest(FailedRequest failedRequest) {
+        var bookRentalRecord = createBookRentalRecord(failedRequest.getBookId());
+        bookRentalRecord.undoBadRequest(failedRequest);
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {
@@ -42,12 +47,4 @@ public record RentalRecordService(RentalRecordMapper recordMapper, RentalsPublis
         RentalRecordEntity entity = bookRentalRecordMapper.toEntity(bookRentalRecord);
         rentalRecordRepository.save(entity);
     }
-
-    private String getUserEmailFromToken(String authToken) {
-        String[] chunks = authToken.split("\\.");
-        String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
-        JSONObject jsonObject = (JSONObject) JSONValue.parse(payload);
-        return (String) jsonObject.get("email");
-    }
-
 }

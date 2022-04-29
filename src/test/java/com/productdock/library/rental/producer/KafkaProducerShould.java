@@ -34,7 +34,7 @@ public class KafkaProducerShould {
     @Mock
     private RentalRecordsMessageMapper rentalRecordsMessageMapper;
 
-    private String topic = "test-rental-record-topic";
+    private String topic = "test-book-status";
 
     @Test
     void produceCorrectMessage() throws JsonProcessingException {
