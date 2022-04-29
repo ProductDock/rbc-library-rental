@@ -1,12 +1,9 @@
 package com.productdock.library.rental.service;
 
-import com.nimbusds.jose.shaded.json.JSONObject;
-import com.nimbusds.jose.shaded.json.JSONValue;
 import com.productdock.library.rental.domain.BookRentalRecord;
 import com.productdock.library.rental.kafka.RentalsPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.Optional;
 
 import static com.productdock.library.rental.domain.UserActivityFactory.createUserActivity;
@@ -15,7 +12,8 @@ import static com.productdock.library.rental.domain.UserActivityFactory.createUs
 public record RentalRecordService(RentalRecordMapper recordMapper, RentalsPublisher publisher,
                                   RentalRecordRepository rentalRecordRepository,
                                   BookRentalRecordMapper bookRentalRecordMapper,
-                                  BookCopyMapper bookInteractionMapper, RentalRecordsMessageMapper rentalRecordsMessageMapper) {
+                                  BookCopyMapper bookInteractionMapper,
+                                  RentalRecordsMessageMapper rentalRecordsMessageMapper) {
 
     public void create(RentalRequest rentalRequest, String userEmail) throws Exception {
         var bookRentalRecord = createBookRentalRecord(rentalRequest.bookId);
@@ -32,6 +30,7 @@ public record RentalRecordService(RentalRecordMapper recordMapper, RentalsPublis
     public void processFailedRequest(FailedRequest failedRequest) {
         var bookRentalRecord = createBookRentalRecord(failedRequest.getBookId());
         bookRentalRecord.undoBadRequest(failedRequest);
+        rentalRecordRepository.save(bookRentalRecordMapper.toEntity(bookRentalRecord));
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {

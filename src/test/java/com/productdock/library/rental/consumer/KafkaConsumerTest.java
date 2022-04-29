@@ -35,17 +35,17 @@ public class KafkaConsumerTest extends KafkaTestBase {
     @Autowired
     private FailedRequestDeserializer failedRequestDeserializer;
 
-    @Value("${spring.kafka.topic.rental-record-warning-topic}")
+    @Value("${spring.kafka.topic.bad-rental-request}")
     private String topic;
+
+    private String userEmail = "default@gmail.com";
+    private RentalStatus requestStatus = RentalStatus.RENTED;
+    private String bookId = "1";
 
     @BeforeEach
     final void before() {
         rentalRecordRepository.deleteAll();
     }
-
-    private String userEmail = "default@gmail.com";
-    private RentalStatus requestStatus = RentalStatus.RENTED;
-    private String bookId = "1";
 
     @Test
     void shouldSaveBookIndex_whenMessageReceived() {
@@ -54,12 +54,14 @@ public class KafkaConsumerTest extends KafkaTestBase {
         producer.send(topic, failedRequest);
         await()
                 .atMost(Duration.ofSeconds(20))
-                .until(() -> rentalRecordRepository.findById(bookId).isPresent());
+                .until(() -> rentalRecordRepository.findById(bookId).get().getInteractions().isEmpty());
+        System.out.println(rentalRecordRepository.findById("1").get());
         assertThat(rentalRecordRepository.findById("1").get().getInteractions().size()).isEqualTo(0);
     }
 
     private void givenOneRentalRecord() {
         var rentalRecord = new RentalRecordEntity(bookId, new LinkedList<>
                 (Arrays.asList(new BookInteraction(userEmail, new Date(), requestStatus))));
+        rentalRecordRepository.save(rentalRecord);
     }
 }

@@ -6,16 +6,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = { BookCopyMapper.class })
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = {BookCopyMapper.class})
 public interface BookRentalRecordMapper {
 
     @Mappings({
-            @Mapping(target="interactions", source="source.bookCopies"),
+            @Mapping(target = "interactions", source = "source.bookCopies"),
     })
     RentalRecordEntity toEntity(BookRentalRecord source);
 
     @Mappings({
-            @Mapping(target="bookCopies", source="source.interactions"),
+            @Mapping(target = "bookCopies", source = "source.interactions"),
     })
     BookRentalRecord toDomain(RentalRecordEntity source);
 }

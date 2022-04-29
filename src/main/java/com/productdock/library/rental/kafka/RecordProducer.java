@@ -2,7 +2,6 @@ package com.productdock.library.rental.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.productdock.library.rental.service.RentalRecordEntity;
 import com.productdock.library.rental.service.RentalRecordsMessage;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;

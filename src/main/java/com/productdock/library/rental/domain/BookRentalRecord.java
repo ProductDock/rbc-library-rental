@@ -35,10 +35,9 @@ public class BookRentalRecord {
 
     public void undoBadRequest(FailedRequest failedRequest) {
         var badRequestBookCopy = bookCopies.stream()
-                .filter(book -> book.getPatron().equals(failedRequest.getPatron()) && bookId.equals(failedRequest.getBookId()))
-                .findFirst()
-                .get();
-        bookCopies.remove(badRequestBookCopy);
+                .filter(book -> book.getPatron().equals(failedRequest.getPatron()))
+                .findFirst();
+        remove(badRequestBookCopy);
     }
 
     private void add(Optional<BookCopy> newRecord) {

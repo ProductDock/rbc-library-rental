@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public record FailedRequestConsumer(RentalRecordService rentalRecordService,
                                     FailedRequestDeserializer failedRequestDeserializer) {
 
-    @KafkaListener(topics = "${spring.kafka.topic.rental-record-warning-topic}")
+    @KafkaListener(topics = "${spring.kafka.topic.bad-rental-request}")
     public synchronized void listen(ConsumerRecord<String, String> record) {
         FailedRequest failedRequest = failedRequestDeserializer.deserializeFailedRequest(record);
         rentalRecordService.processFailedRequest(failedRequest);

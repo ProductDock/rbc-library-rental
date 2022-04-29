@@ -21,4 +21,4 @@ spring:
       group-id: rbc-library
     topic:
       book-status: test-book-status
-      rental-record-warning-topic: test-rental-record-warning-topic
+      bad-rental-request: test-bad-rental-request
