@@ -21,7 +21,7 @@ public class KafkaTestConsumer {
     private RentalRecordsMessageDeserializer rentalRecordsMessageDeserializer;
 
 
-    @KafkaListener(topics = "${spring.kafka.topic.rental-record-topic}")
+    @KafkaListener(topics = "${spring.kafka.topic.book-status}")
     public void receive(ConsumerRecord<String, String> consumerRecord) {
         LOGGER.info("received payload='{}'", consumerRecord.toString());
         var rentalRecordsMessage = rentalRecordsMessageDeserializer.deserializeRentalRecordsMessage(consumerRecord);

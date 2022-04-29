@@ -4,6 +4,7 @@ package com.productdock.library.rental.consumer;
 import com.productdock.library.rental.book.BookInteraction;
 import com.productdock.library.rental.data.provider.KafkaTestBase;
 import com.productdock.library.rental.data.provider.KafkaTestProducer;
+import com.productdock.library.rental.kafka.FailedRequestDeserializer;
 import com.productdock.library.rental.service.FailedRequest;
 import com.productdock.library.rental.service.RentalRecordEntity;
 import com.productdock.library.rental.service.RentalRecordRepository;
@@ -30,6 +31,9 @@ public class KafkaConsumerTest extends KafkaTestBase {
 
     @Autowired
     private RentalRecordRepository rentalRecordRepository;
+
+    @Autowired
+    private FailedRequestDeserializer failedRequestDeserializer;
 
     @Value("${spring.kafka.topic.rental-record-warning-topic}")
     private String topic;
