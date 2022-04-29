@@ -4,7 +4,6 @@ import com.productdock.library.rental.book.BookInteraction;
 import com.productdock.library.rental.domain.BookRentalRecord;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")

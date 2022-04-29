@@ -17,7 +17,7 @@ import static com.productdock.library.rental.data.provider.RentalRecordsMessageM
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class KafkaProducerShould {
+class KafkaProducerShould {
     @InjectMocks
     private RentalsProducer rentalsProducer;
 

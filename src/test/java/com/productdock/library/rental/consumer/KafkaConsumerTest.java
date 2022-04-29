@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 @SpringBootTest
-public class KafkaConsumerTest extends KafkaTestBase {
+class KafkaConsumerTest extends KafkaTestBase {
 
     @Autowired
     private KafkaTestProducer producer;

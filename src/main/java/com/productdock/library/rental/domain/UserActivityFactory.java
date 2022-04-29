@@ -8,19 +8,11 @@ public class UserActivityFactory {
     }
 
     public static UserBookActivity createUserActivity(RentalStatus bookStatus, String userEmail) {
-        switch (bookStatus) {
-            case RENTED -> {
-                return new UserBorrowsABookActivity(userEmail);
-            }
-            case RESERVED -> {
-                return new UserReservesABookActivity(userEmail);
-            }
-            case RETURNED -> {
-                return new UserReturnsABookActivity(userEmail);
-            }
-            default -> {
-                return null;
-            }
-        }
+        return switch (bookStatus) {
+            case RENTED -> new UserBorrowsABookActivity(userEmail);
+            case RESERVED -> new UserReservesABookActivity(userEmail);
+            case RETURNED -> new UserReturnsABookActivity(userEmail);
+            default -> null;
+        };
     }
 }
