@@ -9,12 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public record FailedRequestDeserializer(ObjectMapper objectMapper) {
 
-    public FailedRequest deserializeFailedRequest(ConsumerRecord<String, String> consumerRecord) {
-        try {
-            return objectMapper.readValue(consumerRecord.value(), FailedRequest.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return new FailedRequest();
+    public FailedRequest deserializeFailedRequest(ConsumerRecord<String, String> consumerRecord) throws JsonProcessingException {
+        return objectMapper.readValue(consumerRecord.value(), FailedRequest.class);
     }
 }

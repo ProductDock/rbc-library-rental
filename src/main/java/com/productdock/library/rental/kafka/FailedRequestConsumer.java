@@ -1,5 +1,6 @@
 package com.productdock.library.rental.kafka;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.rental.service.FailedRequest;
 import com.productdock.library.rental.service.RentalRecordService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -11,8 +12,8 @@ public record FailedRequestConsumer(RentalRecordService rentalRecordService,
                                     FailedRequestDeserializer failedRequestDeserializer) {
 
     @KafkaListener(topics = "${spring.kafka.topic.bad-rental-request}")
-    public synchronized void listen(ConsumerRecord<String, String> record) {
-        FailedRequest failedRequest = failedRequestDeserializer.deserializeFailedRequest(record);
+    public synchronized void listen(ConsumerRecord<String, String> message) throws JsonProcessingException {
+        FailedRequest failedRequest = failedRequestDeserializer.deserializeFailedRequest(message);
         rentalRecordService.processFailedRequest(failedRequest);
     }
 }

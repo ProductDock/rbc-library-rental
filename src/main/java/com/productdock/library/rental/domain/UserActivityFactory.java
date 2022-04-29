@@ -4,6 +4,9 @@ import com.productdock.library.rental.service.RentalStatus;
 
 public class UserActivityFactory {
 
+    private UserActivityFactory() {
+    }
+
     public static UserBookActivity createUserActivity(RentalStatus bookStatus, String userEmail) {
         switch (bookStatus) {
             case RENTED -> {

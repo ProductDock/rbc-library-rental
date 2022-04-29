@@ -1,5 +1,6 @@
 package com.productdock.library.rental.data.provider;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.rental.kafka.RentalRecordsMessageDeserializer;
 import com.productdock.library.rental.service.RentalRecordsMessage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -22,7 +23,7 @@ public class KafkaTestConsumer {
 
 
     @KafkaListener(topics = "${spring.kafka.topic.book-status}")
-    public void receive(ConsumerRecord<String, String> consumerRecord) {
+    public void receive(ConsumerRecord<String, String> consumerRecord) throws JsonProcessingException {
         LOGGER.info("received payload='{}'", consumerRecord.toString());
         var rentalRecordsMessage = rentalRecordsMessageDeserializer.deserializeRentalRecordsMessage(consumerRecord);
         writeRecordToFile(rentalRecordsMessage);

@@ -27,7 +27,7 @@ class BookRentalRecordShould {
         bookRentalRecord.trackActivity(activity);
         assertThat(bookRentalRecord.getBookCopies().get(1).getPatron()).isEqualTo(newUser);
         assertThat(bookRentalRecord.getBookCopies().get(1).getStatus()).isEqualTo(RentalStatus.RENTED);
-        assertThat(bookRentalRecord.getBookCopies().size()).isEqualTo(2);
+        assertThat(bookRentalRecord.getBookCopies()).hasSize(2);
     }
 
     @Test
@@ -37,7 +37,7 @@ class BookRentalRecordShould {
         bookRentalRecord.trackActivity(activity);
         assertThat(bookRentalRecord.getBookCopies().get(0).getPatron()).isEqualTo(userWhoAlreadyInteractedWithABook);
         assertThat(bookRentalRecord.getBookCopies().get(0).getStatus()).isEqualTo(RentalStatus.RENTED);
-        assertThat(bookRentalRecord.getBookCopies().size()).isEqualTo(1);
+        assertThat(bookRentalRecord.getBookCopies()).hasSize(1);
     }
 
     @Test
@@ -47,7 +47,7 @@ class BookRentalRecordShould {
                 (Arrays.asList(new BookRentalRecord.BookCopy(new Date(), userWhoAlreadyInteractedWithABook, RentalStatus.RENTED))));
         System.out.println(bookRentalRecord);
         bookRentalRecord.trackActivity(activity);
-        assertThat(bookRentalRecord.getBookCopies().size()).isEqualTo(0);
+        assertThat(bookRentalRecord.getBookCopies().size()).isZero();
     }
 
     @Test
@@ -57,7 +57,7 @@ class BookRentalRecordShould {
         bookRentalRecord.trackActivity(activity);
         assertThat(bookRentalRecord.getBookCopies().get(1).getPatron()).isEqualTo(newUser);
         assertThat(bookRentalRecord.getBookCopies().get(1).getStatus()).isEqualTo(RentalStatus.RESERVED);
-        assertThat(bookRentalRecord.getBookCopies().size()).isEqualTo(2);
+        assertThat(bookRentalRecord.getBookCopies()).hasSize(2);
     }
 
     @Test

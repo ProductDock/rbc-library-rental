@@ -9,12 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public record RentalRecordsMessageDeserializer(ObjectMapper objectMapper) {
 
-    public RentalRecordsMessage deserializeRentalRecordsMessage(ConsumerRecord<String, String> consumerRecord) {
-        try {
-            return objectMapper.readValue(consumerRecord.value(), RentalRecordsMessage.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return new RentalRecordsMessage();
+    public RentalRecordsMessage deserializeRentalRecordsMessage(ConsumerRecord<String, String> consumerRecord) throws JsonProcessingException {
+        return objectMapper.readValue(consumerRecord.value(), RentalRecordsMessage.class);
     }
 }

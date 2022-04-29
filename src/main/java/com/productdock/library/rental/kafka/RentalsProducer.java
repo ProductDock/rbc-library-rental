@@ -9,14 +9,13 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class RecordProducer {
+public class RentalsProducer {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public ProducerRecord createKafkaRecord(String topic, RentalRecordsMessage rentalRecordsMessage) throws JsonProcessingException {
+    public ProducerRecord<String, String> createKafkaRecord(String topic, RentalRecordsMessage rentalRecordsMessage) throws JsonProcessingException {
         var serialisedMessage = serialiseMessage(rentalRecordsMessage);
-        var producerRecord = new ProducerRecord<>(topic, UUID.randomUUID().toString(), serialisedMessage);
-        return producerRecord;
+        return new ProducerRecord<>(topic, UUID.randomUUID().toString(), serialisedMessage);
     }
 
     private String serialiseMessage(RentalRecordsMessage rentalRecordsMessage) throws JsonProcessingException {

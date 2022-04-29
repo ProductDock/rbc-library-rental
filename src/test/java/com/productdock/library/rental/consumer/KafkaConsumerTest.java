@@ -56,7 +56,7 @@ public class KafkaConsumerTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(20))
                 .until(() -> rentalRecordRepository.findById(bookId).get().getInteractions().isEmpty());
         System.out.println(rentalRecordRepository.findById("1").get());
-        assertThat(rentalRecordRepository.findById("1").get().getInteractions().size()).isEqualTo(0);
+        assertThat(rentalRecordRepository.findById("1").get().getInteractions().size()).isZero();
     }
 
     private void givenOneRentalRecord() {

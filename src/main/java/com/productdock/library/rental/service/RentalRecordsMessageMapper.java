@@ -9,9 +9,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = {BookCopyMapper.class})
 public interface RentalRecordsMessageMapper {
 
-    @Mappings({
-            @Mapping(target = "rentalRecords", source = "source.bookCopies"),
-    })
+    @Mapping(target = "rentalRecords", source = "source.bookCopies")
     RentalRecordsMessage toMessage(BookRentalRecord source);
 
     RentalRecordsMessage.RentalRecordRequest map(BookRentalRecord.BookCopy value);
