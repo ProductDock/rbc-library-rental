@@ -47,7 +47,7 @@ class BookRentalRecordShould {
                 (Arrays.asList(new BookRentalRecord.BookCopy(new Date(), userWhoAlreadyInteractedWithABook, RentalStatus.RENTED))));
         System.out.println(bookRentalRecord);
         bookRentalRecord.trackActivity(activity);
-        assertThat(bookRentalRecord.getBookCopies().size()).isZero();
+        assertThat(bookRentalRecord.getBookCopies()).isEmpty();
     }
 
     @Test
