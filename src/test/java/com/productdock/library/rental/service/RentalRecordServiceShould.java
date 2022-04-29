@@ -47,7 +47,7 @@ class RentalRecordServiceShould {
 
     @Test
     void verifyRentRecordEntityIsSavedAndPublished() throws Exception {
-        var recordDTO = new RentalRequest("1", RENTED);
+        var recordDTO = new RentalRequestDto("1", RENTED);
         var recordEntity = Optional.of(mock(RentalRecordEntity.class));
         var bookRentalRecord = mock(BookRentalRecord.class);
 
@@ -63,7 +63,7 @@ class RentalRecordServiceShould {
 
     @Test
     void verifyReserveRecordEntityIsSavedAndPublished() throws Exception {
-        var recordDTO = new RentalRequest("1", RESERVED);
+        var recordDTO = new RentalRequestDto("1", RESERVED);
         var recordEntity = Optional.of(mock(RentalRecordEntity.class));
         var bookRentalRecord = mock(BookRentalRecord.class);
 

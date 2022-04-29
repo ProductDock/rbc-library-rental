@@ -20,8 +20,8 @@ public record RentalRecordApi(RentalRecordService rentalRecordService) {
 
     @PostMapping
     @SneakyThrows
-    public void createRecord(@RequestBody RentalRequest rentalRequest, Authentication authentication) {
-        rentalRecordService.create(rentalRequest, ((Jwt) authentication.getCredentials()).getClaim("email"));
+    public void createRecord(@RequestBody RentalRequestDto rentalRequestDto, Authentication authentication) {
+        rentalRecordService.create(rentalRequestDto, ((Jwt) authentication.getCredentials()).getClaim("email"));
     }
 
 //    @PostMapping

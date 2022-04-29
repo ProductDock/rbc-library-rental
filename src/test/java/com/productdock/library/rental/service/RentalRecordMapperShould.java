@@ -18,8 +18,8 @@ class RentalRecordMapperShould {
 
     @Test
     void mapRecordEntityToRecordDto() {
-        var recordDTO = new RentalRequest("1", RENTED);
-        var recordEntity = recordMapper.toEntity(recordDTO);
-        assertThat(recordEntity.getBookId()).isEqualTo(recordDTO.bookId);
+        var rentalRequestDTO = new RentalRequestDto("1", RENTED);
+        var recordEntity = recordMapper.toEntity(rentalRequestDTO);
+        assertThat(recordEntity.getBookId()).isEqualTo(rentalRequestDTO.bookId);
     }
 }

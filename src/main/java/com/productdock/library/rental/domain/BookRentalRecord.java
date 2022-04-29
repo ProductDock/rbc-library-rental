@@ -1,6 +1,5 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.service.FailedRequest;
 import com.productdock.library.rental.service.RentalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,13 +30,6 @@ public class BookRentalRecord {
         Optional<BookCopy> newRecord = activity.changeStatusFrom(previousRecord);
         remove(previousRecord);
         add(newRecord);
-    }
-
-    public void undoBadRequest(FailedRequest failedRequest) {
-        var badRequestBookCopy = bookCopies.stream()
-                .filter(book -> book.getPatron().equals(failedRequest.getPatron()))
-                .findFirst();
-        remove(badRequestBookCopy);
     }
 
     private void add(Optional<BookCopy> newRecord) {
