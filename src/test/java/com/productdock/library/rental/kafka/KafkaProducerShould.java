@@ -1,8 +1,7 @@
-package com.productdock.library.rental.producer;
+package com.productdock.library.rental.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
-import com.productdock.library.rental.kafka.RentalsProducer;
 import com.productdock.library.rental.service.BookRentalRecordMapper;
 import com.productdock.library.rental.service.RentalRecordsMessageMapper;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class KafkaProducerShould {
     @InjectMocks
-    private RentalsProducer rentalsProducer;
+    private KafkaMessageProducer kafkaMessageProducer;
 
     @Mock
     private BookRentalRecordMapper bookRentalRecordMapper;
@@ -33,7 +32,7 @@ class KafkaProducerShould {
     void produceCorrectMessage() throws JsonProcessingException {
         var rentalRecordsMessage = defaultRentalRecordsMessageBuilder().rentalRecords(Collections.emptyList()).build();
 
-        var producerRecord = rentalsProducer.createKafkaRecord(topic, rentalRecordsMessage);
+        var producerRecord = kafkaMessageProducer.createKafkaRecord(topic, rentalRecordsMessage);
 
         Gson gson = new Gson();
         String desiredValue = "{\"bookId\":\"" + rentalRecordsMessage.getBookId() +

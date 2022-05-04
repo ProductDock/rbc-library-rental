@@ -1,7 +1,7 @@
 package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.domain.BookRentalRecord;
-import com.productdock.library.rental.kafka.RentalsPublisher;
+import com.productdock.library.rental.kafka.KafkaPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,16 +27,10 @@ class RentalRecordServiceShould {
     private RentalRecordRepository rentalRecordRepository;
 
     @Mock
-    private RentalRecordMapper recordMapper;
-
-    @Mock
-    private RentalsPublisher publisher;
+    private RentalRecordPublisher rentalRecordPublisher;
 
     @Mock
     private BookRentalRecordMapper bookRentalRecordMapper;
-
-    @Mock
-    private RentalRecordsMessageMapper rentalRecordsMessageMapper;
 
     private String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWFpZHZlc3RhQHByb2R1Y3Rkb2NrLmNvbSIsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMn0.gbjuSfsxUowv8kY5b-wwMjiv82e-syanUpEmWZ3Vp6c";
 
@@ -57,7 +51,7 @@ class RentalRecordServiceShould {
 
         rentalRecordService.create(recordDTO, token);
 
-        verify(publisher).sendMessage(rentalRecordsMessageMapper.toMessage(bookRentalRecord));
+        verify(rentalRecordPublisher).sendMessage(bookRentalRecord);
         verify(rentalRecordRepository).save(recordEntity.get());
     }
 
@@ -73,7 +67,7 @@ class RentalRecordServiceShould {
 
         rentalRecordService.create(recordDTO, token);
 
-        verify(publisher).sendMessage(rentalRecordsMessageMapper.toMessage(bookRentalRecord));
+        verify(rentalRecordPublisher).sendMessage(bookRentalRecord);
         verify(rentalRecordRepository).save(recordEntity.get());
     }
 }

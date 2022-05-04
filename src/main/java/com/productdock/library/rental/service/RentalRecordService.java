@@ -1,7 +1,6 @@
 package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.domain.BookRentalRecord;
-import com.productdock.library.rental.kafka.RentalsPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,11 +8,9 @@ import java.util.Optional;
 import static com.productdock.library.rental.domain.UserActivityFactory.createUserActivity;
 
 @Service
-public record RentalRecordService(RentalRecordMapper recordMapper, RentalsPublisher publisher,
-                                  RentalRecordRepository rentalRecordRepository,
+public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
                                   BookRentalRecordMapper bookRentalRecordMapper,
-                                  BookCopyMapper bookInteractionMapper,
-                                  RentalRecordsMessageMapper rentalRecordsMessageMapper) {
+                                  RentalRecordPublisher rentalRecordPublisher) {
 
     public void create(RentalRequestDto rentalRequestDto, String userEmail) throws Exception {
         var bookRentalRecord = createBookRentalRecord(rentalRequestDto.bookId);
@@ -23,8 +20,7 @@ public record RentalRecordService(RentalRecordMapper recordMapper, RentalsPublis
 
         saveRentalRecord(bookRentalRecord);
 
-        var rentalRecordsMessage = rentalRecordsMessageMapper.toMessage(bookRentalRecord);
-        publisher.sendMessage(rentalRecordsMessage);
+        rentalRecordPublisher.sendMessage(bookRentalRecord);
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {
