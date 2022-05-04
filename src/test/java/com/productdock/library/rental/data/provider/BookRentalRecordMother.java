@@ -13,23 +13,18 @@ public class BookRentalRecordMother {
 
     private static final String defaultBookId = "1";
 
-    private static final List<BookRentalRecord.BookCopy> bookCopiesWithRentStatus = new ArrayList<>
-            (Arrays.asList(defaultBookCopyWithRentRequest()));
-
-    private static final List<BookRentalRecord.BookCopy> bookCopiesWithReserveStatus = new ArrayList<>
-            (Arrays.asList(defaultBookCopyWithReserveRequest()));
-
-    public static BookRentalRecord defaultBookRentalRecordWithRentRequest() {
-        return defaultBookRentalRecordBuilder().bookCopies(bookCopiesWithRentStatus).build();
-    }
-
-    public static BookRentalRecord defaultBookRentalRecordWithReserveRequest() {
-        return defaultBookRentalRecordBuilder().bookCopies(bookCopiesWithReserveStatus).build();
-    }
-
-    public static BookRentalRecord.BookRentalRecordBuilder defaultBookRentalRecordBuilder() {
+    public static BookRentalRecord bookRentalRecordWithRentRequest() {
         return BookRentalRecord.builder()
                 .bookId(defaultBookId)
-                .bookCopies(bookCopiesWithRentStatus);
+                .bookCopies(new ArrayList<>(Arrays.asList(defaultBookCopyWithRentRequest())))
+                .build();
     }
+
+    public static BookRentalRecord bookRentalRecordWithReserveRequest() {
+        return BookRentalRecord.builder()
+                .bookId(defaultBookId)
+                .bookCopies(new ArrayList<>(Arrays.asList(defaultBookCopyWithReserveRequest())))
+                .build();
+    }
+
 }

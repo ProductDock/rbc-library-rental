@@ -10,7 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-import static com.productdock.library.rental.data.provider.BookRentalRecordMother.defaultBookRentalRecordBuilder;
+import static com.productdock.library.rental.data.provider.BookRentalRecordMother.bookRentalRecordWithRentRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -23,7 +23,7 @@ class RentalRecordsMessageMapperShould {
 
     @Test
     void mapBookRentalRecordToRentalRecordsMessage() {
-        var bookRentalRecord = defaultBookRentalRecordBuilder().build();
+        var bookRentalRecord = bookRentalRecordWithRentRequest();
 
         var rentalRecordsMessage = rentalRecordsMessageMapper.toMessage(bookRentalRecord);
 

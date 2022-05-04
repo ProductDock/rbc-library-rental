@@ -8,7 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 
 import static com.productdock.library.rental.data.provider.BookCopyMother.defaultBookCopyBuilder;
@@ -25,8 +24,7 @@ class BookRentalRecordShould {
 
     @Test
     void addRentWhenUserAlreadyReservedTheBook() {
-        var bookRentalRecord = defaultBookRentalRecordBuilder().bookCopies(new ArrayList<>
-                (Arrays.asList(defaultBookCopyWithRentRequest()))).build();
+        var bookRentalRecord = bookRentalRecordWithReserveRequest();
         System.out.println(bookRentalRecord);
         var reserveBookCopy = bookRentalRecord.getBookCopies().get(0);
         var rentBookCopy = defaultBookCopyWithRentRequest();
@@ -42,7 +40,7 @@ class BookRentalRecordShould {
 
     @Test
     void addReturnWhenUserRentedABookAlready() {
-        var bookRentalRecord = defaultBookRentalRecordWithRentRequest();
+        var bookRentalRecord = bookRentalRecordWithRentRequest();
         var rentBookCopy = bookRentalRecord.getBookCopies().get(0);
         given(userBookActivity.getInitiator()).willReturn(rentBookCopy.getPatron());
         given(userBookActivity.changeStatusFrom(Optional.of(rentBookCopy))).willReturn(Optional.empty());
@@ -54,7 +52,7 @@ class BookRentalRecordShould {
 
     @Test
     void addRentWhenUserHadNotRentedOrReservedItAlready() {
-        var bookRentalRecord = defaultBookRentalRecordWithReserveRequest();
+        var bookRentalRecord = bookRentalRecordWithReserveRequest();
         var rentBookCopy = defaultBookCopyBuilder().patron("newUser@gmail.com").build();
         given(userBookActivity.getInitiator()).willReturn("newUser@gmail.com");
         given(userBookActivity.changeStatusFrom(Optional.empty())).willReturn(Optional.of(rentBookCopy));
