@@ -1,24 +1,27 @@
 package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.domain.BookRentalRecord;
-import com.productdock.library.rental.kafka.KafkaPublisher;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static com.productdock.library.rental.service.RentalStatus.RENTED;
-import static com.productdock.library.rental.service.RentalStatus.RESERVED;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class RentalRecordServiceShould {
+
+    private static final RentalRequestDto ANY_REQUEST_DTO = new RentalRequestDto("1", RENTED);
+    private static final Optional<RentalRecordEntity> ANY_RENTAL_ENTITY = Optional.of(mock(RentalRecordEntity.class));
+    private static final BookRentalRecord ANY_BOOK_RENTAL_RECORD = mock(BookRentalRecord.class);
 
     @InjectMocks
     private RentalRecordService rentalRecordService;
@@ -32,42 +35,17 @@ class RentalRecordServiceShould {
     @Mock
     private BookRentalRecordMapper bookRentalRecordMapper;
 
-    private String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWFpZHZlc3RhQHByb2R1Y3Rkb2NrLmNvbSIsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMn0.gbjuSfsxUowv8kY5b-wwMjiv82e-syanUpEmWZ3Vp6c";
-
-    @BeforeEach
-    final void before() {
-        rentalRecordRepository.deleteAll();
-    }
-
     @Test
     void verifyRentRecordEntityIsSavedAndPublished() throws Exception {
-        var recordDTO = new RentalRequestDto("1", RENTED);
-        var recordEntity = Optional.of(mock(RentalRecordEntity.class));
-        var bookRentalRecord = mock(BookRentalRecord.class);
+        given(rentalRecordRepository.findById(ANY_REQUEST_DTO.bookId)).willReturn(ANY_RENTAL_ENTITY);
+        given(bookRentalRecordMapper.toDomain(ANY_RENTAL_ENTITY.get())).willReturn(ANY_BOOK_RENTAL_RECORD);
+        given(bookRentalRecordMapper.toEntity(ANY_BOOK_RENTAL_RECORD)).willReturn(ANY_RENTAL_ENTITY.get());
 
-        given(rentalRecordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);
-        given(bookRentalRecordMapper.toDomain(recordEntity.get())).willReturn(bookRentalRecord);
-        given(bookRentalRecordMapper.toEntity(bookRentalRecord)).willReturn(recordEntity.get());
+        rentalRecordService.create(ANY_REQUEST_DTO, any());
 
-        rentalRecordService.create(recordDTO, token);
-
-        verify(rentalRecordPublisher).sendMessage(bookRentalRecord);
-        verify(rentalRecordRepository).save(recordEntity.get());
-    }
-
-    @Test
-    void verifyReserveRecordEntityIsSavedAndPublished() throws Exception {
-        var recordDTO = new RentalRequestDto("1", RESERVED);
-        var recordEntity = Optional.of(mock(RentalRecordEntity.class));
-        var bookRentalRecord = mock(BookRentalRecord.class);
-
-        given(rentalRecordRepository.findById(recordDTO.bookId)).willReturn(recordEntity);
-        given(bookRentalRecordMapper.toDomain(recordEntity.get())).willReturn(bookRentalRecord);
-        given(bookRentalRecordMapper.toEntity(bookRentalRecord)).willReturn(recordEntity.get());
-
-        rentalRecordService.create(recordDTO, token);
-
-        verify(rentalRecordPublisher).sendMessage(bookRentalRecord);
-        verify(rentalRecordRepository).save(recordEntity.get());
+        InOrder inOrder = Mockito.inOrder(ANY_BOOK_RENTAL_RECORD, rentalRecordPublisher, rentalRecordRepository);
+        inOrder.verify(ANY_BOOK_RENTAL_RECORD).trackActivity(any());
+        inOrder.verify(rentalRecordRepository).save(ANY_RENTAL_ENTITY.get());
+        inOrder.verify(rentalRecordPublisher).sendMessage(ANY_BOOK_RENTAL_RECORD);
     }
 }

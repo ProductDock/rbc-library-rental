@@ -34,7 +34,7 @@ class BookRentalRecordMapperShould {
     }
 
     private void assertThatRecordsAreMatching (List<BookRentalRecord.BookCopy> bookCopies, List<BookInteraction> bookInteractions) {
-        assertThat(bookCopies.size()).isEqualTo(bookInteractions.size());
+        assertThat(bookCopies).hasSameSizeAs(bookInteractions.size());
         var bookCopy = bookCopies.get(0);
         var bookInteraction = bookInteractions.get(0);
         assertThatBookCopyIsMatching(bookCopy, bookInteraction);
