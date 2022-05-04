@@ -12,18 +12,19 @@ public class BookCopyMother {
     private static final RentalStatus rentStatus = RentalStatus.RENTED;
     private static final RentalStatus reserveStatus = RentalStatus.RESERVED;
 
-    public static BookRentalRecord.BookCopy defaultBookCopyWithRentRequest() {
-        return defaultBookCopyBuilder().status(rentStatus).build();
-    }
-
-    public static BookRentalRecord.BookCopy defaultBookCopyWithReserveRequest() {
-        return defaultBookCopyBuilder().status(reserveStatus).build();
-    }
-
-    public static BookRentalRecord.BookCopy.BookCopyBuilder defaultBookCopyBuilder() {
+    public static BookRentalRecord.BookCopy bookCopyWithRentRequest() {
         return BookRentalRecord.BookCopy.builder()
                 .patron(defaultUserEmail)
                 .date(defaultDate)
-                .status(rentStatus);
+                .status(rentStatus)
+                .build();
+    }
+
+    public static BookRentalRecord.BookCopy bookCopyWithReserveRequest() {
+        return BookRentalRecord.BookCopy.builder()
+                .patron(defaultUserEmail)
+                .date(defaultDate)
+                .status(reserveStatus)
+                .build();
     }
 }

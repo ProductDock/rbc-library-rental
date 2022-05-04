@@ -8,8 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.productdock.library.rental.data.provider.BookCopyMother.defaultBookCopyWithRentRequest;
-import static com.productdock.library.rental.data.provider.BookCopyMother.defaultBookCopyWithReserveRequest;
+import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithReserveRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -21,7 +20,7 @@ class UserReservesABookActivityShould {
 
     @Test
     void reserveABookWhenUserHadReservedItAlready() {
-        BookRentalRecord.BookCopy previousRecord = defaultBookCopyWithReserveRequest();
+        BookRentalRecord.BookCopy previousRecord = bookCopyWithReserveRequest();
 
         assertThatThrownBy(() -> userReservesABookActivity.changeStatusFrom(Optional.of(previousRecord)))
                 .isInstanceOf(RuntimeException.class);

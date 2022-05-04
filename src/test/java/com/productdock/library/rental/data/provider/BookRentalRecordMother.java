@@ -4,10 +4,9 @@ import com.productdock.library.rental.domain.BookRentalRecord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import static com.productdock.library.rental.data.provider.BookCopyMother.defaultBookCopyWithRentRequest;
-import static com.productdock.library.rental.data.provider.BookCopyMother.defaultBookCopyWithReserveRequest;
+import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithRentRequest;
+import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithReserveRequest;
 
 public class BookRentalRecordMother {
 
@@ -16,14 +15,14 @@ public class BookRentalRecordMother {
     public static BookRentalRecord bookRentalRecordWithRentRequest() {
         return BookRentalRecord.builder()
                 .bookId(defaultBookId)
-                .bookCopies(new ArrayList<>(Arrays.asList(defaultBookCopyWithRentRequest())))
+                .bookCopies(new ArrayList<>(Arrays.asList(bookCopyWithRentRequest())))
                 .build();
     }
 
     public static BookRentalRecord bookRentalRecordWithReserveRequest() {
         return BookRentalRecord.builder()
                 .bookId(defaultBookId)
-                .bookCopies(new ArrayList<>(Arrays.asList(defaultBookCopyWithReserveRequest())))
+                .bookCopies(new ArrayList<>(Arrays.asList(bookCopyWithReserveRequest())))
                 .build();
     }
 
