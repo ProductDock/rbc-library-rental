@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
+import static com.productdock.library.rental.data.provider.BookRentalRecordMother.defaultBookRentalRecordBuilder;
 import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,8 +34,18 @@ class BookRentalRecordMapperShould {
         assertThatRecordsAreMatching(bookRentalRecord.getBookCopies(), rentalRecordEntity.getInteractions());
     }
 
+    @Test
+    void mapBookRentalRecordToRentalRecordEntity() {
+        var bookRentalRecord = defaultBookRentalRecordBuilder().build();
+
+        var rentalRecordEntity = bookRentalRecordMapper.toEntity(bookRentalRecord);
+
+        assertThat(bookRentalRecord.getBookId()).isEqualTo(rentalRecordEntity.getBookId());
+        assertThatRecordsAreMatching(bookRentalRecord.getBookCopies(), rentalRecordEntity.getInteractions());
+    }
+
     private void assertThatRecordsAreMatching (List<BookRentalRecord.BookCopy> bookCopies, List<BookInteraction> bookInteractions) {
-        assertThat(bookCopies).hasSameSizeAs(bookInteractions.size());
+        assertThat(bookCopies).hasSameSizeAs(bookInteractions);
         var bookCopy = bookCopies.get(0);
         var bookInteraction = bookInteractions.get(0);
         assertThatBookCopyIsMatching(bookCopy, bookInteraction);
