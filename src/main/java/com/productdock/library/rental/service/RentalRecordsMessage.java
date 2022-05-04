@@ -36,6 +36,7 @@ public class RentalRecordsMessage implements Serializable {
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
+    @Builder
     public static class RentalRecordRequest implements Serializable {
 
         private String patron;

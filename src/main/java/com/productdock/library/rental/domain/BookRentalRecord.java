@@ -52,6 +52,7 @@ public class BookRentalRecord {
 
     @Data
     @AllArgsConstructor
+    @Builder
     public static class BookCopy {
 
         private Date date;
