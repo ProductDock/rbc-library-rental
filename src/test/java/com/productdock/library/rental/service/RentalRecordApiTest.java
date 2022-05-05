@@ -2,7 +2,6 @@ package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.data.provider.KafkaTestBase;
 import com.productdock.library.rental.data.provider.KafkaTestConsumer;
-import lombok.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -22,7 +20,6 @@ import java.time.Duration;
 import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,6 +31,7 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     public static final String FIRST_BOOK = "1";
     public static final String TEST_FILE = "testRecord.txt";
+    public static final String PATRON = "test@productdock.com";
 
     @Autowired
     private MockMvc mockMvc;
@@ -59,8 +57,8 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     @Test
-    void postRentRecord_whenTheyAreSentThroughKafka() throws Exception {
-        makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com")
+    void shouldCreateReservationRecord() throws Exception {
+        makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isOk());
 
         await()
@@ -68,102 +66,80 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .until(ifFileExists(TEST_FILE));
 
         RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
+        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
         assertThat(rentalRecordsMessage.getRentalRecords()).isNotNull();
     }
 
     @Test
-    void postTwoRentRecords_whenTheSecondFails() throws Exception {
-        makeRentalRequest(RentalStatus.RENTED, "test@productdock.com")
+    void shouldReturnBadRequest_whenRentingABookAlreadyRentedByUser() throws Exception {
+        makeRentalRequest(RentalStatus.RENTED)
                 .andExpect(status().isOk());
-        assertThatThrownBy(() -> makeRentalRequest(RentalStatus.RENTED, "test@productdock.com").andExpect(status().isBadRequest()))
-                .getCause()
-                .isInstanceOf(RuntimeException.class);
+        makeRentalRequest(RentalStatus.RENTED).
+                andExpect(status().isBadRequest());
 
-        Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
+        var checkForFile = ifFileExists(TEST_FILE);
         await()
-                .atMost(Duration.ofSeconds(20))
+                .atMost(Duration.ofSeconds(4))
                 .until(checkForFile);
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
+        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
         assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
     }
 
     @Test
-    void postRentAndReturnRecord_WhenTheBookIsReturned() throws Exception {
-        makeRentalRequest(RentalStatus.RENTED, "test@productdock.com")
+    void shouldCreateReturnBookRecord_whenReturningABookAlreadyRentedByUser() throws Exception {
+        makeRentalRequest(RentalStatus.RENTED)
                 .andExpect(status().isOk());
-        makeRentalRequest(RentalStatus.RETURNED, "test@productdock.com")
+        makeRentalRequest(RentalStatus.RETURNED)
                 .andExpect(status().isOk());
-        Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
+        var checkForFile = ifFileExists(TEST_FILE);
         await()
-                .atMost(Duration.ofSeconds(20))
+                .atMost(Duration.ofSeconds(4))
                 .until(checkForFile);
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
+        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
         assertThat(rentalRecordsMessage.getRentalRecords()).isEmpty();
     }
 
     @Test
-    void postReserveRecord_whenTheyAreSentThroughKafka() throws Exception {
-        makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com")
+    void shouldReturnBadRequest_whenReservingABookAlreadyReservedByUser() throws Exception {
+        makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isOk());
-        Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
+        makeRentalRequest(RentalStatus.RESERVED)
+                .andExpect(status().isBadRequest());
+
+        var checkForFile = ifFileExists(TEST_FILE);
         await()
-                .atMost(Duration.ofSeconds(20))
+                .atMost(Duration.ofSeconds(4))
                 .until(checkForFile);
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
+        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
         assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
     }
 
     @Test
-    void postTwoReserveRecords_whenTheSecondFails() throws Exception {
-        makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com");
-
-        assertThatThrownBy(() -> makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com")
-                .andExpect(status().isBadRequest()))
-                .getCause()
-                .isInstanceOf(RuntimeException.class);
-
-        Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
-        await()
-                .atMost(Duration.ofSeconds(20))
-                .until(checkForFile);
-
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
-        assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
+    void shouldReturnBadRequest_whenReturningABookNotRentedByUser() throws Exception {
+        makeRentalRequest(RentalStatus.RETURNED)
+                .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void postReturnRecord_whenTheRequestFails() throws Exception {
-        assertThatThrownBy(() -> makeRentalRequest(RentalStatus.RETURNED, "test@productdock.com")
-                .andExpect(status().isBadRequest()))
-                .getCause()
-                .isInstanceOf(RuntimeException.class);
-    }
-
-    private ResultActions makeRentalRequest(RentalStatus request, String patron) throws Exception {
+    private ResultActions makeRentalRequest(RentalStatus request) throws Exception {
         return mockMvc.perform(post("/api/rental/record")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
                                 "    \"requestedStatus\": \"" + request + "\"\n" +
-                                "}").with(jwt().jwt(jwt -> jwt.claim("email", patron))))
+                                "}").with(jwt().jwt(jwt -> jwt.claim("email", PATRON))))
                 .andDo(print());
     }
 
     private Callable<Boolean> ifFileExists(String testFile) {
-        Callable<Boolean> checkForFile = new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                File f = new File(testFile);
-                return f.isFile();
-            }
+        Callable<Boolean> checkForFile = () -> {
+            File f = new File(testFile);
+            return f.isFile();
         };
         return checkForFile;
     }

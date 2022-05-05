@@ -1,5 +1,7 @@
 package com.productdock.library.rental.domain;
 
+import com.productdock.library.rental.exception.BookRentalException;
+
 import java.util.Optional;
 
 public class UserReturnsABookActivity extends UserBookActivity {
@@ -11,7 +13,7 @@ public class UserReturnsABookActivity extends UserBookActivity {
     @Override
     public Optional<BookRentalRecord.BookCopy> changeStatusFrom(Optional<BookRentalRecord.BookCopy> previousRecord) {
         if (previousRecord.isEmpty() || !previousRecord.get().isBorrow()) {
-            throw new RuntimeException("Book is not rented by this user!");
+            throw new BookRentalException("Book is not rented by this user!");
         }
         return Optional.empty();
     }
