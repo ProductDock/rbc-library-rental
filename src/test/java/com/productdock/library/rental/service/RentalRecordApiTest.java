@@ -2,19 +2,17 @@ package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.data.provider.KafkaTestBase;
 import com.productdock.library.rental.data.provider.KafkaTestConsumer;
+import lombok.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +23,7 @@ import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,24 +59,24 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     @Test
-    @WithMockUser
     void postRentRecord_whenTheyAreSentThroughKafka() throws Exception {
-        mockApiRequest(RentalStatus.RENTED);
-        Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
-        await()
-                .atMost(Duration.ofSeconds(20))
-                .until(checkForFile);
+        makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com")
+                .andExpect(status().isOk());
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFromConsumersFile(TEST_FILE);
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .until(ifFileExists(TEST_FILE));
+
+        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
         assertThat(rentalRecordsMessage.getRentalRecords()).isNotNull();
     }
 
     @Test
-    @WithMockUser
     void postTwoRentRecords_whenTheSecondFails() throws Exception {
-        mockApiRequest(RentalStatus.RENTED);
-        assertThatThrownBy(() -> mockBadApiRequest(RentalStatus.RENTED))
+        makeRentalRequest(RentalStatus.RENTED, "test@productdock.com")
+                .andExpect(status().isOk());
+        assertThatThrownBy(() -> makeRentalRequest(RentalStatus.RENTED, "test@productdock.com").andExpect(status().isBadRequest()))
                 .getCause()
                 .isInstanceOf(RuntimeException.class);
 
@@ -86,45 +85,47 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(20))
                 .until(checkForFile);
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFromConsumersFile(TEST_FILE);
+        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
         assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
     }
 
     @Test
-    @WithMockUser
     void postRentAndReturnRecord_WhenTheBookIsReturned() throws Exception {
-        mockApiRequest(RentalStatus.RENTED);
-        mockApiRequest(RentalStatus.RETURNED);
+        makeRentalRequest(RentalStatus.RENTED, "test@productdock.com")
+                .andExpect(status().isOk());
+        makeRentalRequest(RentalStatus.RETURNED, "test@productdock.com")
+                .andExpect(status().isOk());
         Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
         await()
                 .atMost(Duration.ofSeconds(20))
                 .until(checkForFile);
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFromConsumersFile(TEST_FILE);
+        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
         assertThat(rentalRecordsMessage.getRentalRecords()).isEmpty();
     }
 
     @Test
-    @WithMockUser
     void postReserveRecord_whenTheyAreSentThroughKafka() throws Exception {
-        mockApiRequest(RentalStatus.RESERVED);
+        makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com")
+                .andExpect(status().isOk());
         Callable<Boolean> checkForFile = ifFileExists(TEST_FILE);
         await()
                 .atMost(Duration.ofSeconds(20))
                 .until(checkForFile);
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFromConsumersFile(TEST_FILE);
+        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
         assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
     }
 
     @Test
-    @WithMockUser
     void postTwoReserveRecords_whenTheSecondFails() throws Exception {
-        mockApiRequest(RentalStatus.RESERVED);
-        assertThatThrownBy(() -> mockBadApiRequest(RentalStatus.RESERVED))
+        makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com");
+
+        assertThatThrownBy(() -> makeRentalRequest(RentalStatus.RESERVED, "test@productdock.com")
+                .andExpect(status().isBadRequest()))
                 .getCause()
                 .isInstanceOf(RuntimeException.class);
 
@@ -133,45 +134,27 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(20))
                 .until(checkForFile);
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFromConsumersFile(TEST_FILE);
+        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId().equals(FIRST_BOOK));
         assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
     }
 
     @Test
-    @WithMockUser
     void postReturnRecord_whenTheRequestFails() throws Exception {
-        assertThatThrownBy(() -> mockApiRequest(RentalStatus.RETURNED))
+        assertThatThrownBy(() -> makeRentalRequest(RentalStatus.RETURNED, "test@productdock.com")
+                .andExpect(status().isBadRequest()))
                 .getCause()
                 .isInstanceOf(RuntimeException.class);
     }
 
-    private void mockBadApiRequest(RentalStatus request) throws Exception {
-//        RentalRequest rentalRequest = new RentalRequest("1", RentalStatus.RENTED);
-//        restTemplate.postForEntity("/api/rental/record", rentalRequest);
-
-
-//        mockServer.perform(post("/api/rental/record")
-//                        .header("Authorization", "Bearer " + token)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\n" +
-//                                "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
-//                                "    \"requestedStatus\": \"" + request + "\"\n" +
-//                                "}"))
-//                .andDo(print())
-//                .andExpect(status().isBadRequest());
-    }
-
-    private void mockApiRequest(RentalStatus request) throws Exception {
-        mockMvc.perform(post("/api/rental/record")
-                        .header("Authorization", "Bearer " + token)
+    private ResultActions makeRentalRequest(RentalStatus request, String patron) throws Exception {
+        return mockMvc.perform(post("/api/rental/record")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
                                 "    \"requestedStatus\": \"" + request + "\"\n" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isOk());
+                                "}").with(jwt().jwt(jwt -> jwt.claim("email", patron))))
+                .andDo(print());
     }
 
     private Callable<Boolean> ifFileExists(String testFile) {
@@ -185,7 +168,7 @@ class RentalRecordApiTest extends KafkaTestBase {
         return checkForFile;
     }
 
-    private RentalRecordsMessage getRentalRecordsMessageFromConsumersFile(String testFile) throws IOException, ClassNotFoundException {
+    private RentalRecordsMessage getRentalRecordsMessageFrom(String testFile) throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(testFile);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
         var rentalRecordsMessage = (RentalRecordsMessage) objectInputStream.readObject();
