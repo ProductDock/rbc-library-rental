@@ -9,7 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithRentRequest;
-import static com.productdock.library.rental.data.provider.BookRentalRecordMother.*;
+import static com.productdock.library.rental.data.provider.BookRentalRecordMother.bookRentalRecordWithRentRequest;
+import static com.productdock.library.rental.data.provider.BookRentalRecordMother.bookRentalRecordWithReserveRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 

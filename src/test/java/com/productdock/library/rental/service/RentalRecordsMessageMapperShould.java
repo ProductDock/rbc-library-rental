@@ -1,6 +1,5 @@
 package com.productdock.library.rental.service;
 
-import com.productdock.library.rental.book.BookInteraction;
 import com.productdock.library.rental.domain.BookRentalRecord;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
