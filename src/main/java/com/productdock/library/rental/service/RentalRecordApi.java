@@ -12,21 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/rental/record")
 public record RentalRecordApi(RentalRecordService rentalRecordService) {
 
-//    @PostMapping
-//    @SneakyThrows
-//    public void createRecord(@RequestBody RentalRequest rentalRequest, @RequestHeader("Authorization") String authToken) {
-//        rentalRecordService.create(rentalRequest, authToken);
-//    }
-
     @PostMapping
     @SneakyThrows
     public void createRecord(@RequestBody RentalRequestDto rentalRequestDto, Authentication authentication) {
         rentalRecordService.create(rentalRequestDto, ((Jwt) authentication.getCredentials()).getClaim("email"));
     }
-
-//    @PostMapping
-//    @SneakyThrows
-//    public void createRecord(@RequestBody RentalRequest rentalRequest, Principal principal) {
-//        rentalRecordService.create(rentalRequest, ((Jwt) principal).getClaim("email"));
-//    }
 }
