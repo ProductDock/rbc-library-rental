@@ -21,9 +21,9 @@ class UserReservesABookActivityShould {
 
     @Test
     void reserveABook_whenUserHadReservedItAlready() {
-        BookRentalRecord.BookCopy previousRecord = bookCopyWithReserveRequest();
+        var previousRecord = Optional.of(bookCopyWithReserveRequest());
 
-        assertThatThrownBy(() -> userReservesABookActivity.changeStatusFrom(Optional.of(previousRecord)))
+        assertThatThrownBy(() -> userReservesABookActivity.changeStatusFrom(previousRecord))
                 .isInstanceOf(BookRentalException.class);
     }
 

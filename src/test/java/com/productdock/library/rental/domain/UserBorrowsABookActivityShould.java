@@ -22,7 +22,7 @@ class UserBorrowsABookActivityShould {
 
     @Test
     void rentABook_whenUserHadReservedItAlready() {
-        BookRentalRecord.BookCopy previousRecord = bookCopyWithReserveRequest();
+        var previousRecord = bookCopyWithReserveRequest();
 
         var newRecord = userBorrowsABookActivity.changeStatusFrom(Optional.of(previousRecord));
 
@@ -40,9 +40,9 @@ class UserBorrowsABookActivityShould {
 
     @Test
     void rentABook_whenUserHadRentedItAlready() {
-        BookRentalRecord.BookCopy previousRecord = bookCopyWithRentRequest();
+        var previousRecord = Optional.of(bookCopyWithRentRequest());
 
-        assertThatThrownBy(() -> userBorrowsABookActivity.changeStatusFrom(Optional.of(previousRecord)))
+        assertThatThrownBy(() -> userBorrowsABookActivity.changeStatusFrom(previousRecord))
                 .isInstanceOf(BookRentalException.class);
     }
 }

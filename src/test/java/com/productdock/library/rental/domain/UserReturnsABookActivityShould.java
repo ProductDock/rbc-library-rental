@@ -29,7 +29,7 @@ class UserReturnsABookActivityShould {
 
     @Test
     void returnABook_whenUserHadRentedItAlready() {
-        BookRentalRecord.BookCopy previousRecord = bookCopyWithRentRequest();
+        var previousRecord = bookCopyWithRentRequest();
 
         var newRecord = userReturnsABookActivity.changeStatusFrom(Optional.of(previousRecord));
 
