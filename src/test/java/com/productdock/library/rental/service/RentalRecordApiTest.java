@@ -35,12 +35,9 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     public static final String FIRST_BOOK = "1";
     public static final String TEST_FILE = "testRecord.txt";
-    private String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAcHJvZHVjdGRvY2suY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.ElsZ_Vc_4O9YlL6QO85hjxSdiJ8S41HodjOIUydcGH4";
 
     @Autowired
     private MockMvc mockMvc;
-
-    private MockRestServiceServer mockServer;
 
     @Autowired
     private RentalRecordRepository rentalRecordRepository;
@@ -61,16 +58,6 @@ class RentalRecordApiTest extends KafkaTestBase {
         File f = new File(TEST_FILE);
         f.delete();
     }
-
-//    @BeforeEach
-//    final void beforeAll() throws ParseException {
-////        JWT jwtToken = JWTParser.parse(token);
-//        Jwt jwtToken = Jwt.tokenValue(token).build();
-//
-//        System.out.println(jwtToken.getTokenValue());
-//        Authentication authentication = new JwtAuthenticationToken(jwtToken);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//    }
 
     @Test
     @WithMockUser
@@ -176,16 +163,6 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     private void mockApiRequest(RentalStatus request) throws Exception {
-//        webTestClient.post()
-//                .uri("/api/rental/record")
-//                .header("Authorization", "Bearer " + token)
-//                .bodyValue("{\n" +
-//                        "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
-//                        "    \"requestedStatus\": \"" + request + "\"\n" +
-//                        "}")
-//                .exchange()
-//                .expectStatus().isOk();
-
         mockMvc.perform(post("/api/rental/record")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
