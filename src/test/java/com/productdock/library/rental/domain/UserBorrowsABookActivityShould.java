@@ -1,5 +1,6 @@
 package com.productdock.library.rental.domain;
 
+import com.productdock.library.rental.exception.BookRentalException;
 import com.productdock.library.rental.service.RentalStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ class UserBorrowsABookActivityShould {
     private UserBorrowsABookActivity userBorrowsABookActivity;
 
     @Test
-    void rentABookWhenUserHadReservedItAlready() {
+    void rentABook_whenUserHadReservedItAlready() {
         BookRentalRecord.BookCopy previousRecord = bookCopyWithReserveRequest();
 
         var newRecord = userBorrowsABookActivity.changeStatusFrom(Optional.of(previousRecord));
@@ -29,7 +30,7 @@ class UserBorrowsABookActivityShould {
     }
 
     @Test
-    void rentABookWhenUserHadNoInteractionWithItBefore() {
+    void rentABook_whenUserHadNoInteractionWithItBefore() {
         Optional<BookRentalRecord.BookCopy> previousRecord = Optional.empty();
 
         var newRecord = userBorrowsABookActivity.changeStatusFrom(previousRecord);
@@ -38,10 +39,10 @@ class UserBorrowsABookActivityShould {
     }
 
     @Test
-    void rentABookWhenUserHadRentedItAlready() {
+    void rentABook_whenUserHadRentedItAlready() {
         BookRentalRecord.BookCopy previousRecord = bookCopyWithRentRequest();
 
         assertThatThrownBy(() -> userBorrowsABookActivity.changeStatusFrom(Optional.of(previousRecord)))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(BookRentalException.class);
     }
 }

@@ -1,5 +1,6 @@
 package com.productdock.library.rental.domain;
 
+import com.productdock.library.rental.exception.BookRentalException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,15 +20,15 @@ class UserReturnsABookActivityShould {
 
 
     @Test
-    void returnABookWhenUserHadNoInteractionWithItBefore() {
+    void returnABook_whenUserHadNoInteractionWithItBefore() {
         Optional<BookRentalRecord.BookCopy> previousRecord = Optional.empty();
 
         assertThatThrownBy(() -> userReturnsABookActivity.changeStatusFrom(previousRecord))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(BookRentalException.class);
     }
 
     @Test
-    void returnABookWhenUserHadRentedItAlready() {
+    void returnABook_whenUserHadRentedItAlready() {
         BookRentalRecord.BookCopy previousRecord = bookCopyWithRentRequest();
 
         var newRecord = userReturnsABookActivity.changeStatusFrom(Optional.of(previousRecord));

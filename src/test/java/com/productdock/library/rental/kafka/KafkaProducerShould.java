@@ -29,7 +29,7 @@ class KafkaProducerShould {
     private String topic = "test-book-status";
 
     @Test
-    void produceCorrectMessage() throws JsonProcessingException {
+    void produceMessage() throws JsonProcessingException {
         var rentalRecordsMessage = defaultRentalRecordsMessageBuilder().rentalRecords(Collections.emptyList()).build();
 
         var producerRecord = kafkaMessageProducer.createKafkaRecord(topic, rentalRecordsMessage);

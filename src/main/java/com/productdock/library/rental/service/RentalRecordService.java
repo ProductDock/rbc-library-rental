@@ -1,6 +1,7 @@
 package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.domain.BookRentalRecord;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,7 +13,8 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
                                   BookRentalRecordMapper bookRentalRecordMapper,
                                   RentalRecordPublisher rentalRecordPublisher) {
 
-    public void create(RentalRequestDto rentalRequestDto, String userEmail) throws Exception {
+    @SneakyThrows
+    public void create(RentalRequestDto rentalRequestDto, String userEmail) {
         var bookRentalRecord = createBookRentalRecord(rentalRequestDto.bookId);
 
         var activity = createUserActivity(rentalRequestDto.requestedStatus, userEmail);

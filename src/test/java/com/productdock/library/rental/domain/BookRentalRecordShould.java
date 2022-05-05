@@ -20,7 +20,7 @@ class BookRentalRecordShould {
     private UserBookActivity userBookActivity;
 
     @Test
-    void addRentWhenUserAlreadyReservedTheBook() {
+    void addRentRecord_whenUserAlreadyReservedTheBook() {
         var bookRentalRecord = bookRentalRecordWithReserveRequest();
         System.out.println(bookRentalRecord);
         var reserveBookCopy = bookRentalRecord.getBookCopies().get(0);
@@ -36,7 +36,7 @@ class BookRentalRecordShould {
     }
 
     @Test
-    void addReturnWhenUserRentedABookAlready() {
+    void addReturnRecord_whenUserRentedABookAlready() {
         var bookRentalRecord = bookRentalRecordWithRentRequest();
         var rentBookCopy = bookRentalRecord.getBookCopies().get(0);
         given(userBookActivity.getInitiator()).willReturn(rentBookCopy.getPatron());
@@ -48,7 +48,7 @@ class BookRentalRecordShould {
     }
 
     @Test
-    void addRentWhenUserHadNotRentedOrReservedItAlready() {
+    void addRentRecord_whenUserHadNotRentedOrReservedItAlready() {
         var bookRentalRecord = bookRentalRecordWithReserveRequest();
         var rentBookCopy = bookCopyWithRentRequest();
         rentBookCopy.setPatron("newUser@gmail.com");
