@@ -1,0 +1,24 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://placeholder
+          jwk-set-uri: http://placeholder
+  mongodb:
+    embedded:
+      version: 3.5.5
+
+  kafka:
+    bootstrap-servers: localhost:9093
+    producer:
+      client-id: kafka-message-producer
+      acks: all
+      value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      auto-offset-reset: earliest
+      group-id: rbc-library
+    topic:
+      book-status: test-book-status
+      bad-rental-request: test-bad-rental-request
