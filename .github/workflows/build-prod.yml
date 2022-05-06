@@ -55,4 +55,4 @@ jobs:
 
       - name: 'Deploy Docker image to Compute engine'
         run: |-
-          gcloud compute ssh --project=prod-pd-library --zone=$GCE_INSTANCE_ZONE --ssh-key-expire-after=5m --command="bash /home/pd-library/update-catalog-image.sh $VERSION" $GCE_INSTANCE
+          gcloud compute ssh --project=prod-pd-library --zone=$GCE_INSTANCE_ZONE --ssh-key-expire-after=5m --command="bash /home/pd-library/update-rental-image.sh $VERSION" $GCE_INSTANCE
