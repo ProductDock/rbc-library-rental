@@ -4,8 +4,6 @@ COPY pom.xml .
 COPY src src
 RUN ["mvn", "package"]
 FROM openjdk:17-jdk-alpine
-ARG ACTIVE_PROFILE
-ENV SPRING_PROFILES_ACTIVE=$ACTIVE_PROFILE
 WORKDIR /app
 COPY entrypoint.sh /entrypoint.sh
 COPY --from=builder /app/target/rbc-library-rental-0.0.1-SNAPSHOT.jar rbc-library-rental-0.0.1-SNAPSHOT.jar
