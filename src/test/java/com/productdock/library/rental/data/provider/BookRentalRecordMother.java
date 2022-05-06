@@ -12,6 +12,13 @@ public class BookRentalRecordMother {
 
     private static final String defaultBookId = "1";
 
+    public static BookRentalRecord bookRentalRecordWithNoRequests() {
+        return BookRentalRecord.builder()
+                .bookId(defaultBookId)
+                .bookCopies(new ArrayList<>())
+                .build();
+    }
+
     public static BookRentalRecord bookRentalRecordWithRentRequest() {
         return BookRentalRecord.builder()
                 .bookId(defaultBookId)

@@ -9,8 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithRentRequest;
-import static com.productdock.library.rental.data.provider.BookRentalRecordMother.bookRentalRecordWithRentRequest;
-import static com.productdock.library.rental.data.provider.BookRentalRecordMother.bookRentalRecordWithReserveRequest;
+import static com.productdock.library.rental.data.provider.BookRentalRecordMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -23,7 +22,6 @@ class BookRentalRecordShould {
     @Test
     void addRentRecord_whenUserAlreadyReservedTheBook() {
         var bookRentalRecord = bookRentalRecordWithReserveRequest();
-        System.out.println(bookRentalRecord);
         var reserveBookCopy = bookRentalRecord.getBookCopies().get(0);
         var rentBookCopy = bookCopyWithRentRequest();
         given(userBookActivity.getInitiator()).willReturn(reserveBookCopy.getPatron());
@@ -31,9 +29,7 @@ class BookRentalRecordShould {
 
         bookRentalRecord.trackActivity(userBookActivity);
 
-        assertThat(bookRentalRecord.getBookCopies().get(0).getPatron()).isEqualTo(reserveBookCopy.getPatron());
-        assertThat(bookRentalRecord.getBookCopies().get(0).getStatus()).isEqualTo(RentalStatus.RENTED);
-        assertThat(bookRentalRecord.getBookCopies()).hasSize(1);
+        assertThat(bookRentalRecord.getBookCopies()).containsOnly(rentBookCopy);
     }
 
     @Test
@@ -50,7 +46,7 @@ class BookRentalRecordShould {
 
     @Test
     void addRentRecord_whenUserHadNotRentedOrReservedItAlready() {
-        var bookRentalRecord = bookRentalRecordWithReserveRequest();
+        var bookRentalRecord = bookRentalRecordWithNoRequests();
         var rentBookCopy = bookCopyWithRentRequest();
         rentBookCopy.setPatron("newUser@gmail.com");
         given(userBookActivity.getInitiator()).willReturn("newUser@gmail.com");
@@ -58,8 +54,6 @@ class BookRentalRecordShould {
 
         bookRentalRecord.trackActivity(userBookActivity);
 
-        assertThat(bookRentalRecord.getBookCopies().get(1).getPatron()).isEqualTo(rentBookCopy.getPatron());
-        assertThat(bookRentalRecord.getBookCopies().get(1).getStatus()).isEqualTo(RentalStatus.RENTED);
-        assertThat(bookRentalRecord.getBookCopies()).hasSize(2);
+        assertThat(bookRentalRecord.getBookCopies()).containsOnly(rentBookCopy);
     }
 }

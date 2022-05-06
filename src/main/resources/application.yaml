@@ -13,7 +13,6 @@ spring:
       group-id: ${consumer.group:group}
     topic:
       book-status: ${kafka.topic:book-status}
-      rental-record-warning-topic: ${kafka.topic:bad-rental-request}
 
   data:
     mongodb:

@@ -34,5 +34,7 @@ class UserReservesABookActivityShould {
         var newRecord = userReservesABookActivity.changeStatusFrom(previousRecord);
 
         assertThat(newRecord.get().getStatus()).isEqualTo(RentalStatus.RESERVED);
+        assertThat(newRecord.get().getPatron()).isNull();
+        assertThat(newRecord.get().getDate()).isToday();
     }
 }

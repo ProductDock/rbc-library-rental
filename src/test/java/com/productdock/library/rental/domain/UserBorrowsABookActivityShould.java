@@ -27,6 +27,8 @@ class UserBorrowsABookActivityShould {
         var newRecord = userBorrowsABookActivity.changeStatusFrom(Optional.of(previousRecord));
 
         assertThat(newRecord.get().getStatus()).isEqualTo(RentalStatus.RENTED);
+        assertThat(newRecord.get().getPatron()).isNull();
+        assertThat(newRecord.get().getDate()).isToday();
     }
 
     @Test

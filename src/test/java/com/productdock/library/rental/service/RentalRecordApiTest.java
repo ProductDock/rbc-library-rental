@@ -77,14 +77,13 @@ class RentalRecordApiTest extends KafkaTestBase {
         makeRentalRequest(RentalStatus.RENTED).
                 andExpect(status().isBadRequest());
 
-        var checkForFile = ifFileExists(TEST_FILE);
         await()
                 .atMost(Duration.ofSeconds(4))
-                .until(checkForFile);
+                .until(ifFileExists(TEST_FILE));
 
         var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
+        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(1);
     }
 
     @Test
@@ -93,10 +92,9 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .andExpect(status().isOk());
         makeRentalRequest(RentalStatus.RETURNED)
                 .andExpect(status().isOk());
-        var checkForFile = ifFileExists(TEST_FILE);
         await()
                 .atMost(Duration.ofSeconds(4))
-                .until(checkForFile);
+                .until(ifFileExists(TEST_FILE));
 
         var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
@@ -110,14 +108,13 @@ class RentalRecordApiTest extends KafkaTestBase {
         makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isBadRequest());
 
-        var checkForFile = ifFileExists(TEST_FILE);
         await()
                 .atMost(Duration.ofSeconds(4))
-                .until(checkForFile);
+                .until(ifFileExists(TEST_FILE));
 
         var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords().get(0)).isNotNull();
+        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(1);
     }
 
     @Test
