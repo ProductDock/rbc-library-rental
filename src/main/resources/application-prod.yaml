@@ -1,0 +1,35 @@
+spring:
+  kafka:
+    enabled: true
+    bootstrap-servers: ${kafka.server.url}
+    producer:
+      client-id: kafka-message-producer
+      acks: all
+      value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      enable-auto-commit: true
+      auto-offset-reset: latest
+      group-id: ${consumer.group:group}
+    topic:
+      book-status: ${kafka.topic:book-status}
+
+  data:
+    mongodb:
+      authentication-database: docuemnt-db
+      host: ${mongo.server.url}
+      port: ${mongo.server.port}
+      username: ${mongo.username}
+      password: ${mongo.password}
+      database: document-db
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: accounts.google.com
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+
+server:
+  error:
+    include-message: always
