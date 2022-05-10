@@ -38,4 +38,12 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
         RentalRecordEntity entity = bookRentalRecordMapper.toEntity(bookRentalRecord);
         rentalRecordRepository.save(entity);
     }
+
+    public RentalRecordsDto getByBookId(String bookId) {
+        Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findById(bookId);
+        if(recordEntity.isEmpty()){
+            return new RentalRecordsDto();
+        }
+        return bookRentalRecordMapper.toDto(recordEntity.get());
+    }
 }
