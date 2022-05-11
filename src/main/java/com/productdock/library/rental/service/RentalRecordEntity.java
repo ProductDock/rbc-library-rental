@@ -1,6 +1,7 @@
 package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.book.BookInteraction;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +16,11 @@ import java.util.List;
 @Document("rental-record")
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class RentalRecordEntity implements Serializable {
 
     @Id
+    private String id;
     private String bookId;
     private List<BookInteraction> interactions;
-
-    public RentalRecordEntity(String bookId, List<BookInteraction> interactions) {
-        this.bookId = bookId;
-        this.interactions = interactions;
-    }
-
 }

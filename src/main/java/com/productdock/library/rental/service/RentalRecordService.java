@@ -26,7 +26,7 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {
-        Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findById(bookId);
+        Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findByBookId(bookId);
         if (recordEntity.isEmpty()) {
             return new BookRentalRecord(bookId);
         } else {
@@ -35,7 +35,11 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
     }
 
     private void saveRentalRecord(BookRentalRecord bookRentalRecord) {
-        RentalRecordEntity entity = bookRentalRecordMapper.toEntity(bookRentalRecord);
-        rentalRecordRepository.save(entity);
+        Optional<RentalRecordEntity> previousRecordEntity = rentalRecordRepository.findByBookId(bookRentalRecord.getBookId());
+        RentalRecordEntity newRecordEntity = bookRentalRecordMapper.toEntity(bookRentalRecord);
+        if (previousRecordEntity.isPresent()) {
+            newRecordEntity.setId(previousRecordEntity.get().getId());
+        }
+        rentalRecordRepository.save(newRecordEntity);
     }
 }
