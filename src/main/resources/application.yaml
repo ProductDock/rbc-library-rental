@@ -33,4 +33,3 @@ spring:
 server:
   error:
     include-message: always
-  port: 8083

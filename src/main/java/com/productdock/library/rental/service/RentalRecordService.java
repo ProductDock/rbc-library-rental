@@ -11,6 +11,7 @@ import static com.productdock.library.rental.domain.UserActivityFactory.createUs
 @Service
 public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
                                   BookRentalRecordMapper bookRentalRecordMapper,
+                                  RentalRecordDtoMapper rentalRecordDtoMapper,
                                   RentalRecordPublisher rentalRecordPublisher) {
 
     @SneakyThrows
@@ -44,6 +45,6 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
         if(recordEntity.isEmpty()){
             return new RentalRecordsDto();
         }
-        return bookRentalRecordMapper.toDto(recordEntity.get());
+        return rentalRecordDtoMapper.toDto(recordEntity.get());
     }
 }

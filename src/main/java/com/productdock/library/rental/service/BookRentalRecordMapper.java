@@ -13,7 +13,4 @@ public interface BookRentalRecordMapper {
 
     @Mapping(target = "bookCopies", source = "source.interactions")
     BookRentalRecord toDomain(RentalRecordEntity source);
-
-    @Mapping(target = "records", source = "source.interactions")
-    RentalRecordsDto toDto(RentalRecordEntity source);
 }

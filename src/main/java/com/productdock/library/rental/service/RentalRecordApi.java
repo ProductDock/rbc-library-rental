@@ -16,7 +16,7 @@ public record RentalRecordApi(RentalRecordService rentalRecordService) {
     }
 
     @GetMapping("/{bookId}")
-    public RentalRecordsDto getBook(@PathVariable("bookId") String bookId){
+    public RentalRecordsDto getBook(@PathVariable("bookId") String bookId) throws InterruptedException {
         return rentalRecordService.getByBookId(bookId);
     }
 }
