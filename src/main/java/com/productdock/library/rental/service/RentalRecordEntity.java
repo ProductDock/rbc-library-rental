@@ -24,9 +24,4 @@ public class RentalRecordEntity implements Serializable {
     private String bookId;
     private List<BookInteraction> interactions;
 
-    public RentalRecordEntity(String bookId, List<BookInteraction> interactions) {
-        this.bookId = bookId;
-        this.interactions = interactions;
-    }
-
 }

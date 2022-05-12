@@ -12,6 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.productdock.library.rental.service.RentalStatus.RENTED;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -19,9 +22,11 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 class RentalRecordServiceShould {
 
-    private static final RentalRequestDto ANY_REQUEST_DTO = new RentalRequestDto("1", RENTED);
+    public static final String DEFAULT_BOOK_ID = "1";
+    private static final RentalRequestDto ANY_REQUEST_DTO = new RentalRequestDto(DEFAULT_BOOK_ID, RENTED);
     private static final Optional<RentalRecordEntity> ANY_RENTAL_ENTITY = Optional.of(mock(RentalRecordEntity.class));
     private static final BookRentalRecord ANY_BOOK_RENTAL_RECORD = mock(BookRentalRecord.class);
+    private static final BookRecordDto ANY_BOOK_RECORD_DTO = mock(BookRecordDto.class);
 
     @InjectMocks
     private RentalRecordService rentalRecordService;
@@ -35,6 +40,9 @@ class RentalRecordServiceShould {
     @Mock
     private BookRentalRecordMapper bookRentalRecordMapper;
 
+    @Mock
+    private BookRecordMapper bookRecordMapper;
+
     @Test
     void verifyIfRentRecordEntityIsSavedAndPublished() throws Exception {
         given(rentalRecordRepository.findByBookId(ANY_REQUEST_DTO.bookId)).willReturn(ANY_RENTAL_ENTITY);
@@ -47,5 +55,28 @@ class RentalRecordServiceShould {
         inOrder.verify(ANY_BOOK_RENTAL_RECORD).trackActivity(any());
         inOrder.verify(rentalRecordRepository).save(ANY_RENTAL_ENTITY.get());
         inOrder.verify(rentalRecordPublisher).sendMessage(ANY_BOOK_RENTAL_RECORD);
+    }
+
+    @Test
+    void getBookRentalRecords_whenMissingRecords() {
+        given(rentalRecordRepository.findById(DEFAULT_BOOK_ID)).willReturn(Optional.empty());
+
+        var bookRecords = rentalRecordService.getByBookId(DEFAULT_BOOK_ID);
+
+        assertThat(bookRecords).isEmpty();
+    }
+
+    @Test
+    void getBookRentalRecords() {
+        given(rentalRecordRepository.findById(DEFAULT_BOOK_ID)).willReturn(ANY_RENTAL_ENTITY);
+        given(bookRecordMapper.toDtoCollection(ANY_RENTAL_ENTITY.get().getInteractions()))
+                .willReturn(of(
+                        ANY_BOOK_RECORD_DTO,
+                        ANY_BOOK_RECORD_DTO
+                ).collect(toList()));
+
+        var bookRecords = rentalRecordService.getByBookId(DEFAULT_BOOK_ID);
+
+        assertThat(bookRecords).hasSize(2);
     }
 }
