@@ -58,7 +58,7 @@ class RentalRecordServiceShould {
 
     @Test
     void getBookRentalRecords_whenMissingRecords() {
-        given(rentalRecordRepository.findById(DEFAULT_BOOK_ID)).willReturn(Optional.empty());
+        given(rentalRecordRepository.findByBookId(DEFAULT_BOOK_ID)).willReturn(Optional.empty());
 
         var bookRecords = rentalRecordService.getByBookId(DEFAULT_BOOK_ID);
 
@@ -67,7 +67,7 @@ class RentalRecordServiceShould {
 
     @Test
     void getBookRentalRecords() {
-        given(rentalRecordRepository.findById(DEFAULT_BOOK_ID)).willReturn(ANY_RENTAL_ENTITY);
+        given(rentalRecordRepository.findByBookId(DEFAULT_BOOK_ID)).willReturn(ANY_RENTAL_ENTITY);
         given(bookRecordMapper.toDtoCollection(ANY_RENTAL_ENTITY.get().getInteractions()))
                 .willReturn(ANY_BOOK_RECORD_DTO_COLLECTION);
 
