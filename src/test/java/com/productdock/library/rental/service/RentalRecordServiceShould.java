@@ -13,8 +13,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import static com.productdock.library.rental.service.RentalStatus.RENTED;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
