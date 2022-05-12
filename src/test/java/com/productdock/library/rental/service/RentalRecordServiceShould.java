@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import static com.productdock.library.rental.service.RentalStatus.RENTED;
@@ -26,7 +27,7 @@ class RentalRecordServiceShould {
     private static final RentalRequestDto ANY_REQUEST_DTO = new RentalRequestDto(DEFAULT_BOOK_ID, RENTED);
     private static final Optional<RentalRecordEntity> ANY_RENTAL_ENTITY = Optional.of(mock(RentalRecordEntity.class));
     private static final BookRentalRecord ANY_BOOK_RENTAL_RECORD = mock(BookRentalRecord.class);
-    private static final BookRecordDto ANY_BOOK_RECORD_DTO = mock(BookRecordDto.class);
+    public static final Collection ANY_BOOK_RECORD_DTO_COLLECTION = mock(Collection.class);
 
     @InjectMocks
     private RentalRecordService rentalRecordService;
@@ -70,13 +71,10 @@ class RentalRecordServiceShould {
     void getBookRentalRecords() {
         given(rentalRecordRepository.findById(DEFAULT_BOOK_ID)).willReturn(ANY_RENTAL_ENTITY);
         given(bookRecordMapper.toDtoCollection(ANY_RENTAL_ENTITY.get().getInteractions()))
-                .willReturn(of(
-                        ANY_BOOK_RECORD_DTO,
-                        ANY_BOOK_RECORD_DTO
-                ).collect(toList()));
+                .willReturn(ANY_BOOK_RECORD_DTO_COLLECTION);
 
         var bookRecords = rentalRecordService.getByBookId(DEFAULT_BOOK_ID);
 
-        assertThat(bookRecords).hasSize(2);
+        assertThat(bookRecords).isEqualTo(ANY_BOOK_RECORD_DTO_COLLECTION);
     }
 }
