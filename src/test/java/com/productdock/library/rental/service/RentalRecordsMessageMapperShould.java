@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {RentalRecordsMessageMapperImpl.class})
-
 class RentalRecordsMessageMapperShould {
 
     @Autowired
@@ -30,7 +29,7 @@ class RentalRecordsMessageMapperShould {
         assertThatRecordsAreMatching(bookRentalRecord.getBookCopies(), rentalRecordsMessage.getRentalRecords());
     }
 
-    private void assertThatRecordsAreMatching (List<BookRentalRecord.BookCopy> bookCopies, List<RentalRecordsMessage.RentalRecordRequest> rentalRecordRequests) {
+    private void assertThatRecordsAreMatching(List<BookRentalRecord.BookCopy> bookCopies, List<RentalRecordsMessage.RentalRecordRequest> rentalRecordRequests) {
         assertThat(bookCopies).hasSameSizeAs(rentalRecordRequests);
         var bookCopy = bookCopies.get(0);
         var rentalRecordRequest = rentalRecordRequests.get(0);

@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 class UserReturnsABookActivityShould {
-    
+
     @InjectMocks
     private UserReturnsABookActivity userReturnsABookActivity;
 
