@@ -31,9 +31,9 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     public static final String FIRST_BOOK = "1";
     public static final String TEST_FILE = "testRecord.txt";
-    public static final String PATRON_1 = "test@productdock.com";
-    public static final String PATRON_2 = "test1@productdock.com";
-    public static final String PATRON_3 = "test2@productdock.com";
+    public static final String PATRON_1 = "test1@productdock.com";
+    public static final String PATRON_2 = "test2@productdock.com";
+    public static final String PATRON_3 = "test3@productdock.com";
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,7 +60,7 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @Test
     void shouldCreateThreeRentalRecords_whenThreeDifferentUsersRentABook() throws Exception {
-        makeRentalRequestWithDefaultUser(RentalStatus.RENTED)
+        makeRentalRequest(RentalStatus.RENTED)
                 .andExpect(status().isOk());
         makeRentalRequest(RentalStatus.RENTED, PATRON_2)
                 .andExpect(status().isOk());
@@ -78,7 +78,7 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @Test
     void shouldCreateReservationRecord() throws Exception {
-        makeRentalRequestWithDefaultUser(RentalStatus.RESERVED)
+        makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isOk());
 
         await()
@@ -92,9 +92,9 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @Test
     void shouldReturnBadRequest_whenRentingABookAlreadyRentedByUser() throws Exception {
-        makeRentalRequestWithDefaultUser(RentalStatus.RENTED)
+        makeRentalRequest(RentalStatus.RENTED)
                 .andExpect(status().isOk());
-        makeRentalRequestWithDefaultUser(RentalStatus.RENTED).
+        makeRentalRequest(RentalStatus.RENTED).
                 andExpect(status().isBadRequest());
 
         await()
@@ -108,9 +108,9 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @Test
     void shouldCreateReturnBookRecord_whenReturningABookAlreadyRentedByUser() throws Exception {
-        makeRentalRequestWithDefaultUser(RentalStatus.RENTED)
+        makeRentalRequest(RentalStatus.RENTED)
                 .andExpect(status().isOk());
-        makeRentalRequestWithDefaultUser(RentalStatus.RETURNED)
+        makeRentalRequest(RentalStatus.RETURNED)
                 .andExpect(status().isOk());
         await()
                 .atMost(Duration.ofSeconds(4))
@@ -123,9 +123,9 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @Test
     void shouldCreateRentBookRecord_whenRentingABookAlreadyReservedByUser() throws Exception {
-        makeRentalRequestWithDefaultUser(RentalStatus.RESERVED)
+        makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isOk());
-        makeRentalRequestWithDefaultUser(RentalStatus.RENTED)
+        makeRentalRequest(RentalStatus.RENTED)
                 .andExpect(status().isOk());
         await()
                 .atMost(Duration.ofSeconds(4))
@@ -138,9 +138,9 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @Test
     void shouldReturnBadRequest_whenReservingABookAlreadyReservedByUser() throws Exception {
-        makeRentalRequestWithDefaultUser(RentalStatus.RESERVED)
+        makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isOk());
-        makeRentalRequestWithDefaultUser(RentalStatus.RESERVED)
+        makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isBadRequest());
 
         await()
@@ -154,7 +154,7 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @Test
     void shouldReturnBadRequest_whenReturningABookNotRentedByUser() throws Exception {
-        makeRentalRequestWithDefaultUser(RentalStatus.RETURNED)
+        makeRentalRequest(RentalStatus.RETURNED)
                 .andExpect(status().isBadRequest());
     }
 
@@ -168,7 +168,7 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .andDo(print());
     }
 
-    private ResultActions makeRentalRequestWithDefaultUser(RentalStatus request) throws Exception {
+    private ResultActions makeRentalRequest(RentalStatus request) throws Exception {
         return makeRentalRequest(request, PATRON_1);
     }
 
