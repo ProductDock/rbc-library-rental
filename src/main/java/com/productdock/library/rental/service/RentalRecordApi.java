@@ -5,6 +5,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("api/rental/record")
 public record RentalRecordApi(RentalRecordService rentalRecordService) {
@@ -16,7 +18,7 @@ public record RentalRecordApi(RentalRecordService rentalRecordService) {
     }
 
     @GetMapping("/{bookId}")
-    public RentalRecordsDto getBook(@PathVariable("bookId") String bookId) throws InterruptedException {
+    public Collection<BookRecordDto> getByBookId(@PathVariable("bookId") String bookId) {
         return rentalRecordService.getByBookId(bookId);
     }
 }
