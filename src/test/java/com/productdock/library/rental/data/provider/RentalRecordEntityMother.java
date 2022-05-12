@@ -18,9 +18,12 @@ public class RentalRecordEntityMother {
             (Arrays.asList(defaultBookInteraction()));
 
     public static RentalRecordEntity defaultRentalRecordEntity() {
+        return defaultRentalRecordEntityBuilder().build();
+    }
+
+    public static RentalRecordEntity.RentalRecordEntityBuilder defaultRentalRecordEntityBuilder() {
         return RentalRecordEntity.builder()
                 .bookId(defaultBookId)
-                .interactions(defaultInteractions)
-                .build();
+                .interactions(defaultInteractions);
     }
 }

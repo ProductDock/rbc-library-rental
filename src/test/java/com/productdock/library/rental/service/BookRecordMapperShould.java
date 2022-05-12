@@ -42,7 +42,7 @@ public class BookRecordMapperShould {
                 reservedInteraction,
                 rentedInteraction,
                 returnedInteraction
-        ).collect(toList());;
+        ).collect(toList());
 
         var bookRecordDtoCollection = bookRecordMapper.toDtoCollection(bookInteractions);
 
