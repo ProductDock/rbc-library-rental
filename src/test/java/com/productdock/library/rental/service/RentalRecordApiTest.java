@@ -22,8 +22,6 @@ import java.util.concurrent.Callable;
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteraction;
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteractionBuilder;
 import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -184,13 +182,10 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     private void givenAnyRentalRecord() {
         var returnedInteraction = defaultBookInteractionBuilder().userEmail("::email::").status(RentalStatus.RETURNED).build();
-        var rentedInteraction = defaultBookInteraction();
-        var bookInteractions = of(
-                rentedInteraction,
-                returnedInteraction
-        ).collect(toList());
 
-        var rentalRecord = defaultRentalRecordEntityBuilder().interactions(bookInteractions).build();
+        var rentalRecord = defaultRentalRecordEntityBuilder()
+                .interaction(returnedInteraction)
+                .build();
         rentalRecordRepository.save(rentalRecord);
     }
 

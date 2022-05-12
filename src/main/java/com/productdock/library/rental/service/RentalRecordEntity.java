@@ -1,10 +1,7 @@
 package com.productdock.library.rental.service;
 
 import com.productdock.library.rental.book.BookInteraction;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,6 +19,7 @@ public class RentalRecordEntity implements Serializable {
     @Id
     private String id;
     private String bookId;
+    @Singular
     private List<BookInteraction> interactions;
 
 }

@@ -47,7 +47,7 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
     }
 
     public Collection<BookRecordDto> getByBookId(String bookId) {
-        Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findById(bookId);
+        Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findByBookId(bookId);
         if(recordEntity.isEmpty()){
             return new ArrayList<>();
         }
