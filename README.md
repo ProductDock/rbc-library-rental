@@ -1,6 +1,5 @@
 ## PD Library rental service
 
-
 ## Build and run by executing following steps manually
 
 ### Production
@@ -29,7 +28,8 @@ Production is running in GCP.
     ``` 
 5. #### Restart rbc-library-rental-vm to run a new jar
 
-   **rbc-library-rental-vm** is configured with startup-script. Startup script already contains instructions for running the jar:
+   **rbc-library-rental-vm** is configured with startup-script. Startup script already contains instructions for running
+   the jar:
 
    **Startup-script content:**
 

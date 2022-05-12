@@ -31,7 +31,9 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     public static final String FIRST_BOOK = "1";
     public static final String TEST_FILE = "testRecord.txt";
-    public static final String PATRON = "test@productdock.com";
+    public static final String PATRON_1 = "test1@productdock.com";
+    public static final String PATRON_2 = "test2@productdock.com";
+    public static final String PATRON_3 = "test3@productdock.com";
 
     @Autowired
     private MockMvc mockMvc;
@@ -54,6 +56,24 @@ class RentalRecordApiTest extends KafkaTestBase {
     final void after() {
         File f = new File(TEST_FILE);
         f.delete();
+    }
+
+    @Test
+    void shouldCreateThreeRentalRecords_whenThreeDifferentUsersRentABook() throws Exception {
+        makeRentalRequest(RentalStatus.RENTED)
+                .andExpect(status().isOk());
+        makeRentalRequest(RentalStatus.RENTED, PATRON_2)
+                .andExpect(status().isOk());
+        makeRentalRequest(RentalStatus.RENTED, PATRON_3)
+                .andExpect(status().isOk());
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .until(ifFileExists(TEST_FILE));
+
+        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(3);
     }
 
     @Test
@@ -102,6 +122,21 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     @Test
+    void shouldCreateRentBookRecord_whenRentingABookAlreadyReservedByUser() throws Exception {
+        makeRentalRequest(RentalStatus.RESERVED)
+                .andExpect(status().isOk());
+        makeRentalRequest(RentalStatus.RENTED)
+                .andExpect(status().isOk());
+        await()
+                .atMost(Duration.ofSeconds(4))
+                .until(ifFileExists(TEST_FILE));
+
+        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(1);
+    }
+
+    @Test
     void shouldReturnBadRequest_whenReservingABookAlreadyReservedByUser() throws Exception {
         makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isOk());
@@ -123,14 +158,18 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .andExpect(status().isBadRequest());
     }
 
-    private ResultActions makeRentalRequest(RentalStatus request) throws Exception {
+    private ResultActions makeRentalRequest(RentalStatus request, String email) throws Exception {
         return mockMvc.perform(post("/api/rental/record")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"bookId\": \"" + FIRST_BOOK + "\",\n" +
                                 "    \"requestedStatus\": \"" + request + "\"\n" +
-                                "}").with(jwt().jwt(jwt -> jwt.claim("email", PATRON))))
+                                "}").with(jwt().jwt(jwt -> jwt.claim("email", email))))
                 .andDo(print());
+    }
+
+    private ResultActions makeRentalRequest(RentalStatus request) throws Exception {
+        return makeRentalRequest(request, PATRON_1);
     }
 
     private Callable<Boolean> ifFileExists(String testFile) {

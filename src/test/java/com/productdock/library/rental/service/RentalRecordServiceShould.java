@@ -37,7 +37,7 @@ class RentalRecordServiceShould {
 
     @Test
     void verifyIfRentRecordEntityIsSavedAndPublished() throws Exception {
-        given(rentalRecordRepository.findById(ANY_REQUEST_DTO.bookId)).willReturn(ANY_RENTAL_ENTITY);
+        given(rentalRecordRepository.findByBookId(ANY_REQUEST_DTO.bookId)).willReturn(ANY_RENTAL_ENTITY);
         given(bookRentalRecordMapper.toDomain(ANY_RENTAL_ENTITY.get())).willReturn(ANY_BOOK_RENTAL_RECORD);
         given(bookRentalRecordMapper.toEntity(ANY_BOOK_RENTAL_RECORD)).willReturn(ANY_RENTAL_ENTITY.get());
 

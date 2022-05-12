@@ -1,6 +1,5 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.service.RentalStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
