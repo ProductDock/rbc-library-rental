@@ -1,5 +1,6 @@
 package com.productdock.library.rental.service;
 
+import com.productdock.library.rental.book.BookInteraction;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {BookRecordMapperImpl.class})
 class BookRecordMapperShould {
+
+    public static final BookInteraction RESERVED_INTERACTION = defaultBookInteractionBuilder().status(RentalStatus.RESERVED).build();
+    public static final BookInteraction RETURNED_INTERACTION = defaultBookInteractionBuilder().status(RentalStatus.RETURNED).build();
+    public static final BookInteraction RENTED_INTERACTION = defaultBookInteraction();
 
     @Autowired
     private BookRecordMapper bookRecordMapper;
@@ -34,14 +39,10 @@ class BookRecordMapperShould {
 
     @Test
     void mapBookInteractionCollectionToBookRecordDtoCollection() {
-        var reservedInteraction = defaultBookInteractionBuilder().userEmail("::email::").status(RentalStatus.RESERVED).build();
-        var returnedInteraction = defaultBookInteractionBuilder().userEmail("::email::").status(RentalStatus.RETURNED).build();
-        var rentedInteraction = defaultBookInteraction();
-
         var bookInteractions = of(
-                reservedInteraction,
-                rentedInteraction,
-                returnedInteraction
+                RESERVED_INTERACTION,
+                RENTED_INTERACTION,
+                RETURNED_INTERACTION
         ).collect(toList());
 
         var bookRecordDtoCollection = bookRecordMapper.toDtoCollection(bookInteractions);
@@ -50,9 +51,9 @@ class BookRecordMapperShould {
             softly.assertThat(bookRecordDtoCollection)
                     .extracting("email", "status")
                     .containsExactlyInAnyOrder(
-                            tuple(reservedInteraction.getUserEmail(), RentalStatus.RESERVED),
-                            tuple(returnedInteraction.getUserEmail(), RentalStatus.RETURNED),
-                            tuple(rentedInteraction.getUserEmail(), RentalStatus.RENTED)
+                            tuple(RESERVED_INTERACTION.getUserEmail(), RentalStatus.RESERVED),
+                            tuple(RETURNED_INTERACTION.getUserEmail(), RentalStatus.RETURNED),
+                            tuple(RENTED_INTERACTION.getUserEmail(), RentalStatus.RENTED)
                     );
         }
     }
