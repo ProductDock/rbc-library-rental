@@ -12,17 +12,20 @@ import static com.productdock.library.rental.data.provider.BookInteractionMother
 
 public class RentalRecordEntityMother {
 
-    private static final String defaultId = "1";
+    private static final String defaultId = "2";
     private static final String defaultBookId = "1";
 
     private static final List<BookInteraction> defaultInteractions = new ArrayList<>
             (Arrays.asList(defaultBookInteraction()));
 
     public static RentalRecordEntity defaultRentalRecordEntity() {
+        return defaultRentalRecordEntityBuilder().build();
+    }
+
+    public static RentalRecordEntity.RentalRecordEntityBuilder defaultRentalRecordEntityBuilder() {
         return RentalRecordEntity.builder()
                 .id(defaultId)
                 .bookId(defaultBookId)
-                .interactions(defaultInteractions)
-                .build();
+                .interactions(defaultInteractions);
     }
 }

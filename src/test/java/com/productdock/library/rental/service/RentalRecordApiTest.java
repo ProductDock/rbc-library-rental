@@ -19,10 +19,17 @@ import java.io.ObjectInputStream;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 
+import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteraction;
+import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteractionBuilder;
+import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
@@ -157,6 +164,32 @@ class RentalRecordApiTest extends KafkaTestBase {
         makeRentalRequest(RentalStatus.RETURNED)
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void shouldGetBookRecords() throws Exception {
+        givenAnyRentalRecord();
+
+        mockMvc.perform(get("/api/rental/record/" + FIRST_BOOK)
+                        .with(jwt().jwt(jwt -> jwt.claim("email", PATRON_1))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").value(hasSize(2)))
+                .andExpect(jsonPath("$.[*].status",
+                        containsInAnyOrder(RentalStatus.RENTED.toString(), RentalStatus.RETURNED.toString())))
+                .andExpect(jsonPath("$.[*].email",
+                        containsInAnyOrder("default@gmail.com", "::email::")));
+
+    }
+
+    private void givenAnyRentalRecord() {
+        var returnedInteraction = defaultBookInteractionBuilder().userEmail("::email::").status(RentalStatus.RETURNED).build();
+
+        var rentalRecord = defaultRentalRecordEntityBuilder()
+                .interaction(returnedInteraction)
+                .build();
+        rentalRecordRepository.save(rentalRecord);
+    }
+
+
 
     private ResultActions makeRentalRequest(RentalStatus request, String email) throws Exception {
         return mockMvc.perform(post("/api/rental/record")

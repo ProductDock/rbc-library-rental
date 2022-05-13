@@ -4,12 +4,15 @@ import com.productdock.library.rental.domain.BookRentalRecord;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 import static com.productdock.library.rental.domain.UserActivityFactory.createUserActivity;
 
 @Service
 public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
+                                  BookRecordMapper bookRecordMapper,
                                   BookRentalRecordMapper bookRentalRecordMapper,
                                   RentalRecordPublisher rentalRecordPublisher) {
 
@@ -41,5 +44,13 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
             newRecordEntity.setId(previousRecordEntity.get().getId());
         }
         rentalRecordRepository.save(newRecordEntity);
+    }
+
+    public Collection<BookRecordDto> getByBookId(String bookId) {
+        Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findByBookId(bookId);
+        if(recordEntity.isEmpty()){
+            return new ArrayList<>();
+        }
+        return bookRecordMapper.toDtoCollection(recordEntity.get().getInteractions());
     }
 }
