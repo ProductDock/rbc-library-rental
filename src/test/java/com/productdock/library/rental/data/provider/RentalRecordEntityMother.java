@@ -1,8 +1,8 @@
 package com.productdock.library.rental.data.provider;
 
 
-import com.productdock.library.rental.book.BookInteraction;
-import com.productdock.library.rental.service.RentalRecordEntity;
+import com.productdock.library.rental.ca.domain.BookInteraction;
+import com.productdock.library.rental.ca.domain.RentalRecordEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

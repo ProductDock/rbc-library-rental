@@ -1,6 +1,6 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.book.BookInteraction;
+import com.productdock.library.rental.ca.domain.BookInteraction;
 import com.productdock.library.rental.service.RentalStatus;
 
 import java.util.Date;

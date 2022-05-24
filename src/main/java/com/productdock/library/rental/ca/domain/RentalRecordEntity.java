@@ -1,6 +1,5 @@
-package com.productdock.library.rental.service;
+package com.productdock.library.rental.ca.domain;
 
-import com.productdock.library.rental.book.BookInteraction;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

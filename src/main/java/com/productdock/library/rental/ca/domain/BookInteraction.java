@@ -1,4 +1,4 @@
-package com.productdock.library.rental.book;
+package com.productdock.library.rental.ca.domain;
 
 import com.productdock.library.rental.service.RentalStatus;
 import lombok.AllArgsConstructor;

@@ -46,11 +46,4 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
         rentalRecordRepository.save(newRecordEntity);
     }
 
-    public Collection<BookRecordDto> getByBookId(String bookId) {
-        Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findByBookId(bookId);
-        if(recordEntity.isEmpty()){
-            return new ArrayList<>();
-        }
-        return bookRecordMapper.toDtoCollection(recordEntity.get().getInteractions());
-    }
 }

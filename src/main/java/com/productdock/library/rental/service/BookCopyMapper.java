@@ -1,6 +1,6 @@
 package com.productdock.library.rental.service;
 
-import com.productdock.library.rental.book.BookInteraction;
+import com.productdock.library.rental.ca.domain.BookInteraction;
 import com.productdock.library.rental.domain.BookRentalRecord;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
