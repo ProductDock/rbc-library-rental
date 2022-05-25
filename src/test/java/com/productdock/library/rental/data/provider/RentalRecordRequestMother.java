@@ -1,7 +1,7 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.service.RentalRecordsMessage;
-import com.productdock.library.rental.service.RentalStatus;
+import com.productdock.library.rental.ca.adapter.out.kafka.RentalRecordsMessage;
+import com.productdock.library.rental.domain.RentalStatus;
 
 public class RentalRecordRequestMother {
 

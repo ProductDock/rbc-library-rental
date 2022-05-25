@@ -1,9 +1,9 @@
-package com.productdock.library.rental.ca.application.service;
+package com.productdock.library.rental.application.service;
 
-import com.productdock.library.rental.ca.application.port.in.GetBookInteractionsQuery;
-import com.productdock.library.rental.ca.domain.BookInteraction;
-import com.productdock.library.rental.ca.domain.RentalRecordEntity;
-import com.productdock.library.rental.service.RentalRecordRepository;
+import com.productdock.library.rental.application.port.in.GetBookInteractionsQuery;
+import com.productdock.library.rental.domain.BookInteraction;
+import com.productdock.library.rental.domain.RentalRecordEntity;
+import com.productdock.library.rental.application.port.out.persistence.RentalRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

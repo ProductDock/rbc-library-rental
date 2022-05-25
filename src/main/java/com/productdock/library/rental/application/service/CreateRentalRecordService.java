@@ -1,31 +1,30 @@
-package com.productdock.library.rental.service;
+package com.productdock.library.rental.application.service;
 
+import com.productdock.library.rental.application.port.in.CreateRentalRecordUseCase;
+import com.productdock.library.rental.application.port.out.persistence.RentalRecordRepository;
+import com.productdock.library.rental.application.port.out.kafka.SendRentalRecordOutPort;
+import com.productdock.library.rental.domain.RentalRequestDto;
 import com.productdock.library.rental.domain.BookRentalRecord;
+import com.productdock.library.rental.domain.UserActivityFactory;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-
-import static com.productdock.library.rental.domain.UserActivityFactory.createUserActivity;
-
 @Service
-public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
-                                  BookRecordMapper bookRecordMapper,
-                                  BookRentalRecordMapper bookRentalRecordMapper,
-                                  RentalRecordPublisher rentalRecordPublisher) {
+public record CreateRentalRecordService(RentalRecordRepository rentalRecordRepository,
+                                        BookRecordMapper bookRecordMapper,
+                                        BookRentalRecordMapper bookRentalRecordMapper,
+                                        SendRentalRecordOutPort sendRentalRecordOutPort) implements CreateRentalRecordUseCase {
 
     @SneakyThrows
     public void create(RentalRequestDto rentalRequestDto, String userEmail) {
         var bookRentalRecord = createBookRentalRecord(rentalRequestDto.bookId);
 
-        var activity = createUserActivity(rentalRequestDto.requestedStatus, userEmail);
+        var activity = UserActivityFactory.createUserActivity(rentalRequestDto.requestedStatus, userEmail);
         bookRentalRecord.trackActivity(activity);
 
         saveRentalRecord(bookRentalRecord);
 
-        rentalRecordPublisher.sendMessage(bookRentalRecord);
+        sendRentalRecordOutPort.sendMessage(bookRentalRecord);
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {
@@ -45,5 +44,4 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
         }
         rentalRecordRepository.save(newRecordEntity);
     }
-
 }

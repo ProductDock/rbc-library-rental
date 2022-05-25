@@ -2,7 +2,7 @@ package com.productdock.library.rental.data.provider;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.rental.kafka.RentalRecordsMessageDeserializer;
-import com.productdock.library.rental.service.RentalRecordsMessage;
+import com.productdock.library.rental.ca.adapter.out.kafka.RentalRecordsMessage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

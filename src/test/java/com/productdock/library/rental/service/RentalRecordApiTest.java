@@ -1,5 +1,8 @@
 package com.productdock.library.rental.service;
 
+import com.productdock.library.rental.ca.adapter.out.kafka.RentalRecordsMessage;
+import com.productdock.library.rental.application.port.out.persistence.RentalRecordRepository;
+import com.productdock.library.rental.domain.RentalStatus;
 import com.productdock.library.rental.data.provider.KafkaTestBase;
 import com.productdock.library.rental.data.provider.KafkaTestConsumer;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +22,6 @@ import java.io.ObjectInputStream;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 
-import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteraction;
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteractionBuilder;
 import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
 import static org.assertj.core.api.Assertions.assertThat;

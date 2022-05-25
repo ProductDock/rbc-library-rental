@@ -1,8 +1,8 @@
-package com.productdock.library.rental.ca.adapter.in.web;
+package com.productdock.library.rental.adapter.in.web;
 
-import com.productdock.library.rental.ca.application.port.in.GetBookInteractionsQuery;
-import com.productdock.library.rental.service.BookRecordDto;
-import com.productdock.library.rental.service.BookRecordMapper;
+import com.productdock.library.rental.application.port.in.GetBookInteractionsQuery;
+import com.productdock.library.rental.application.service.BookRecordMapper;
+import com.productdock.library.rental.domain.BookRecordDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package com.productdock.library.rental.ca.domain;
+package com.productdock.library.rental.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

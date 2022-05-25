@@ -1,4 +1,4 @@
-package com.productdock.library.rental.service;
+package com.productdock.library.rental.domain;
 
 public class BookRecordDto {
     public String email;

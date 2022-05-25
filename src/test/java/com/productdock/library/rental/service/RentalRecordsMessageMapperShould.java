@@ -1,5 +1,7 @@
 package com.productdock.library.rental.service;
 
+import com.productdock.library.rental.ca.adapter.out.kafka.RentalRecordsMessage;
+import com.productdock.library.rental.domain.RentalRecordsMessageMapper;
 import com.productdock.library.rental.domain.BookRentalRecord;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

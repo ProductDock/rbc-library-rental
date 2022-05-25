@@ -1,7 +1,5 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.service.RentalStatus;
-
 public class UserActivityFactory {
 
     private UserActivityFactory() {

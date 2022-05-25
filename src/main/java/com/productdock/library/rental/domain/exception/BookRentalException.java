@@ -1,4 +1,4 @@
-package com.productdock.library.rental.exception;
+package com.productdock.library.rental.domain.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

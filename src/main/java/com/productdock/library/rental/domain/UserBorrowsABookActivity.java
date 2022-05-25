@@ -1,7 +1,6 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.exception.BookRentalException;
-import com.productdock.library.rental.service.RentalStatus;
+import com.productdock.library.rental.domain.exception.BookRentalException;
 
 import java.util.Optional;
 
