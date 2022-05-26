@@ -16,12 +16,12 @@ spring:
 
   data:
     mongodb:
-      authentication-database: ${mongo.database.name:rental-db}
+      authentication-database: ${mongo.database.name:rental}
       host: ${mongo.server.url:localhost}
-      port: ${mongo.server.port:29017}
+      port: ${mongo.server.port:28017}
       username: ${mongo.username:root1}
       password: ${mongo.password:root1}
-      database: ${mongo.database.name:rental-db}
+      database: ${mongo.database.name:rental}
 
   security:
     oauth2:
@@ -33,3 +33,6 @@ spring:
 server:
   error:
     include-message: always
+
+mongock:
+  change-logs-scan-package: com.productdock.library.rental.config.dbmigrations
