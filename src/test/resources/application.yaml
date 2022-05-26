@@ -22,3 +22,6 @@ spring:
     topic:
       book-status: test-book-status
       bad-rental-request: test-bad-rental-request
+
+mongock:
+  enabled: false

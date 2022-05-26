@@ -1,5 +1,6 @@
 package com.productdock.library.rental;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +11,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableMongoRepositories
+@EnableMongock
 public class RentalApplication {
 
     public static void main(String[] args) {
