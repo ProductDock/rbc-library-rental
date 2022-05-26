@@ -16,12 +16,12 @@ spring:
 
   data:
     mongodb:
-      authentication-database: ${mongo.database.name:rental}
+      authentication-database: rental
       host: ${mongo.server.url:localhost}
       port: ${mongo.server.port:28017}
       username: ${mongo.username:root1}
       password: ${mongo.password:root1}
-      database: ${mongo.database.name:rental}
+      database: rental
 
   security:
     oauth2:
