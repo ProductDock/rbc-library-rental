@@ -43,7 +43,7 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
     }
 
     private void saveRentalRecord(BookRentalRecord bookRentalRecord) {
-        log.debug("Save new book's rental record in database: {}", bookRentalRecord);
+        log.debug("Save new book's rental record in database with id : {}", bookRentalRecord);
         var previousRecordEntity = rentalRecordRepository.findByBookId(bookRentalRecord.getBookId());
         var newRecordEntity = bookRentalRecordMapper.toEntity(bookRentalRecord);
         if (previousRecordEntity.isPresent()) {
@@ -55,7 +55,7 @@ public record RentalRecordService(RentalRecordRepository rentalRecordRepository,
     public Collection<BookRecordDto> getByBookId(String bookId) {
         log.debug("Get rental records for the {} book", bookId);
         Optional<RentalRecordEntity> recordEntity = rentalRecordRepository.findByBookId(bookId);
-        if(recordEntity.isEmpty()){
+        if (recordEntity.isEmpty()) {
             return new ArrayList<>();
         }
         return bookRecordMapper.toDtoCollection(recordEntity.get().getInteractions());

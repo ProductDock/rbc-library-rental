@@ -7,5 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface RentalRecordRepository extends MongoRepository<RentalRecordEntity, String> {
+
     Optional<RentalRecordEntity> findByBookId(String bookId);
 }
