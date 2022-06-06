@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Data
 @NoArgsConstructor
 @Builder
@@ -26,8 +28,11 @@ public class BookRentalRecord {
     }
 
     public void trackActivity(UserBookActivity activity) {
+        log.debug("Add new rental request to book's rental record");
         Optional<BookCopy> previousRecord = findByPatron(activity.getInitiator());
+        log.debug("Old record that is getting replaced : {}", previousRecord);
         Optional<BookCopy> newRecord = activity.changeStatusFrom(previousRecord);
+        log.debug("New record : {}", newRecord);
         remove(previousRecord);
         add(newRecord);
     }
