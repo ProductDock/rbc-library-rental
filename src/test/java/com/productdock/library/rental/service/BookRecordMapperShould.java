@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteraction;
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteractionBuilder;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
