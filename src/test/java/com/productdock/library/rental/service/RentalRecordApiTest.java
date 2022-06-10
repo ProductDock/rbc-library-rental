@@ -170,7 +170,7 @@ class RentalRecordApiTest extends KafkaTestBase {
 
         var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(0);
+        assertThat(rentalRecordsMessage.getRentalRecords()).isEmpty();
     }
 
     @Test
