@@ -12,6 +12,7 @@ public class UserActivityFactory {
             case RENTED -> new UserBorrowsABookActivity(userEmail);
             case RESERVED -> new UserReservesABookActivity(userEmail);
             case RETURNED -> new UserReturnsABookActivity(userEmail);
+            case CANCELED -> new UserCancelsABookReservationActivity(userEmail);
             default -> null;
         };
     }

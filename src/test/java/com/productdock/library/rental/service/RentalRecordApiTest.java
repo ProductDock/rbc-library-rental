@@ -159,8 +159,29 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     @Test
+    void shouldCancelReservation_whenCancelingABookAlreadyReservedByUser() throws Exception {
+        makeRentalRequest(RentalStatus.RESERVED)
+                .andExpect(status().isOk());
+        makeRentalRequest(RentalStatus.CANCELED)
+                .andExpect(status().isOk());
+        await()
+                .atMost(Duration.ofSeconds(4))
+                .until(ifFileExists(TEST_FILE));
+
+        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(rentalRecordsMessage.getRentalRecords()).isEmpty();
+    }
+
+    @Test
     void shouldReturnBadRequest_whenReturningABookNotRentedByUser() throws Exception {
         makeRentalRequest(RentalStatus.RETURNED)
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenCancelingReservationOfABookThatNotReservedByUser() throws Exception {
+        makeRentalRequest(RentalStatus.CANCELED)
                 .andExpect(status().isBadRequest());
     }
 
