@@ -44,6 +44,18 @@ class BookRentalRecordShould {
     }
 
     @Test
+    void addCancelBookReservationRecord_whenUserReservedABookAlready() {
+        var bookRentalRecord = bookRentalRecordWithReserveRequest();
+        var reserveBookCopy = bookRentalRecord.getBookCopies().get(0);
+        given(userBookActivity.getInitiator()).willReturn(reserveBookCopy.getPatron());
+        given(userBookActivity.changeStatusFrom(Optional.of(reserveBookCopy))).willReturn(Optional.empty());
+
+        bookRentalRecord.trackActivity(userBookActivity);
+
+        assertThat(bookRentalRecord.getBookCopies()).isEmpty();
+    }
+
+    @Test
     void addRentRecord_whenUserHadNotRentedOrReservedItAlready() {
         var bookRentalRecord = bookRentalRecordWithNoRequests();
         var rentBookCopy = bookCopyWithRentRequest();
