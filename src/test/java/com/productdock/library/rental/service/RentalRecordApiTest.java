@@ -182,7 +182,7 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .andExpect(status().isOk());
 
         await()
-                .atMost(Duration.ofSeconds(5))
+                .atMost(Duration.ofSeconds(8))
                 .until(reservationCanceled(FIRST_BOOK));
 
         mockMvc.perform(get("/api/rental/record/" + FIRST_BOOK)
@@ -204,7 +204,7 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .andExpect(status().isOk());
 
         await()
-                .atMost(Duration.ofSeconds(5))
+                .atMost(Duration.ofSeconds(8))
                 .until(reservationCanceled(FIRST_BOOK));
         Date reservationCanceled = new Date();
 
