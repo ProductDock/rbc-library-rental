@@ -40,3 +40,7 @@ mongock:
 logging:
   level:
     com.productdock.library.rental: ${logging.level:INFO}
+
+scheduled:
+  task:
+    delay: 345600

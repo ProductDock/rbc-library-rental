@@ -17,7 +17,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.Duration;
+import java.util.Date;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteractionBuilder;
 import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
@@ -40,6 +42,7 @@ class RentalRecordApiTest extends KafkaTestBase {
     public static final String PATRON_1 = "test1@productdock.com";
     public static final String PATRON_2 = "test2@productdock.com";
     public static final String PATRON_3 = "test3@productdock.com";
+    public static final Integer CANCEL_RESERVATION_DELAY = 3;
 
     @Autowired
     private MockMvc mockMvc;
@@ -174,6 +177,42 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     @Test
+    void shouldCancelReservation_whenReservationDelayExpires() throws Exception {
+        makeRentalRequest(RentalStatus.RESERVED)
+                .andExpect(status().isOk());
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .until(reservationCanceled(FIRST_BOOK));
+
+        mockMvc.perform(get("/api/rental/record/" + FIRST_BOOK)
+                        .with(jwt().jwt(jwt -> jwt.claim("email", PATRON_1))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").value(hasSize(0)));
+    }
+
+    @Test
+    void shouldCancelReservationAfterLastReservation_whenLastReservationDelayExpires() throws Exception {
+
+        makeRentalRequest(RentalStatus.RESERVED)
+                .andExpect(status().isOk());
+        makeRentalRequest(RentalStatus.CANCELED)
+                .andExpect(status().isOk());
+
+        Date secondReservation = new Date();
+        makeRentalRequest(RentalStatus.RESERVED)
+                .andExpect(status().isOk());
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .until(reservationCanceled(FIRST_BOOK));
+        Date reservationCanceled = new Date();
+
+        assertThat(reservationCanceled.getTime())
+                .isGreaterThanOrEqualTo(secondReservation.getTime() + TimeUnit.SECONDS.toMillis(CANCEL_RESERVATION_DELAY));
+    }
+
+    @Test
     void shouldReturnBadRequest_whenReturningABookNotRentedByUser() throws Exception {
         makeRentalRequest(RentalStatus.RETURNED)
                 .andExpect(status().isBadRequest());
@@ -230,6 +269,17 @@ class RentalRecordApiTest extends KafkaTestBase {
             return f.isFile();
         };
         return checkForFile;
+    }
+
+    private Callable<Boolean> reservationCanceled(String bookId) {
+        Callable<Boolean> checkIfCanceled = () -> {
+            var records = rentalRecordRepository.findByBookId(bookId);
+            if (records.isEmpty()) {
+                return false;
+            }
+            return records.get().getInteractions().size() == 0;
+        };
+        return checkIfCanceled;
     }
 
     private RentalRecordsMessage getRentalRecordsMessageFrom(String testFile) throws IOException, ClassNotFoundException {

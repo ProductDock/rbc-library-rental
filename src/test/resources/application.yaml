@@ -25,3 +25,7 @@ spring:
 
 mongock:
   enabled: false
+
+scheduled:
+  task:
+    delay: 3
