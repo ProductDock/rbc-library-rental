@@ -277,10 +277,8 @@ class RentalRecordApiTest extends KafkaTestBase {
             if (records.isEmpty()) {
                 return false;
             }
-
             return records.get().getInteractions().size() == 0;
         };
-
         return checkIfCanceled;
     }
 

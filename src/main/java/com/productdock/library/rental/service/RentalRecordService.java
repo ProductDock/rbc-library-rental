@@ -44,9 +44,7 @@ public class RentalRecordService {
         if (rentalRequestDto.requestedStatus.equals(RentalStatus.RESERVED)) {
             scheduleCancelReservation(rentalRequestDto, userEmail);
         }
-
         bookRentalRecord.trackActivity(activity);
-
         saveRentalRecord(bookRentalRecord);
 
         rentalRecordPublisher.sendMessage(bookRentalRecord);
@@ -81,7 +79,6 @@ public class RentalRecordService {
         if (rentalRecords.isEmpty()) {
             throw new BookRentalException("Book rental record not found");
         }
-
         return rentalRecords.get().getInteractions().stream()
                 .filter(i -> i.getUserEmail().equals(userEmail)).findFirst();
     }
