@@ -33,7 +33,7 @@ public class RentalRecordService {
     private RentalRecordPublisher rentalRecordPublisher;
 
     @Value("${scheduled.task.delay}")
-    private Integer DELAY;
+    private Integer delay;
 
     @SneakyThrows
     public void create(RentalRequestDto rentalRequestDto, String userEmail) {
@@ -57,7 +57,7 @@ public class RentalRecordService {
         rentalRequestDto.requestedStatus = RentalStatus.CANCELED;
         Runnable task = () -> createCancelReservationTask(rentalRequestDto, userEmail);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
-        executor.schedule(task, DELAY, TimeUnit.SECONDS);
+        executor.schedule(task, delay, TimeUnit.SECONDS);
     }
 
     private void createCancelReservationTask(RentalRequestDto rentalRequestDto, String userEmail) {
@@ -72,7 +72,7 @@ public class RentalRecordService {
     }
 
     private boolean beforeDelay(Date interactionDate) {
-        return interactionDate.getTime() + TimeUnit.SECONDS.toMillis(DELAY) > new Date().getTime();
+        return interactionDate.getTime() + TimeUnit.SECONDS.toMillis(delay) > new Date().getTime();
     }
 
     private Optional<BookInteraction> findUsersBookInteraction(String userEmail, String bookId) {
