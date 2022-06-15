@@ -3,6 +3,8 @@ package com.productdock.library.rental.service;
 import com.productdock.library.rental.book.BookInteraction;
 import com.productdock.library.rental.domain.BookRentalRecord;
 import com.productdock.library.rental.exception.BookRentalException;
+import com.productdock.library.rental.scheduler.SchedulerRule;
+import com.productdock.library.rental.scheduler.TaskScheduler;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.productdock.library.rental.domain.UserActivityFactory.createUserActivity;
@@ -53,9 +53,12 @@ public class RentalRecordService {
     private void scheduleCancelReservation(RentalRequestDto rentalRequestDto, String userEmail) {
         log.debug("Scheduling cancel reservation task for book {} for user {} at: {} time", rentalRequestDto.bookId, userEmail, new Date());
         rentalRequestDto.requestedStatus = RentalStatus.CANCELED;
-        Runnable task = () -> createCancelReservationTask(rentalRequestDto, userEmail);
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
-        executor.schedule(task, delay, TimeUnit.SECONDS);
+        new TaskScheduler()
+                .scheduledTask(() -> createCancelReservationTask(rentalRequestDto, userEmail))
+                .delay(delay)
+                .timeUnit(TimeUnit.SECONDS)
+                .schedulerRule(SchedulerRule.WEEKDAYS)
+                .schedule();
     }
 
     private void createCancelReservationTask(RentalRequestDto rentalRequestDto, String userEmail) {
