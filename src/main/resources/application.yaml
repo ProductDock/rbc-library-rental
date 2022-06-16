@@ -42,5 +42,8 @@ logging:
     com.productdock.library.rental: ${logging.level:INFO}
 
 scheduled:
+  cron:
+    expression: '0 8 * * *'
   task:
     delay: 345600
+    time-to-skip-weekend: 172800

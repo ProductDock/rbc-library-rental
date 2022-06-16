@@ -1,39 +1,27 @@
 package com.productdock.library.rental.service;
 
-import com.productdock.library.rental.book.BookInteraction;
 import com.productdock.library.rental.domain.BookRentalRecord;
-import com.productdock.library.rental.exception.BookRentalException;
-import com.productdock.library.rental.scheduler.SchedulerRule;
-import com.productdock.library.rental.scheduler.TaskScheduler;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static com.productdock.library.rental.domain.UserActivityFactory.createUserActivity;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RentalRecordService {
 
-    @NonNull
     private RentalRecordRepository rentalRecordRepository;
-    @NonNull
     private BookRecordMapper bookRecordMapper;
-    @NonNull
     private BookRentalRecordMapper bookRentalRecordMapper;
-    @NonNull
     private RentalRecordPublisher rentalRecordPublisher;
 
-    @Value("${scheduled.task.delay}")
-    private Integer delay;
 
     @SneakyThrows
     public void create(RentalRequestDto rentalRequestDto, String userEmail) {
@@ -41,49 +29,14 @@ public class RentalRecordService {
         var bookRentalRecord = createBookRentalRecord(rentalRequestDto.bookId);
 
         var activity = createUserActivity(rentalRequestDto.requestedStatus, userEmail);
-        if (rentalRequestDto.requestedStatus.equals(RentalStatus.RESERVED)) {
-            scheduleCancelReservation(rentalRequestDto, userEmail);
-        }
         bookRentalRecord.trackActivity(activity);
         saveRentalRecord(bookRentalRecord);
 
         rentalRecordPublisher.sendMessage(bookRentalRecord);
     }
 
-    private void scheduleCancelReservation(RentalRequestDto rentalRequestDto, String userEmail) {
-        log.debug("Scheduling cancel reservation task for book {} for user {} at: {} time", rentalRequestDto.bookId, userEmail, new Date());
-        rentalRequestDto.requestedStatus = RentalStatus.CANCELED;
-        new TaskScheduler()
-                .scheduledTask(() -> createCancelReservationTask(rentalRequestDto, userEmail))
-                .delay(delay)
-                .timeUnit(TimeUnit.SECONDS)
-                .schedulerRule(SchedulerRule.WEEKDAYS)
-                .schedule();
-    }
-
-    private void createCancelReservationTask(RentalRequestDto rentalRequestDto, String userEmail) {
-        log.debug("Executing cancel reservation task for book {} for user {} at: {} time", rentalRequestDto.bookId, userEmail, new Date());
-        var usersInteraction = findUsersBookInteraction(userEmail, rentalRequestDto.bookId);
-
-        if (usersInteraction.isEmpty() || beforeDelay(usersInteraction.get().getDate())) {
-            return;
-        }
-
-        create(rentalRequestDto, userEmail);
-    }
-
-    private boolean beforeDelay(Date interactionDate) {
-        return interactionDate.getTime() + TimeUnit.SECONDS.toMillis(delay) > new Date().getTime();
-    }
-
-    private Optional<BookInteraction> findUsersBookInteraction(String userEmail, String bookId) {
-        log.debug("Find users book interaction for book with id: {} and user with id: {}", bookId, userEmail);
-        var rentalRecords = rentalRecordRepository.findByBookId(bookId);
-        if (rentalRecords.isEmpty()) {
-            throw new BookRentalException("Book rental record not found");
-        }
-        return rentalRecords.get().getInteractions().stream()
-                .filter(i -> i.getUserEmail().equals(userEmail)).findFirst();
+    public Collection<RentalRecordEntity> findAllReserved() {
+        return rentalRecordRepository.findAllReserved();
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {
