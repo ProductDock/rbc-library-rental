@@ -8,6 +8,7 @@ import com.productdock.library.rental.service.RentalStatus;
 import com.productdock.library.rental.util.DateRange;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class CancelReservation {
@@ -34,6 +36,7 @@ public class CancelReservation {
 
     @Scheduled(cron = "${scheduled.cron.expression}")
     public void schedule() {
+        log.debug("Started scheduled task for canceling book reservations, date: {}", new Date());
         var rentalRecords = rentalRecordService.findAllReserved();
         for (var rentalRecord : rentalRecords) {
             cancelExpiredBookReservations(rentalRecord);
@@ -44,6 +47,7 @@ public class CancelReservation {
         var rentalRequestDto = new RentalRequestDto(rentalRecord.getBookId(), RentalStatus.CANCELED);
 
         for (var interaction :  getReservedInteractions(rentalRecord)) {
+            log.debug("Found reserved book interaction: {} for book with id: {}", interaction, rentalRecord.getBookId());
             if (timeToCancelReservation(interaction.getDate())) {
                 rentalRecordService.create(rentalRequestDto, interaction.getUserEmail());
             }
