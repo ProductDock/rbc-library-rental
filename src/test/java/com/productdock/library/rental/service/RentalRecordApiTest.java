@@ -192,27 +192,6 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     @Test
-    void shouldCancelReservationAfterLastReservation_whenLastReservationDelayExpires() throws Exception {
-
-        makeRentalRequest(RentalStatus.RESERVED)
-                .andExpect(status().isOk());
-        makeRentalRequest(RentalStatus.CANCELED)
-                .andExpect(status().isOk());
-
-        Date secondReservation = new Date();
-        makeRentalRequest(RentalStatus.RESERVED)
-                .andExpect(status().isOk());
-
-        await()
-                .atMost(Duration.ofSeconds(8))
-                .until(reservationCanceled(FIRST_BOOK));
-        Date reservationCanceled = new Date();
-
-        assertThat(reservationCanceled.getTime())
-                .isGreaterThanOrEqualTo(secondReservation.getTime() + TimeUnit.SECONDS.toMillis(CANCEL_RESERVATION_DELAY));
-    }
-
-    @Test
     void shouldReturnBadRequest_whenReturningABookNotRentedByUser() throws Exception {
         makeRentalRequest(RentalStatus.RETURNED)
                 .andExpect(status().isBadRequest());
