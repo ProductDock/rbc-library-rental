@@ -43,7 +43,7 @@ logging:
 
 scheduled:
   cron:
-    expression: '0 8 * * *'
+    expression: '0 0 8 * * *'
   task:
     delay: 345600
     time-to-skip-weekend: 172800
