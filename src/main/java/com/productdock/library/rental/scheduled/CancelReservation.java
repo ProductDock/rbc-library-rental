@@ -6,35 +6,26 @@ import com.productdock.library.rental.service.RentalRecordService;
 import com.productdock.library.rental.service.RentalRequestDto;
 import com.productdock.library.rental.service.RentalStatus;
 import com.productdock.library.rental.util.DateRange;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Component
 public class CancelReservation {
 
-    @NonNull
     private RentalRecordService rentalRecordService;
-
-    @NonNull
     private DateProvider dateProvider;
+    private ReservationHoldPolicy reservationHoldPolicy;
 
-    @Value("${scheduled.task.delay}")
-    private int delay;
+    private static final int WEEKEND_DAYS = 2;
 
-    @Value("${scheduled.task.time-to-skip-weekend}")
-    private int timeToSkipWeekend;
-
-    @Scheduled(cron = "${scheduled.cron.expression}")
+    @Scheduled(cron = "${reservations.auto-canceling.scheduled}")
     public void schedule() {
         log.debug("Started scheduled task for canceling book reservations, date: {}", new Date());
         var rentalRecords = rentalRecordService.findAllReserved();
@@ -46,7 +37,7 @@ public class CancelReservation {
     private void cancelExpiredBookReservations(RentalRecordEntity rentalRecord) {
         var rentalRequestDto = new RentalRequestDto(rentalRecord.getBookId(), RentalStatus.CANCELED);
 
-        for (var interaction :  getReservedInteractions(rentalRecord)) {
+        for (var interaction : getReservedInteractions(rentalRecord)) {
             log.debug("Found reserved book interaction: {} for book with id: {}", interaction, rentalRecord.getBookId());
             if (timeToCancelReservation(interaction.getDate())) {
                 rentalRecordService.create(rentalRequestDto, interaction.getUserEmail());
@@ -64,10 +55,10 @@ public class CancelReservation {
     }
 
     private Date getExecutionTime(Date reservationTime) {
-        var executionTime = reservationTime.getTime() + TimeUnit.SECONDS.toMillis(delay);
+        var executionTime = reservationTime.getTime() + reservationHoldPolicy.getTimeUnit().toMillis(reservationHoldPolicy.getLimit());
         DateRange dateRange = new DateRange(reservationTime.getTime(), executionTime);
-        if (dateRange.includesWeekend()) {
-            executionTime += TimeUnit.SECONDS.toMillis(timeToSkipWeekend);
+        if (dateRange.includesWeekend() && reservationHoldPolicy.isSkippedWeekend()) {
+            executionTime += reservationHoldPolicy.getTimeUnit().toMillis(WEEKEND_DAYS);
         }
 
         return new Date(executionTime);
