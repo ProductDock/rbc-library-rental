@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @AllArgsConstructor
@@ -55,10 +56,10 @@ public class CancelReservation {
     }
 
     private Date getExecutionTime(Date reservationTime) {
-        var executionTime = reservationTime.getTime() + reservationHoldPolicy.getTimeUnit().toMillis(reservationHoldPolicy.getLimit());
+        var executionTime = reservationTime.getTime() + reservationHoldPolicy.getLimitInMillis();
         DateRange dateRange = new DateRange(reservationTime.getTime(), executionTime);
         if (dateRange.includesWeekend() && reservationHoldPolicy.isSkippedWeekend()) {
-            executionTime += reservationHoldPolicy.getTimeUnit().toMillis(WEEKEND_DAYS);
+            executionTime += TimeUnit.DAYS.toMillis(WEEKEND_DAYS);
         }
 
         return new Date(executionTime);

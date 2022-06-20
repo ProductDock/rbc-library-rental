@@ -5,19 +5,18 @@ import com.productdock.library.rental.service.RentalRecordEntity;
 import com.productdock.library.rental.service.RentalRecordService;
 import com.productdock.library.rental.service.RentalRequestDto;
 import com.productdock.library.rental.service.RentalStatus;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteractionBuilder;
 import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
@@ -38,8 +37,11 @@ class CancelReservationShould {
     @Mock
     private DateProvider dateProvider;
 
-    @Mock
-    private ReservationHoldPolicy reservationHoldPolicy;
+    @Spy
+    private ReservationHoldPolicy reservationHoldPolicy = new ReservationHoldPolicy()
+                                                                    .withSkippedWeekend(true)
+                                                                    .withLimit(4)
+                                                                    .withTimeUnit("days");
 
     private static final Date DATE_13_06_2022 = new Date(1655107200000L);
     private static final Date DATE_15_06_2022 = new Date(1655287200000L);
@@ -56,13 +58,6 @@ class CancelReservationShould {
             .interaction(WEDNESDAY_RESERVED_INTERACTION).build();
 
     private static final Collection<RentalRecordEntity> ANY_RENTAL_RECORD_COLLECTION = List.of(FIRST_RECORD, SECOND_RECORD);
-
-    @BeforeEach
-    public void setUp() {
-        given(reservationHoldPolicy.getTimeUnit()).willReturn(TimeUnit.DAYS);
-        given(reservationHoldPolicy.getLimit()).willReturn(4);
-        given(reservationHoldPolicy.isSkippedWeekend()).willReturn(true);
-    }
 
     @Test
     void executeScheduledWhenWeekendNotIncludedAndTimeToCancel() {
