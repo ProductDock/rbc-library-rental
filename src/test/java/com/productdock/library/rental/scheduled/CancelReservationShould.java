@@ -26,7 +26,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CancelReservationTest {
+class CancelReservationShould {
 
     @InjectMocks
     private CancelReservation cancelReservation;
