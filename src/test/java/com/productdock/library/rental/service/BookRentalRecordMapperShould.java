@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.productdock.library.rental.data.provider.BookRentalRecordMother.bookRentalRecordWithRentRequest;
 import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntity;
+import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -23,6 +24,20 @@ class BookRentalRecordMapperShould {
 
     @Autowired
     private BookCopyMapper bookCopyMapper;
+
+    @Test
+    void mapRentalRecordEntityCollectionToBookRentalRecordCollection() {
+        var firstRentalRecordEntity = defaultRentalRecordEntity();
+        var secondRentalRecordEntity = defaultRentalRecordEntityBuilder().bookId("2").build();
+        var rentalRecordCollection = List.of(firstRentalRecordEntity, secondRentalRecordEntity);
+
+        var bookRentalRecordCollection = bookRentalRecordMapper.toDomainCollection(rentalRecordCollection).stream().toList();
+
+        assertThat(bookRentalRecordCollection.get(0).getBookId()).isEqualTo(firstRentalRecordEntity.getBookId());
+        assertThatRecordsAreMatching(bookRentalRecordCollection.get(0).getBookCopies(), firstRentalRecordEntity.getInteractions());
+        assertThat(bookRentalRecordCollection.get(1).getBookId()).isEqualTo(secondRentalRecordEntity.getBookId());
+        assertThatRecordsAreMatching(bookRentalRecordCollection.get(1).getBookCopies(), secondRentalRecordEntity.getInteractions());
+    }
 
     @Test
     void mapRentalRecordEntityToBookRentalRecord() {
