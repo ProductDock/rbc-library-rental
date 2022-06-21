@@ -29,8 +29,8 @@ mongock:
 reservations:
   auto-canceling:
     scheduled: '*/2 * * * * *'
-    reservation-hold-policy:
+    reservation-expiration-policy:
       limit:
-        unit: seconds
+        unit: SECONDS
         value: 4
-      skip-weekends: false
+      weekend-policy: WEEKDAYS

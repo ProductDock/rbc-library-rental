@@ -44,8 +44,8 @@ logging:
 reservations:
   auto-canceling:
     scheduled: '0 0 8 * * *'
-    reservation-hold-policy:
+    reservation-expiration-policy:
       limit:
-        unit: days
+        unit: DAYS
         value: 4
-      skip-weekends: true
+      weekend-policy: WORKDAYS

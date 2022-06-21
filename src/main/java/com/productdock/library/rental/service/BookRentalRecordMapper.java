@@ -5,6 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.Collection;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = {BookCopyMapper.class, BookRecordMapper.class})
 public interface BookRentalRecordMapper {
 
@@ -13,4 +15,6 @@ public interface BookRentalRecordMapper {
 
     @Mapping(target = "bookCopies", source = "source.interactions")
     BookRentalRecord toDomain(RentalRecordEntity source);
+
+    Collection<BookRentalRecord> toDomainCollection(Collection<RentalRecordEntity> source);
 }

@@ -1,5 +1,6 @@
 package com.productdock.library.rental.domain;
 
+import com.productdock.library.rental.scheduled.ReservationExpirationPolicy;
 import com.productdock.library.rental.service.RentalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,10 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Data
@@ -37,6 +35,14 @@ public class BookRentalRecord {
         add(newRecord);
     }
 
+    public void removeExpiredReservations(ReservationExpirationPolicy policy) {
+        for (var bookCopy : findReservedInteractions()) {
+            if (policy.isExpired(bookCopy.date)) {
+                remove(Optional.of(bookCopy));
+            }
+        }
+    }
+
     private void add(Optional<BookCopy> newRecord) {
         if (newRecord.isEmpty()) {
             return;
@@ -49,6 +55,10 @@ public class BookRentalRecord {
             return;
         }
         bookCopies.remove(previousRecord.get());
+    }
+
+    private Collection<BookCopy> findReservedInteractions() {
+        return this.bookCopies.stream().filter(i -> i.getStatus().equals(RentalStatus.RESERVED)).toList();
     }
 
     private Optional<BookCopy> findByPatron(String initiator) {
