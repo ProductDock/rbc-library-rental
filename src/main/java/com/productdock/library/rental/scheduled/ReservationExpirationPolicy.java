@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class ReservationExpirationPolicy {
 
     @Value("${reservations.auto-canceling.reservation-expiration-policy.limit.value}")
-    private int limit;
+    private int timeLimit;
 
     @Value("${reservations.auto-canceling.reservation-expiration-policy.limit.unit}")
     private TimeUnit timeUnit;
@@ -35,7 +35,7 @@ public class ReservationExpirationPolicy {
 
     public boolean isExpired(Date date) {
         var currentTime = dateProvider.now();
-        var maxReservationTime = new Duration(limit, timeUnit);
+        var maxReservationTime = new Duration(timeLimit, timeUnit);
         var expirationTime = FutureDate.of(date, weekendPolicy).offset(maxReservationTime);
         return !expirationTime.after(currentTime);
     }
