@@ -33,10 +33,10 @@ public class ReservationExpirationPolicy {
         this.dateProvider = dateProvider;
     }
 
-    public boolean isExpired(Date date) {
+    public boolean isReservationExpired(Date reservationDate) {
         var currentTime = dateProvider.now();
         var maxReservationTime = new Duration(timeLimit, timeUnit);
-        var expirationTime = FutureDate.of(date, daysOfTheWeek).offset(maxReservationTime);
+        var expirationTime = FutureDate.of(reservationDate, daysOfTheWeek).offset(maxReservationTime);
         return !expirationTime.after(currentTime);
     }
 

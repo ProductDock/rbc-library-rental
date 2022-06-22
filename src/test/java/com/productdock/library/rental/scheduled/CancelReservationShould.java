@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 class CancelReservationShould {
 
     @InjectMocks
-    private CancelReservation cancelReservation;
+    private CancelReservationJob cancelReservation;
 
     @Mock
     private RentalRecordService rentalRecordService;
@@ -34,7 +34,7 @@ class CancelReservationShould {
     void executeScheduledTask() {
         given(rentalRecordService.findAllReserved()).willReturn(ANY_RENTAL_RECORD_COLLECTION);
 
-        cancelReservation.schedule();
+        cancelReservation.cancelReservation();
 
         verify(ANY_RENTAL_RECORD).removeExpiredReservations(reservationHoldPolicy);
         verify(rentalRecordService).saveRentalRecord(ANY_RENTAL_RECORD);

@@ -11,13 +11,13 @@ import java.util.Date;
 @Slf4j
 @AllArgsConstructor
 @Component
-public class CancelReservation {
+public class CancelReservationJob {
 
     private RentalRecordService rentalRecordService;
     private ReservationExpirationPolicy reservationExpirationPolicy;
 
     @Scheduled(cron = "${reservations.auto-canceling.scheduled}")
-    public void schedule() {
+    public void cancelReservation() {
         log.debug("Started scheduled task for canceling book reservations, date: {}", new Date());
         var rentalRecords = rentalRecordService.findAllReserved();
         for (var rentalRecord : rentalRecords) {

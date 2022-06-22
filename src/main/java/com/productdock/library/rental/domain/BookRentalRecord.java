@@ -36,8 +36,8 @@ public class BookRentalRecord {
     }
 
     public void removeExpiredReservations(ReservationExpirationPolicy policy) {
-        for (var bookCopy : findReservedInteractions()) {
-            if (policy.isExpired(bookCopy.date)) {
+        for (var bookCopy : findReservations()) {
+            if (policy.isReservationExpired(bookCopy.date)) {
                 log.debug("Removing expired book reservation for user with id: {} for book with id: {}", bookId, bookCopy.patron);
                 remove(Optional.of(bookCopy));
             }
@@ -58,7 +58,7 @@ public class BookRentalRecord {
         bookCopies.remove(previousRecord.get());
     }
 
-    private Collection<BookCopy> findReservedInteractions() {
+    private Collection<BookCopy> findReservations() {
         return this.bookCopies.stream().filter(i -> i.getStatus().equals(RentalStatus.RESERVED)).toList();
     }
 

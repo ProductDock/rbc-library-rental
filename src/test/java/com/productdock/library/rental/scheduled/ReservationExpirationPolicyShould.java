@@ -1,6 +1,5 @@
 package com.productdock.library.rental.scheduled;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -8,7 +7,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -43,7 +41,7 @@ class ReservationExpirationPolicyShould {
                 .daysOfTheWeek(daysOfTheWeekPolicy)
                 .dateProvider(dateProvider).build();
 
-        var isExpired = policy.isExpired(reservationDate);
+        var isExpired = policy.isReservationExpired(reservationDate);
 
         assertThat(isExpired).isEqualTo(expired);
     }
