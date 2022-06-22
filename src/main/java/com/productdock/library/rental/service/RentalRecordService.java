@@ -35,8 +35,9 @@ public class RentalRecordService {
         rentalRecordPublisher.sendMessage(bookRentalRecord);
     }
 
-    public Collection<BookRentalRecord> findAllReserved() {
-        return bookRentalRecordMapper.toDomainCollection(rentalRecordRepository.findAllReserved());
+    public Collection<BookRentalRecord> findWithReservations() {
+        var reservedRentalRecords = rentalRecordRepository.findWithReservations();
+        return bookRentalRecordMapper.toDomainCollection(reservedRentalRecords);
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {

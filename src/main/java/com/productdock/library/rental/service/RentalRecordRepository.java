@@ -13,6 +13,6 @@ public interface RentalRecordRepository extends MongoRepository<RentalRecordEnti
     Optional<RentalRecordEntity> findByBookId(String bookId);
 
     @Query("{ 'interactions.status' : 'RESERVED' }")
-    Collection<RentalRecordEntity> findAllReserved();
+    Collection<RentalRecordEntity> findWithReservations();
 
 }

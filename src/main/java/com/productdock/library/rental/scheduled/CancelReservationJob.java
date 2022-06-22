@@ -19,7 +19,7 @@ public class CancelReservationJob {
     @Scheduled(cron = "${reservations.auto-canceling.scheduled}")
     public void cancelReservation() {
         log.debug("Started scheduled task for canceling book reservations, date: {}", new Date());
-        var rentalRecords = rentalRecordService.findAllReserved();
+        var rentalRecords = rentalRecordService.findWithReservations();
         for (var rentalRecord : rentalRecords) {
             rentalRecord.removeExpiredReservations(reservationExpirationPolicy);
             rentalRecordService.saveRentalRecord(rentalRecord);

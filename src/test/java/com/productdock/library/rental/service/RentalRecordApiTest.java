@@ -17,9 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.Duration;
-import java.util.Date;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 import static com.productdock.library.rental.data.provider.BookInteractionMother.defaultBookInteractionBuilder;
 import static com.productdock.library.rental.data.provider.RentalRecordEntityMother.defaultRentalRecordEntityBuilder;
@@ -177,7 +175,7 @@ class RentalRecordApiTest extends KafkaTestBase {
     }
 
     @Test
-    void shouldCancelReservation_whenReservationDelayExpires() throws Exception {
+    void shouldCancelReservation_whenReservationExpires() throws Exception {
         makeRentalRequest(RentalStatus.RESERVED)
                 .andExpect(status().isOk());
 
