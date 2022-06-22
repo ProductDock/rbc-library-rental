@@ -13,6 +13,7 @@ import static com.productdock.library.rental.data.provider.BookCopyMother.bookCo
 import static com.productdock.library.rental.data.provider.BookRentalRecordMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class BookRentalRecordShould {
@@ -22,6 +23,11 @@ class BookRentalRecordShould {
 
     @Mock
     private ReservationExpirationPolicy reservationExpirationPolicy;
+
+    private static final Date NOT_EXPIRED_DATE = mock(Date.class);
+    private static final Date EXPIRED_DATE = mock(Date.class);
+    private static final BookRentalRecord.BookCopy EXPIRED_RESERVATION = bookCopyWithReserveRequest(EXPIRED_DATE);
+    private static final BookRentalRecord.BookCopy NOT_EXPIRED_RESERVATION = bookCopyWithReserveRequest(NOT_EXPIRED_DATE);
 
     @Test
     void addRentRecord_whenUserAlreadyReservedTheBook() {
@@ -75,19 +81,17 @@ class BookRentalRecordShould {
 
     @Test
     void removeExpiredReservations() {
-        var firstDate = new Date(1655287200000L);
-        var secondDate = new Date(1655632800000L);
         var bookCopies = new ArrayList<>(Arrays.asList(
-                bookCopyWithReserveRequest(firstDate),
-                bookCopyWithReserveRequest(secondDate))
-        );
+                EXPIRED_RESERVATION,
+                NOT_EXPIRED_RESERVATION
+        ));
         var bookRentalRecord = bookRentalRecordBuilder().bookCopies(bookCopies).build();
 
-        given(reservationExpirationPolicy.isReservationExpired(firstDate)).willReturn(true);
-        given(reservationExpirationPolicy.isReservationExpired(secondDate)).willReturn(false);
+        given(reservationExpirationPolicy.isReservationExpired(EXPIRED_DATE)).willReturn(true);
+        given(reservationExpirationPolicy.isReservationExpired(NOT_EXPIRED_DATE)).willReturn(false);
 
         bookRentalRecord.removeExpiredReservations(reservationExpirationPolicy);
 
-        assertThat(bookRentalRecord.getBookCopies()).hasSize(1);
+        assertThat(bookRentalRecord.getBookCopies()).containsOnly(NOT_EXPIRED_RESERVATION);
     }
 }
