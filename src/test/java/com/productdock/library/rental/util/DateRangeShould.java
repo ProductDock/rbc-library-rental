@@ -1,36 +1,31 @@
 package com.productdock.library.rental.util;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Calendar;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DateRangeShould {
 
-    private static final Long WEDNESDAY_DATE = 1655287200000L;
-    private static final Long MONDAY_DATE = 1655114400000L;
+    private static final Long MONDAY = 1655114400000L;
+    private static final Long WEDNESDAY = 1655287200000L;
+    private static final Long SUNDAY = 1655625600000L;
 
+    @ParameterizedTest
+    @MethodSource("testArguments")
+    void showIfWeekendIsInRange(long startTime, long endTime, boolean isIncluded) {
+        DateRange dateRange = new DateRange(startTime, endTime);
 
-    @Test
-    void showThatWeekendIsNotIncluded() {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(WEDNESDAY_DATE);
-        calendar.add(Calendar.DATE, 4);
-        DateRange dateRange = new DateRange(WEDNESDAY_DATE, calendar.getTimeInMillis());
-
-        assertThat(dateRange.includesWeekend()).isTrue();
+        assertThat(dateRange.includesWeekend()).isEqualTo(isIncluded);
     }
 
-    @Test
-    void showThatWeekendIsIncluded() {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(MONDAY_DATE);
-        calendar.add(Calendar.DATE, 4);
-        DateRange dateRange = new DateRange(MONDAY_DATE, calendar.getTimeInMillis());
-
-        assertThat(dateRange.includesWeekend()).isFalse();
+    static Stream<Arguments> testArguments() {
+        return Stream.of(
+                Arguments.of(WEDNESDAY, SUNDAY, true),
+                Arguments.of(MONDAY, WEDNESDAY, false)
+        );
     }
 }
