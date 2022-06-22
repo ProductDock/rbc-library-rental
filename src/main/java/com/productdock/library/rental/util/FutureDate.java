@@ -11,19 +11,19 @@ public class FutureDate {
 
     private final Date date;
     private final DaysOfTheWeek daysOfTheWeek;
-    private static final long WEEKEND_MILLIS = TimeUnit.DAYS.toMillis(2);
+    private static final long WEEKEND = TimeUnit.DAYS.toMillis(2);
 
     public static FutureDate of(Date date, DaysOfTheWeek weekendPolicy) {
         return new FutureDate(date, weekendPolicy);
     }
 
     public Date offset(Duration duration) {
-        var calculatedTime = date.getTime() + duration.getTimeUnit().toMillis(duration.getAmount());
-        DateRange dateRange = new DateRange(date.getTime(), calculatedTime);
+        var futureTime = date.getTime() + duration.getTime();
+        DateRange dateRange = new DateRange(date.getTime(), futureTime);
         if (dateRange.includesWeekend() && daysOfTheWeek.equals(DaysOfTheWeek.WORKDAYS)) {
-            calculatedTime += WEEKEND_MILLIS;
+            return new Date(futureTime + WEEKEND);
         }
 
-        return new Date(calculatedTime);
+        return new Date(futureTime);
     }
 }

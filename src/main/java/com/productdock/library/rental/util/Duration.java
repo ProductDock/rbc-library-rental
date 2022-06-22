@@ -9,6 +9,10 @@ import java.util.concurrent.TimeUnit;
 @Getter
 public class Duration {
 
-    private int amount;
+    private int value;
     private TimeUnit timeUnit;
+
+    public long getTime() {
+        return timeUnit.toMillis(value);
+    }
 }
