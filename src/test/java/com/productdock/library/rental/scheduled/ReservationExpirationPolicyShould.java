@@ -27,7 +27,11 @@ class ReservationExpirationPolicyShould {
     @Test
     void checkIfReservationIsExpiredWhenWeekdaysPolicyAndCurrentTimeBeforeExpiration() {
         given(dateProvider.now()).willReturn(DATE_15_06_2022);
-        var policy = new ReservationExpirationPolicy(limit, TimeUnit.DAYS, WeekendPolicy.WEEKDAYS, dateProvider);
+        var policy = ReservationExpirationPolicy.builder()
+                .limit(limit)
+                .weekendPolicy(WeekendPolicy.WEEKDAYS)
+                .timeUnit(TimeUnit.DAYS)
+                .dateProvider(dateProvider).build();
 
         var isExpired = policy.isExpired(DATE_13_06_2022);
 
@@ -37,7 +41,11 @@ class ReservationExpirationPolicyShould {
     @Test
     void checkIfReservationIsExpiredWhenWeekdaysPolicyAndCurrentTimeAfterExpiration() {
         given(dateProvider.now()).willReturn(DATE_17_06_2022);
-        var policy = new ReservationExpirationPolicy(limit, TimeUnit.DAYS, WeekendPolicy.WEEKDAYS, dateProvider);
+        var policy = ReservationExpirationPolicy.builder()
+                .limit(limit)
+                .weekendPolicy(WeekendPolicy.WEEKDAYS)
+                .timeUnit(TimeUnit.DAYS)
+                .dateProvider(dateProvider).build();
 
         var isExpired = policy.isExpired(DATE_13_06_2022);
 
@@ -48,7 +56,11 @@ class ReservationExpirationPolicyShould {
     @Test
     void checkIfReservationIsExpiredWhenWorkdaysPolicyAndCurrentTimeBeforeExpiration() {
         given(dateProvider.now()).willReturn(DATE_20_06_2022);
-        var policy = new ReservationExpirationPolicy(limit, TimeUnit.DAYS, WeekendPolicy.WORKDAYS, dateProvider);
+        var policy = ReservationExpirationPolicy.builder()
+                .limit(limit)
+                .weekendPolicy(WeekendPolicy.WORKDAYS)
+                .timeUnit(TimeUnit.DAYS)
+                .dateProvider(dateProvider).build();
 
         var isExpired = policy.isExpired(DATE_15_06_2022);
 
@@ -58,7 +70,11 @@ class ReservationExpirationPolicyShould {
     @Test
     void checkIfReservationIsExpiredWhenWorkdaysPolicyAndCurrentTimeAfterExpiration() {
         given(dateProvider.now()).willReturn(DATE_21_06_2022);
-        var policy = new ReservationExpirationPolicy(limit, TimeUnit.DAYS, WeekendPolicy.WORKDAYS, dateProvider);
+        var policy = ReservationExpirationPolicy.builder()
+                .limit(limit)
+                .weekendPolicy(WeekendPolicy.WORKDAYS)
+                .timeUnit(TimeUnit.DAYS)
+                .dateProvider(dateProvider).build();
 
         var isExpired = policy.isExpired(DATE_15_06_2022);
 
