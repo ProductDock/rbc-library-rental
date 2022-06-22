@@ -23,8 +23,8 @@ public class ReservationExpirationPolicy {
     @Value("${reservations.auto-canceling.reservation-expiration-policy.limit.unit}")
     private TimeUnit timeUnit;
 
-    @Value("${reservations.auto-canceling.reservation-expiration-policy.weekend-policy}")
-    private WeekendPolicy weekendPolicy;
+    @Value("${reservations.auto-canceling.reservation-expiration-policy.week-policy}")
+    private DaysOfTheWeek daysOfTheWeek;
 
     private DateProvider dateProvider;
 
@@ -36,7 +36,7 @@ public class ReservationExpirationPolicy {
     public boolean isExpired(Date date) {
         var currentTime = dateProvider.now();
         var maxReservationTime = new Duration(timeLimit, timeUnit);
-        var expirationTime = FutureDate.of(date, weekendPolicy).offset(maxReservationTime);
+        var expirationTime = FutureDate.of(date, daysOfTheWeek).offset(maxReservationTime);
         return !expirationTime.after(currentTime);
     }
 

@@ -33,4 +33,4 @@ reservations:
       limit:
         unit: SECONDS
         value: 4
-      weekend-policy: WEEKDAYS
+      week-policy: ALL_DAYS

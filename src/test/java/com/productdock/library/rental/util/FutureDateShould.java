@@ -1,6 +1,6 @@
 package com.productdock.library.rental.util;
 
-import com.productdock.library.rental.scheduled.WeekendPolicy;
+import com.productdock.library.rental.scheduled.DaysOfTheWeek;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -17,7 +17,7 @@ class FutureDateShould {
     @Test
     void addDurationToDateWhenWorkdayPolicy() {
         var duration = new Duration(4, TimeUnit.DAYS);
-        var futureDate = FutureDate.of(WEDNESDAY, WeekendPolicy.WORKDAYS).offset(duration);
+        var futureDate = FutureDate.of(WEDNESDAY, DaysOfTheWeek.WORKDAYS).offset(duration);
 
         assertThat(futureDate).isEqualTo(TUESDAY);
     }
@@ -25,7 +25,7 @@ class FutureDateShould {
     @Test
     void addDurationToDateWhenWeekdayPolicy() {
         var duration = new Duration(4, TimeUnit.DAYS);
-        var futureDate = FutureDate.of(WEDNESDAY, WeekendPolicy.WEEKDAYS).offset(duration);
+        var futureDate = FutureDate.of(WEDNESDAY, DaysOfTheWeek.ALL_DAYS).offset(duration);
 
         assertThat(futureDate).isEqualTo(SATURDAY);
     }

@@ -1,6 +1,6 @@
 package com.productdock.library.rental.scheduled;
 
-public enum WeekendPolicy {
-    WEEKDAYS,
+public enum DaysOfTheWeek {
+    ALL_DAYS,
     WORKDAYS
 }

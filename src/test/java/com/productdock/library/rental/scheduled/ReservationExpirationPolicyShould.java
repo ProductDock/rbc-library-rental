@@ -29,7 +29,7 @@ class ReservationExpirationPolicyShould {
         given(dateProvider.now()).willReturn(DATE_15_06_2022);
         var policy = ReservationExpirationPolicy.builder()
                 .timeLimit(limit)
-                .weekendPolicy(WeekendPolicy.WEEKDAYS)
+                .daysOfTheWeek(DaysOfTheWeek.ALL_DAYS)
                 .timeUnit(TimeUnit.DAYS)
                 .dateProvider(dateProvider).build();
 
@@ -43,7 +43,7 @@ class ReservationExpirationPolicyShould {
         given(dateProvider.now()).willReturn(DATE_17_06_2022);
         var policy = ReservationExpirationPolicy.builder()
                 .timeLimit(limit)
-                .weekendPolicy(WeekendPolicy.WEEKDAYS)
+                .daysOfTheWeek(DaysOfTheWeek.ALL_DAYS)
                 .timeUnit(TimeUnit.DAYS)
                 .dateProvider(dateProvider).build();
 
@@ -58,7 +58,7 @@ class ReservationExpirationPolicyShould {
         given(dateProvider.now()).willReturn(DATE_20_06_2022);
         var policy = ReservationExpirationPolicy.builder()
                 .timeLimit(limit)
-                .weekendPolicy(WeekendPolicy.WORKDAYS)
+                .daysOfTheWeek(DaysOfTheWeek.WORKDAYS)
                 .timeUnit(TimeUnit.DAYS)
                 .dateProvider(dateProvider).build();
 
@@ -72,7 +72,7 @@ class ReservationExpirationPolicyShould {
         given(dateProvider.now()).willReturn(DATE_21_06_2022);
         var policy = ReservationExpirationPolicy.builder()
                 .timeLimit(limit)
-                .weekendPolicy(WeekendPolicy.WORKDAYS)
+                .daysOfTheWeek(DaysOfTheWeek.WORKDAYS)
                 .timeUnit(TimeUnit.DAYS)
                 .dateProvider(dateProvider).build();
 

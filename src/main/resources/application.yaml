@@ -48,4 +48,4 @@ reservations:
       limit:
         unit: DAYS
         value: 4
-      weekend-policy: WORKDAYS
+      week-policy: WORKDAYS

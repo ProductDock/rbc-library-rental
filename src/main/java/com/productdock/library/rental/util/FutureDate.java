@@ -1,6 +1,6 @@
 package com.productdock.library.rental.util;
 
-import com.productdock.library.rental.scheduled.WeekendPolicy;
+import com.productdock.library.rental.scheduled.DaysOfTheWeek;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;
@@ -9,19 +9,19 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class FutureDate {
 
-    private Date currentDate;
-    private WeekendPolicy weekendPolicy;
-    private static final int WEEKEND_DAYS = 2;
+    private final Date date;
+    private final DaysOfTheWeek daysOfTheWeek;
+    private static final long WEEKEND_MILLIS = TimeUnit.DAYS.toMillis(2);
 
-    public static FutureDate of(Date date, WeekendPolicy weekendPolicy) {
+    public static FutureDate of(Date date, DaysOfTheWeek weekendPolicy) {
         return new FutureDate(date, weekendPolicy);
     }
 
     public Date offset(Duration duration) {
-        var calculatedTime = currentDate.getTime() + duration.getTimeUnit().toMillis(duration.getAmount());
-        DateRange dateRange = new DateRange(currentDate.getTime(), calculatedTime);
-        if (dateRange.includesWeekend() && weekendPolicy.equals(WeekendPolicy.WORKDAYS)) {
-            calculatedTime += TimeUnit.DAYS.toMillis(WEEKEND_DAYS);
+        var calculatedTime = date.getTime() + duration.getTimeUnit().toMillis(duration.getAmount());
+        DateRange dateRange = new DateRange(date.getTime(), calculatedTime);
+        if (dateRange.includesWeekend() && daysOfTheWeek.equals(DaysOfTheWeek.WORKDAYS)) {
+            calculatedTime += WEEKEND_MILLIS;
         }
 
         return new Date(calculatedTime);
