@@ -38,6 +38,7 @@ public class BookRentalRecord {
     public void removeExpiredReservations(ReservationExpirationPolicy policy) {
         for (var bookCopy : findReservedInteractions()) {
             if (policy.isExpired(bookCopy.date)) {
+                log.debug("Removing expired book reservation for user with id: {} for book with id: {}", bookId, bookCopy.patron);
                 remove(Optional.of(bookCopy));
             }
         }
