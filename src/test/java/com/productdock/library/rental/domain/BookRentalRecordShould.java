@@ -83,9 +83,8 @@ class BookRentalRecordShould {
         );
         var bookRentalRecord = bookRentalRecordBuilder().bookCopies(bookCopies).build();
 
-
-        given(reservationExpirationPolicy.isReservationExpired(firstDate)).willReturn(false);
         given(reservationExpirationPolicy.isReservationExpired(firstDate)).willReturn(true);
+        given(reservationExpirationPolicy.isReservationExpired(secondDate)).willReturn(false);
 
         bookRentalRecord.removeExpiredReservations(reservationExpirationPolicy);
 
