@@ -41,9 +41,11 @@ logging:
   level:
     com.productdock.library.rental: ${logging.level:INFO}
 
-scheduled:
-  cron:
-    expression: '0 0 8 * * *'
-  task:
-    delay: 345600
-    time-to-skip-weekend: 172800
+reservations:
+  auto-canceling:
+    scheduled: '0 0 8 * * *'
+    reservation-expiration-policy:
+      limit:
+        unit: DAYS
+        value: 4
+      week-policy: WORKDAYS

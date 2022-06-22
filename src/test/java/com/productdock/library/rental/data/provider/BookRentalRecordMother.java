@@ -33,4 +33,8 @@ public class BookRentalRecordMother {
                 .build();
     }
 
+    public static BookRentalRecord.BookRentalRecordBuilder bookRentalRecordBuilder() {
+        return BookRentalRecord.builder()
+                .bookId(defaultBookId);
+    }
 }

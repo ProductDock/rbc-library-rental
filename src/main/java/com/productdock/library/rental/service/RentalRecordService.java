@@ -35,8 +35,9 @@ public class RentalRecordService {
         rentalRecordPublisher.sendMessage(bookRentalRecord);
     }
 
-    public Collection<RentalRecordEntity> findAllReserved() {
-        return rentalRecordRepository.findAllReserved();
+    public Collection<BookRentalRecord> findWithReservations() {
+        var reservedRentalRecords = rentalRecordRepository.findWithReservations();
+        return bookRentalRecordMapper.toDomainCollection(reservedRentalRecords);
     }
 
     private BookRentalRecord createBookRentalRecord(String bookId) {
@@ -50,7 +51,7 @@ public class RentalRecordService {
         }
     }
 
-    private void saveRentalRecord(BookRentalRecord bookRentalRecord) {
+    public void saveRentalRecord(BookRentalRecord bookRentalRecord) {
         log.debug("Save new book's rental record in database with id : {}", bookRentalRecord);
         var previousRecordEntity = rentalRecordRepository.findByBookId(bookRentalRecord.getBookId());
         var newRecordEntity = bookRentalRecordMapper.toEntity(bookRentalRecord);

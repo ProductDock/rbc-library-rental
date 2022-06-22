@@ -10,10 +10,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class DateRange {
 
-    private Date dateFrom;
-    private Date dateTo;
+    private final Date dateFrom;
+    private final Date dateTo;
 
-    public DateRange(Long dateFrom, Long dateTo) {
+    public DateRange(long dateFrom, long dateTo) {
         this.dateFrom = new Date(dateFrom);
         this.dateTo = new Date(dateTo);
     }

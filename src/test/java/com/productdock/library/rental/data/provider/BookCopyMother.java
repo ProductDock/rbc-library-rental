@@ -27,4 +27,12 @@ public class BookCopyMother {
                 .status(reserveStatus)
                 .build();
     }
+
+    public static BookRentalRecord.BookCopy bookCopyWithReserveRequest(Date reservationDate) {
+        return BookRentalRecord.BookCopy.builder()
+                .patron(defaultUserEmail)
+                .date(reservationDate)
+                .status(reserveStatus)
+                .build();
+    }
 }

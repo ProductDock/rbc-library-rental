@@ -1,22 +1,33 @@
 package com.productdock.library.rental.domain;
 
+import com.productdock.library.rental.scheduled.ReservationExpirationPolicy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
+import java.util.*;
 
 import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithRentRequest;
+import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithReserveRequest;
 import static com.productdock.library.rental.data.provider.BookRentalRecordMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class BookRentalRecordShould {
 
     @Mock
     private UserBookActivity userBookActivity;
+
+    @Mock
+    private ReservationExpirationPolicy reservationExpirationPolicy;
+
+    private static final Date NOT_EXPIRED_DATE = mock(Date.class);
+    private static final Date EXPIRED_DATE = mock(Date.class);
+    private static final BookRentalRecord.BookCopy EXPIRED_RESERVATION = bookCopyWithReserveRequest(EXPIRED_DATE);
+    private static final BookRentalRecord.BookCopy NOT_EXPIRED_RESERVATION = bookCopyWithReserveRequest(NOT_EXPIRED_DATE);
 
     @Test
     void addRentRecord_whenUserAlreadyReservedTheBook() {
@@ -66,5 +77,21 @@ class BookRentalRecordShould {
         bookRentalRecord.trackActivity(userBookActivity);
 
         assertThat(bookRentalRecord.getBookCopies()).containsOnly(rentBookCopy);
+    }
+
+    @Test
+    void removeExpiredReservations() {
+        var bookCopies = new ArrayList<>(Arrays.asList(
+                EXPIRED_RESERVATION,
+                NOT_EXPIRED_RESERVATION
+        ));
+        var bookRentalRecord = bookRentalRecordBuilder().bookCopies(bookCopies).build();
+
+        given(reservationExpirationPolicy.isReservationExpired(EXPIRED_DATE)).willReturn(true);
+        given(reservationExpirationPolicy.isReservationExpired(NOT_EXPIRED_DATE)).willReturn(false);
+
+        bookRentalRecord.removeExpiredReservations(reservationExpirationPolicy);
+
+        assertThat(bookRentalRecord.getBookCopies()).containsOnly(NOT_EXPIRED_RESERVATION);
     }
 }

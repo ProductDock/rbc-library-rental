@@ -26,9 +26,11 @@ spring:
 mongock:
   enabled: false
 
-scheduled:
-  cron:
-    expression: '*/2 * * * * *'
-  task:
-    delay: 3
-    time-to-skip-weekend: 0
+reservations:
+  auto-canceling:
+    scheduled: '*/2 * * * * *'
+    reservation-expiration-policy:
+      limit:
+        unit: SECONDS
+        value: 4
+      week-policy: ALL_DAYS
