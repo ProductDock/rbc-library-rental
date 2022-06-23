@@ -1,5 +1,6 @@
-package com.productdock.library.rental.application.service;
+package com.productdock.library.rental.domain;
 
+import com.productdock.library.rental.application.service.DateProvider;
 import com.productdock.library.rental.domain.dateutil.DaysOfTheWeek;
 import com.productdock.library.rental.domain.dateutil.Duration;
 import com.productdock.library.rental.domain.dateutil.FutureDate;

@@ -1,6 +1,5 @@
-package com.productdock.library.rental.application.service;
+package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.domain.RentalActionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 

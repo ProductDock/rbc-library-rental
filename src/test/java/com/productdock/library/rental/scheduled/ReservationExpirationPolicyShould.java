@@ -1,6 +1,6 @@
 package com.productdock.library.rental.scheduled;
 
-import com.productdock.library.rental.application.service.ReservationExpirationPolicy;
+import com.productdock.library.rental.domain.ReservationExpirationPolicy;
 import com.productdock.library.rental.application.service.DateProvider;
 import com.productdock.library.rental.domain.dateutil.DaysOfTheWeek;
 import org.junit.jupiter.api.extension.ExtendWith;

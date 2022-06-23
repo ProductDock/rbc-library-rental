@@ -4,6 +4,7 @@ import com.productdock.library.rental.application.port.in.ExecuteRentalActionUse
 import com.productdock.library.rental.application.port.out.messaging.RentalRecordMessagingOutPort;
 import com.productdock.library.rental.application.port.out.persistence.RentalRecordPersistenceOutPort;
 import com.productdock.library.rental.domain.BookRentalRecord;
+import com.productdock.library.rental.domain.RentalAction;
 import com.productdock.library.rental.domain.activity.UserActivityFactory;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ExecuteRentalActionService implements ExecuteRentalActionUseCase {
+class ExecuteRentalActionService implements ExecuteRentalActionUseCase {
 
     private RentalRecordPersistenceOutPort rentalRecordRepository;
     private RentalRecordMessagingOutPort rentalRecordPublisher;

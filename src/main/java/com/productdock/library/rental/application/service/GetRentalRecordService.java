@@ -13,7 +13,7 @@ import java.util.Collection;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class GetRentalRecordService implements GetRentalRecordQuery {
+class GetRentalRecordService implements GetRentalRecordQuery {
 
     private RentalRecordPersistenceOutPort rentalRecordRepository;
 

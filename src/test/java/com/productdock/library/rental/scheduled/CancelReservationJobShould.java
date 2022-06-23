@@ -2,7 +2,7 @@
 //
 //import com.productdock.library.rental.application.service.CancelExpiredReservationsService;
 //import com.productdock.library.rental.application.service.GetRentalRecordService;
-//import com.productdock.library.rental.application.service.ReservationExpirationPolicy;
+//import com.productdock.library.rental.domain.ReservationExpirationPolicy;
 //import com.productdock.library.rental.domain.BookRentalRecord;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;

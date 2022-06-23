@@ -1,6 +1,5 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.application.service.ReservationExpirationPolicy;
 import com.productdock.library.rental.domain.activity.UserBookActivity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

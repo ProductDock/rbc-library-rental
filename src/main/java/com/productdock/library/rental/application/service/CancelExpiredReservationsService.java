@@ -2,6 +2,7 @@ package com.productdock.library.rental.application.service;
 
 import com.productdock.library.rental.application.port.in.CancelExpiredReservationsUseCase;
 import com.productdock.library.rental.application.port.out.persistence.RentalRecordPersistenceOutPort;
+import com.productdock.library.rental.domain.ReservationExpirationPolicy;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.Date;
 @Slf4j
 @AllArgsConstructor
 @Component
-public class CancelExpiredReservationsService implements CancelExpiredReservationsUseCase {
+class CancelExpiredReservationsService implements CancelExpiredReservationsUseCase {
 
     private RentalRecordPersistenceOutPort rentalRecordRepository;
     private ReservationExpirationPolicy reservationExpirationPolicy;
