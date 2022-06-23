@@ -2,8 +2,9 @@ package com.productdock.library.rental.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
-import com.productdock.library.rental.service.BookRentalRecordMapper;
-import com.productdock.library.rental.service.RentalRecordsMessageMapper;
+import com.productdock.library.rental.adapter.out.kafka.mapper.RentalRecordsMessageMapper;
+import com.productdock.library.rental.adapter.out.kafka.publisher.KafkaMessageProducer;
+import com.productdock.library.rental.adapter.out.mongo.mapper.BookRentalRecordMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

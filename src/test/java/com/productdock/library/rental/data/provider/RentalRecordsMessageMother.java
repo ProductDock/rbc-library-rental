@@ -1,6 +1,6 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.service.RentalRecordsMessage;
+import com.productdock.library.rental.adapter.out.kafka.RentalRecordsMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;

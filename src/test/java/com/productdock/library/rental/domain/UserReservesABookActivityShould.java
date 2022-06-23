@@ -1,7 +1,7 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.exception.BookRentalException;
-import com.productdock.library.rental.service.RentalStatus;
+import com.productdock.library.rental.domain.activity.UserReservesABookActivity;
+import com.productdock.library.rental.domain.exception.BookRentalException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,12 +1,16 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.scheduled.ReservationExpirationPolicy;
+import com.productdock.library.rental.application.service.ReservationExpirationPolicy;
+import com.productdock.library.rental.domain.activity.UserBookActivity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Optional;
 
 import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithRentRequest;
 import static com.productdock.library.rental.data.provider.BookCopyMother.bookCopyWithReserveRequest;

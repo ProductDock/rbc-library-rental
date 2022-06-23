@@ -1,7 +1,7 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.book.BookInteraction;
-import com.productdock.library.rental.service.RentalStatus;
+import com.productdock.library.rental.adapter.out.mongo.entity.BookInteraction;
+import com.productdock.library.rental.domain.RentalStatus;
 
 import java.util.Date;
 

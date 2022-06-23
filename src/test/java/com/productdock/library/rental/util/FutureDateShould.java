@@ -1,6 +1,8 @@
 package com.productdock.library.rental.util;
 
-import com.productdock.library.rental.scheduled.DaysOfTheWeek;
+import com.productdock.library.rental.domain.dateutil.DaysOfTheWeek;
+import com.productdock.library.rental.domain.dateutil.Duration;
+import com.productdock.library.rental.domain.dateutil.FutureDate;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

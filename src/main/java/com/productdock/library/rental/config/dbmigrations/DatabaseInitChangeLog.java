@@ -2,11 +2,11 @@ package com.productdock.library.rental.config.dbmigrations;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
-import com.productdock.library.rental.book.BookInteraction;
+import com.productdock.library.rental.adapter.out.mongo.RentalRecordEntityRepository;
+import com.productdock.library.rental.adapter.out.mongo.entity.BookInteraction;
+import com.productdock.library.rental.adapter.out.mongo.entity.RentalRecordEntity;
 import com.productdock.library.rental.config.coverage.Generated;
-import com.productdock.library.rental.service.RentalRecordEntity;
-import com.productdock.library.rental.service.RentalRecordRepository;
-import com.productdock.library.rental.service.RentalStatus;
+import com.productdock.library.rental.domain.RentalStatus;
 
 import java.util.Calendar;
 
@@ -15,7 +15,7 @@ import java.util.Calendar;
 public class DatabaseInitChangeLog {
 
     @ChangeSet(order = "001", id = "init_rental_records", author = "pd")
-    public void initRentalRecords(RentalRecordRepository rentalRecordRepository) {
+    public void initRentalRecords(RentalRecordEntityRepository rentalRecordRepository) {
         var calendar = Calendar.getInstance();
 
         calendar.set(2019, Calendar.OCTOBER, 29);
