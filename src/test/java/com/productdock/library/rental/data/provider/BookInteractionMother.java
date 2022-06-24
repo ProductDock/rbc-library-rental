@@ -1,6 +1,6 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.adapter.out.mongo.entity.BookInteraction;
+import com.productdock.library.rental.adapter.out.mongo.entity.BookCopyRentalState;
 import com.productdock.library.rental.domain.RentalStatus;
 
 import java.util.Date;
@@ -11,12 +11,12 @@ public class BookInteractionMother {
     private static final Date defaultDate = new Date();
     private static final RentalStatus defaultStatus = RentalStatus.RENTED;
 
-    public static BookInteraction defaultBookInteraction() {
+    public static BookCopyRentalState defaultBookInteraction() {
         return defaultBookInteractionBuilder().build();
     }
 
-    public static BookInteraction.BookInteractionBuilder defaultBookInteractionBuilder() {
-        return BookInteraction.builder()
+    public static BookCopyRentalState.BookCopyRentalStateBuilder defaultBookInteractionBuilder() {
+        return BookCopyRentalState.builder()
                 .userEmail(defaultUserEmail)
                 .date(defaultDate)
                 .status(defaultStatus);

@@ -2,7 +2,7 @@ package com.productdock.library.rental.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
-import com.productdock.library.rental.adapter.out.kafka.mapper.RentalRecordsMessageMapper;
+import com.productdock.library.rental.adapter.out.kafka.mapper.BookRentalsMessageMapper;
 import com.productdock.library.rental.adapter.out.kafka.publisher.KafkaMessageProducer;
 import com.productdock.library.rental.adapter.out.mongo.mapper.BookRentalRecordMapper;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class KafkaProducerShould {
     private BookRentalRecordMapper bookRentalRecordMapper;
 
     @Mock
-    private RentalRecordsMessageMapper rentalRecordsMessageMapper;
+    private BookRentalsMessageMapper bookRentalsMessageMapper;
 
     private String topic = "test-book-status";
 

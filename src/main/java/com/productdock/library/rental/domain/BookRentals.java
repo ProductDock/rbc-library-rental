@@ -1,6 +1,6 @@
 package com.productdock.library.rental.domain;
 
-import com.productdock.library.rental.domain.activity.UserBookActivity;
+import com.productdock.library.rental.domain.activity.UserRentalActivity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,21 +14,21 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class BookRentalRecord {
+public class BookRentals {
 
     private String bookId;
-    private List<BookCopy> bookCopies;
+    private List<BookCopyRentalState> bookCopiesRentalState;
 
-    public BookRentalRecord(String bookId) {
+    public BookRentals(String bookId) {
         this.bookId = bookId;
-        bookCopies = new ArrayList<>();
+        bookCopiesRentalState = new ArrayList<>();
     }
 
-    public void trackActivity(UserBookActivity activity) {
+    public void trackRentalActivity(UserRentalActivity activity) {
         log.debug("Add new rental request to book's rental record");
-        Optional<BookCopy> previousRecord = findByPatron(activity.getInitiator());
+        Optional<BookCopyRentalState> previousRecord = findByPatron(activity.getInitiator());
         log.debug("Old record that is getting replaced : {}", previousRecord);
-        Optional<BookCopy> newRecord = activity.changeStatusFrom(previousRecord);
+        Optional<BookCopyRentalState> newRecord = activity.changeStatusFrom(previousRecord);
         log.debug("New record : {}", newRecord);
         remove(previousRecord);
         add(newRecord);
@@ -43,41 +43,41 @@ public class BookRentalRecord {
         }
     }
 
-    private void add(Optional<BookCopy> newRecord) {
+    private void add(Optional<BookCopyRentalState> newRecord) {
         if (newRecord.isEmpty()) {
             return;
         }
-        bookCopies.add(newRecord.get());
+        bookCopiesRentalState.add(newRecord.get());
     }
 
-    private void remove(Optional<BookCopy> previousRecord) {
+    private void remove(Optional<BookCopyRentalState> previousRecord) {
         if (previousRecord.isEmpty()) {
             return;
         }
-        bookCopies.remove(previousRecord.get());
+        bookCopiesRentalState.remove(previousRecord.get());
     }
 
-    private Collection<BookCopy> findReservations() {
-        return this.bookCopies.stream().filter(i -> i.getStatus().equals(RentalStatus.RESERVED)).toList();
+    private Collection<BookCopyRentalState> findReservations() {
+        return this.bookCopiesRentalState.stream().filter(i -> i.getStatus().equals(RentalStatus.RESERVED)).toList();
     }
 
-    private Optional<BookCopy> findByPatron(String initiator) {
-        return bookCopies.stream().filter(book -> book.getPatron().equals(initiator)).findFirst();
+    private Optional<BookCopyRentalState> findByPatron(String initiator) {
+        return bookCopiesRentalState.stream().filter(book -> book.getPatron().equals(initiator)).findFirst();
     }
 
     @Data
     @AllArgsConstructor
     @Builder
-    public static class BookCopy {
+    public static class BookCopyRentalState {
 
         private Date date;
         private String patron;
         private RentalStatus status;
 
-        public BookCopy() {
+        public BookCopyRentalState() {
         }
 
-        public BookCopy(String patron, RentalStatus status) {
+        public BookCopyRentalState(String patron, RentalStatus status) {
             this.patron = patron;
             this.status = status;
             this.date = new Date();

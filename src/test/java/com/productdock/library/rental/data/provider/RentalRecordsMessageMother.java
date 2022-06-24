@@ -1,6 +1,6 @@
 package com.productdock.library.rental.data.provider;
 
-import com.productdock.library.rental.adapter.out.kafka.RentalRecordsMessage;
+import com.productdock.library.rental.adapter.out.kafka.BookRentalsMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,15 +12,15 @@ public class RentalRecordsMessageMother {
 
     private static final String defaultBookId = "1";
 
-    private static final List<RentalRecordsMessage.RentalRecordRequest> defaultRentalRecords =
+    private static final List<BookRentalsMessage.RentalRecordRequest> defaultRentalRecords =
             new ArrayList<>(Arrays.asList(defaultRentalRecordRequest()));
 
-    public static RentalRecordsMessage defaultRentalRecordsMessage() {
+    public static BookRentalsMessage defaultRentalRecordsMessage() {
         return defaultRentalRecordsMessageBuilder().build();
     }
 
-    public static RentalRecordsMessage.RentalRecordsMessageBuilder defaultRentalRecordsMessageBuilder() {
-        return RentalRecordsMessage.builder()
+    public static BookRentalsMessage.BookRentalsMessageBuilder defaultRentalRecordsMessageBuilder() {
+        return BookRentalsMessage.builder()
                 .bookId(defaultBookId)
                 .rentalRecords(defaultRentalRecords);
     }

@@ -22,7 +22,7 @@ class UserCancelsABookReservationActivityShould {
 
     @Test
     void cancelBookReservation_whenUserHadNoInteractionWithItBefore() {
-        Optional<BookRentalRecord.BookCopy> previousRecord = Optional.empty();
+        Optional<BookRentals.BookCopyRentalState> previousRecord = Optional.empty();
 
         assertThatThrownBy(() -> userCancelsABookReservationActivity.changeStatusFrom(previousRecord))
                 .isInstanceOf(BookRentalException.class);

@@ -1,49 +1,41 @@
 package com.productdock.library.rental.application.service;
 
 import com.productdock.library.rental.application.port.in.ExecuteRentalActionUseCase;
-import com.productdock.library.rental.application.port.out.messaging.RentalRecordMessagingOutPort;
-import com.productdock.library.rental.application.port.out.persistence.RentalRecordPersistenceOutPort;
-import com.productdock.library.rental.domain.BookRentalRecord;
+import com.productdock.library.rental.application.port.out.messaging.BookRentalsMessagingOutPort;
+import com.productdock.library.rental.application.port.out.persistence.BookRentalsPersistenceOutPort;
+import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalAction;
-import com.productdock.library.rental.domain.activity.UserActivityFactory;
+import com.productdock.library.rental.domain.activity.UserRentalActivityFactory;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import static com.productdock.library.rental.domain.activity.UserRentalActivityFactory.userRentalActivity;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 class ExecuteRentalActionService implements ExecuteRentalActionUseCase {
 
-    private RentalRecordPersistenceOutPort rentalRecordRepository;
-    private RentalRecordMessagingOutPort rentalRecordPublisher;
+    private BookRentalsPersistenceOutPort bookRentalsRepository;
+    private BookRentalsMessagingOutPort bookRentalsPublisher;
 
     @Override
     @SneakyThrows
     public void executeAction(RentalAction rentalAction) {
         log.debug("User {} executes action {} for book {}  ", rentalAction.userId, rentalAction.action, rentalAction.bookId);
-        var bookRentalRecord = createBookRentalRecord(rentalAction.bookId);
+        var bookRentals = loadCurrentBookRentals(rentalAction.bookId);
 
-        trackUserActivityInRecord(rentalAction, bookRentalRecord);
+        bookRentals.trackRentalActivity(userRentalActivity(rentalAction.action, rentalAction.userId));
 
-        rentalRecordRepository.save(bookRentalRecord);
-        rentalRecordPublisher.sendMessage(bookRentalRecord);
+        bookRentalsRepository.save(bookRentals);
+        bookRentalsPublisher.sendMessage(bookRentals);
     }
 
-    private BookRentalRecord createBookRentalRecord(String bookId) {
-        log.debug("Find book's rental record in database by id: {}", bookId);
-        var record = rentalRecordRepository.findByBookId(bookId);
-        if (record.isEmpty()) {
-            log.debug("Create book's rental record in database for id: {}", bookId);
-            return new BookRentalRecord(bookId);
-        }
-        return record.get();
-    }
-
-    private void trackUserActivityInRecord(RentalAction rentalAction, BookRentalRecord bookRentalRecord) {
-        var activity = UserActivityFactory.createUserActivity(rentalAction.action, rentalAction.userId);
-        bookRentalRecord.trackActivity(activity);
+    private BookRentals loadCurrentBookRentals(String bookId) {
+        log.debug("Find current book rentals if there are any or start new BookRentals for book {}", bookId);
+        return bookRentalsRepository.findByBookId(bookId).orElse(new BookRentals(bookId));
     }
 
 }

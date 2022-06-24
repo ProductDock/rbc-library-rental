@@ -47,7 +47,7 @@
 //    private BookRentalRecordMapper bookRentalRecordMapper;
 //
 //    @Mock
-//    private BookRecordMapper bookRecordMapper;
+//    private BookRecordMapper bookCopyRentalStateMapper;
 //
 //    @Test
 //    void verifyIfRentRecordEntityIsSavedAndPublished() throws Exception {
@@ -75,7 +75,7 @@
 //    @Test
 //    void getBookRentalRecords() {
 //        given(rentalRecordRepository.findByBookId(DEFAULT_BOOK_ID)).willReturn(ANY_RENTAL_ENTITY);
-//        given(bookRecordMapper.toDtoCollection(ANY_RENTAL_ENTITY.get().getInteractions()))
+//        given(bookCopyRentalStateMapper.toDtoCollection(ANY_RENTAL_ENTITY.get().getInteractions()))
 //                .willReturn(ANY_BOOK_RECORD_DTO_COLLECTION);
 //
 //        var bookRecords = getRentalRecordService.getBookCopiesByBookId(DEFAULT_BOOK_ID);

@@ -1,7 +1,7 @@
 package com.productdock.library.rental;
 
-import com.productdock.library.rental.adapter.out.kafka.RentalRecordsMessage;
-import com.productdock.library.rental.adapter.out.mongo.RentalRecordEntityRepository;
+import com.productdock.library.rental.adapter.out.kafka.BookRentalsMessage;
+import com.productdock.library.rental.adapter.out.mongo.BookRentalStateRepository;
 import com.productdock.library.rental.data.provider.KafkaTestBase;
 import com.productdock.library.rental.data.provider.KafkaTestConsumer;
 import com.productdock.library.rental.domain.RentalActionType;
@@ -49,7 +49,7 @@ class RentalRecordApiTest extends KafkaTestBase {
     private MockMvc mockMvc;
 
     @Autowired
-    private RentalRecordEntityRepository rentalRecordRepository;
+    private BookRentalStateRepository bookRentalStateRepository;
 
     @Autowired
     private KafkaTestConsumer consumer;
@@ -59,7 +59,7 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     @BeforeEach
     final void before() {
-        rentalRecordRepository.deleteAll();
+        bookRentalStateRepository.deleteAll();
     }
 
     @AfterEach
@@ -81,9 +81,9 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(5))
                 .until(ifFileExists(TEST_FILE));
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(3);
+        BookRentalsMessage bookRentalsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(bookRentalsMessage.getRentalRecords()).hasSize(3);
     }
 
     @Test
@@ -95,9 +95,9 @@ class RentalRecordApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(5))
                 .until(ifFileExists(TEST_FILE));
 
-        RentalRecordsMessage rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords()).isNotNull();
+        BookRentalsMessage bookRentalsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(bookRentalsMessage.getRentalRecords()).isNotNull();
     }
 
     @Test
@@ -223,9 +223,9 @@ class RentalRecordApiTest extends KafkaTestBase {
         var returnedInteraction = defaultBookInteractionBuilder().userEmail("::email::").status(RentalStatus.RESERVED).build();
 
         var rentalRecord = defaultRentalRecordEntityBuilder()
-                .interaction(returnedInteraction)
+                .bookCopyRentalState(returnedInteraction)
                 .build();
-        rentalRecordRepository.save(rentalRecord);
+        bookRentalStateRepository.save(rentalRecord);
     }
 
 
@@ -252,19 +252,19 @@ class RentalRecordApiTest extends KafkaTestBase {
 
     private Callable<Boolean> reservationCanceled(String bookId) {
         Callable<Boolean> checkIfCanceled = () -> {
-            var records = rentalRecordRepository.findByBookId(bookId);
+            var records = bookRentalStateRepository.findByBookId(bookId);
             if (records.isEmpty()) {
                 return false;
             }
-            return records.get().getInteractions().size() == 0;
+            return records.get().getBookCopiesRentalState().size() == 0;
         };
         return checkIfCanceled;
     }
 
-    private RentalRecordsMessage getRentalRecordsMessageFrom(String testFile) throws IOException, ClassNotFoundException {
+    private BookRentalsMessage getRentalRecordsMessageFrom(String testFile) throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(testFile);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        var rentalRecordsMessage = (RentalRecordsMessage) objectInputStream.readObject();
+        var rentalRecordsMessage = (BookRentalsMessage) objectInputStream.readObject();
         objectInputStream.close();
         return rentalRecordsMessage;
     }

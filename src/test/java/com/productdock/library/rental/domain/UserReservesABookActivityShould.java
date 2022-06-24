@@ -29,7 +29,7 @@ class UserReservesABookActivityShould {
 
     @Test
     void reserveABook_whenUserHadNoInteractionWithItBefore() {
-        Optional<BookRentalRecord.BookCopy> previousRecord = Optional.empty();
+        Optional<BookRentals.BookCopyRentalState> previousRecord = Optional.empty();
 
         var newRecord = userReservesABookActivity.changeStatusFrom(previousRecord);
 

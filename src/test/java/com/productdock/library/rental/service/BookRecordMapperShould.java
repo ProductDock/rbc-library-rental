@@ -25,13 +25,13 @@
 //    public static final BookInteraction RENTED_INTERACTION = defaultBookInteraction();
 //
 //    @Autowired
-//    private BookRecordMapper bookRecordMapper;
+//    private BookRecordMapper bookCopyRentalStateMapper;
 //
 //    @Test
 //    void mapBookInteractionToBookRecordDto() {
 //        var bookInteraction = defaultBookInteraction();
 //
-//        var bookRecordDto = bookRecordMapper.toDto(bookInteraction);
+//        var bookRecordDto = bookCopyRentalStateMapper.toDto(bookInteraction);
 //
 //        try (var softly = new AutoCloseableSoftAssertions()) {
 //            softly.assertThat(bookRecordDto.email).isEqualTo(bookInteraction.getUserEmail());
@@ -47,7 +47,7 @@
 //                RETURNED_INTERACTION
 //        ).collect(toList());
 //
-//        var bookRecordDtoCollection = bookRecordMapper.toDtoCollection(bookInteractions);
+//        var bookRecordDtoCollection = bookCopyRentalStateMapper.toDtoCollection(bookInteractions);
 //
 //        try (var softly = new AutoCloseableSoftAssertions()) {
 //            softly.assertThat(bookRecordDtoCollection)

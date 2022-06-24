@@ -1,8 +1,8 @@
 package com.productdock.library.rental.data.provider;
 
 
-import com.productdock.library.rental.adapter.out.mongo.entity.BookInteraction;
-import com.productdock.library.rental.adapter.out.mongo.entity.RentalRecordEntity;
+import com.productdock.library.rental.adapter.out.mongo.entity.BookCopyRentalState;
+import com.productdock.library.rental.adapter.out.mongo.entity.BookRentalState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,17 +15,17 @@ public class RentalRecordEntityMother {
     private static final String defaultId = "2";
     private static final String defaultBookId = "1";
 
-    private static final List<BookInteraction> defaultInteractions = new ArrayList<>
+    private static final List<BookCopyRentalState> defaultInteractions = new ArrayList<>
             (Arrays.asList(defaultBookInteraction()));
 
-    public static RentalRecordEntity defaultRentalRecordEntity() {
+    public static BookRentalState defaultRentalRecordEntity() {
         return defaultRentalRecordEntityBuilder().build();
     }
 
-    public static RentalRecordEntity.RentalRecordEntityBuilder defaultRentalRecordEntityBuilder() {
-        return RentalRecordEntity.builder()
+    public static BookRentalState.BookRentalStateBuilder defaultRentalRecordEntityBuilder() {
+        return BookRentalState.builder()
                 .id(defaultId)
                 .bookId(defaultBookId)
-                .interactions(defaultInteractions);
+                .bookCopiesRentalState(defaultInteractions);
     }
 }

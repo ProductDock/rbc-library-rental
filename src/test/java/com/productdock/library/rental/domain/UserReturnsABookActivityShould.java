@@ -22,7 +22,7 @@ class UserReturnsABookActivityShould {
 
     @Test
     void returnABook_whenUserHadNoInteractionWithItBefore() {
-        Optional<BookRentalRecord.BookCopy> previousRecord = Optional.empty();
+        Optional<BookRentals.BookCopyRentalState> previousRecord = Optional.empty();
 
         assertThatThrownBy(() -> userReturnsABookActivity.changeStatusFrom(previousRecord))
                 .isInstanceOf(BookRentalException.class);

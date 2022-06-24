@@ -2,9 +2,9 @@ package com.productdock.library.rental.config.dbmigrations;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
-import com.productdock.library.rental.adapter.out.mongo.RentalRecordEntityRepository;
-import com.productdock.library.rental.adapter.out.mongo.entity.BookInteraction;
-import com.productdock.library.rental.adapter.out.mongo.entity.RentalRecordEntity;
+import com.productdock.library.rental.adapter.out.mongo.BookRentalStateRepository;
+import com.productdock.library.rental.adapter.out.mongo.entity.BookCopyRentalState;
+import com.productdock.library.rental.adapter.out.mongo.entity.BookRentalState;
 import com.productdock.library.rental.config.coverage.Generated;
 import com.productdock.library.rental.domain.RentalStatus;
 
@@ -15,13 +15,13 @@ import java.util.Calendar;
 public class DatabaseInitChangeLog {
 
     @ChangeSet(order = "001", id = "init_rental_records", author = "pd")
-    public void initRentalRecords(RentalRecordEntityRepository rentalRecordRepository) {
+    public void initRentalRecords(BookRentalStateRepository bookRentalStateRepository) {
         var calendar = Calendar.getInstance();
 
         calendar.set(2019, Calendar.OCTOBER, 29);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("2")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                             .userEmail("adriana.martinovic@productdock.com")
                             .status(RentalStatus.RENTED)
                             .date(calendar.getTime())
@@ -29,9 +29,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2021, Calendar.DECEMBER, 15);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("4")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("jovanka.bobic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -39,9 +39,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2021, Calendar.AUGUST, 5);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("6")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("jovana.minic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -49,9 +49,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2022, Calendar.MARCH, 14);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("7")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("marko.radinovic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -59,9 +59,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2022, Calendar.MARCH, 14);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("30")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("nemanja.vasiljevic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -69,9 +69,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2020, Calendar.OCTOBER, 16);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("36")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("jovanka.bobic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -79,9 +79,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2020, Calendar.MARCH, 29);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("38")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("dragana.bogdanovic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -89,9 +89,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2020, Calendar.MARCH, 29);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("40")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("dragana.bogdanovic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -99,9 +99,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2021, Calendar.MAY, 24);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("52")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("bojan.ristic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -109,9 +109,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2021, Calendar.NOVEMBER, 1);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("55")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("nikola.lajic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -119,9 +119,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2021, Calendar.SEPTEMBER, 15);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("57")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("suzana.bogojevic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -129,9 +129,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2021, Calendar.AUGUST, 25);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("60")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("jovana.minic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -139,9 +139,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2021, Calendar.NOVEMBER, 5);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("63")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("andrija.vujasinovic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -149,9 +149,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2022, Calendar.MARCH, 4);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("65")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("adriana.martinovic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -159,9 +159,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2022, Calendar.JANUARY, 12);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("66")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("bojana.armacki@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -169,9 +169,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2022, Calendar.JANUARY, 19);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("67")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("nemanja.vasiljevic@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -179,9 +179,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2022, Calendar.MARCH, 2);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("69")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("milica.zivkov@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
@@ -189,9 +189,9 @@ public class DatabaseInitChangeLog {
                 .build());
 
         calendar.set(2022, Calendar.MARCH, 2);
-        rentalRecordRepository.save(RentalRecordEntity.builder()
+        bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("70")
-                .interaction(BookInteraction.builder()
+                .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("jaroslav.slivka@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
