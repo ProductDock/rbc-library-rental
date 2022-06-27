@@ -16,7 +16,7 @@ import java.util.List;
 public class BookRentalsMessage implements Serializable {
 
     private String bookId;
-    private List<RentalRecordRequest> rentalRecords;
+    private List<RentalRecord> rentalRecords;
 
     public BookRentalsMessage(String bookId) {
         this.bookId = bookId;
@@ -26,7 +26,7 @@ public class BookRentalsMessage implements Serializable {
     @NoArgsConstructor
     @Data
     @Builder
-    public static class RentalRecordRequest implements Serializable {
+    public static class RentalRecord implements Serializable {
 
         private String patron;
         private RentalStatus status;

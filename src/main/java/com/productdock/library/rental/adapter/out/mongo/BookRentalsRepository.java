@@ -1,6 +1,6 @@
 package com.productdock.library.rental.adapter.out.mongo;
 
-import com.productdock.library.rental.adapter.out.mongo.mapper.BookRentalRecordMapper;
+import com.productdock.library.rental.adapter.out.mongo.mapper.BookRentalStateMapper;
 import com.productdock.library.rental.application.port.out.persistence.BookRentalsPersistenceOutPort;
 import com.productdock.library.rental.domain.BookRentals;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class BookRentalsRepository implements BookRentalsPersistenceOutPort {
 
     private BookRentalStateRepository entityRepository;
-    private BookRentalRecordMapper mapper;
+    private BookRentalStateMapper mapper;
 
     @Override
     public Optional<BookRentals> findByBookId(String bookId) {
@@ -38,9 +38,7 @@ public class BookRentalsRepository implements BookRentalsPersistenceOutPort {
         log.debug("Save new book's rental record in database with id : {}", bookRentals);
         var previousRecordEntity = entityRepository.findByBookId(bookRentals.getBookId());
         var newRecordEntity = mapper.toEntity(bookRentals);
-        if (previousRecordEntity.isPresent()) {
-            newRecordEntity.setId(previousRecordEntity.get().getId());
-        }
+        previousRecordEntity.ifPresent(bookRentalState -> newRecordEntity.setId(bookRentalState.getId()));
         entityRepository.save(newRecordEntity);
     }
 
