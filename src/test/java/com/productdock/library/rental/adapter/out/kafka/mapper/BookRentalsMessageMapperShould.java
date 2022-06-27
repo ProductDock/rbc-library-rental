@@ -4,22 +4,17 @@ import com.productdock.library.rental.adapter.out.kafka.BookRentalsMessage;
 import com.productdock.library.rental.domain.BookRentals;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 import static com.productdock.library.rental.data.provider.domain.BookRentalsMother.bookRentalsWithRentRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {BookRentalsMessageMapperImpl.class})
+
 class BookRentalsMessageMapperShould {
 
-    @Autowired
-    private BookRentalsMessageMapper bookRentalsMessageMapper;
+    private final BookRentalsMessageMapper bookRentalsMessageMapper = Mappers.getMapper(BookRentalsMessageMapper.class);
 
     @Test
     void mapBookRentalsToRentalRecordsMessage() {

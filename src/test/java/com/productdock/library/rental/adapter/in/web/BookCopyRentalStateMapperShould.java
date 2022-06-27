@@ -4,17 +4,14 @@ import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalStatus;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mapstruct.factory.Mappers;
 
 import java.util.Date;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {BookCopyRentalStateMapperImpl.class})
 class BookCopyRentalStateMapperShould {
+
+    private final BookCopyRentalStateMapper bookCopyRentalStateMapper = Mappers.getMapper(BookCopyRentalStateMapper.class);
 
     public static final String USER_EMAIL = "test@productdock.com";
     public static final Date DATE = new Date();
@@ -24,9 +21,6 @@ class BookCopyRentalStateMapperShould {
             .patron(USER_EMAIL)
             .build();
 
-
-    @Autowired
-    private BookCopyRentalStateMapper bookCopyRentalStateMapper;
 
     @Test
     void mapBookCopyRentalStateToBookCopyRentalStateDto() {
