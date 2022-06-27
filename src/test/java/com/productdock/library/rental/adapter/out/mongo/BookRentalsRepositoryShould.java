@@ -50,8 +50,7 @@ class BookRentalsRepositoryShould {
 
         var bookRentals = bookRentalsRepository.findByBookId(BOOK_ID);
 
-        assertThat(bookRentals).isPresent();
-        assertThat(bookRentals.get()).isEqualTo(BOOK_RENTALS);
+        assertThat(bookRentals).contains(BOOK_RENTALS);
     }
 
     @Test

@@ -4,7 +4,7 @@ import com.productdock.library.rental.application.port.in.ExecuteRentalActionUse
 import com.productdock.library.rental.application.port.out.messaging.BookRentalsMessagingOutPort;
 import com.productdock.library.rental.application.port.out.persistence.BookRentalsPersistenceOutPort;
 import com.productdock.library.rental.domain.BookRentals;
-import com.productdock.library.rental.domain.RentalAction;
+import com.productdock.library.rental.domain.ds.RentalAction;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.productdock.library.rental.domain;
+package com.productdock.library.rental.domain.ds;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

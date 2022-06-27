@@ -1,7 +1,7 @@
 package com.productdock.library.rental.adapter.in.web;
 
 import com.productdock.library.rental.application.port.in.ExecuteRentalActionUseCase;
-import com.productdock.library.rental.domain.RentalAction;
+import com.productdock.library.rental.domain.ds.RentalAction;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

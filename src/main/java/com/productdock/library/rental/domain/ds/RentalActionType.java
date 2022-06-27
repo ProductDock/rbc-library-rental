@@ -1,4 +1,4 @@
-package com.productdock.library.rental.domain;
+package com.productdock.library.rental.domain.ds;
 
 public enum RentalActionType {
     RENT,
