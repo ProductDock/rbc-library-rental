@@ -26,7 +26,7 @@ class ExecuteRentalActionServiceShould {
     private ExecuteRentalActionService executeRentalActionService;
 
     @Mock
-    private BookRentalsPersistenceOutPort bookRentalsPersistenceOutPort;
+    private BookRentalsPersistenceOutPort bookRentalsRepository;
 
     @Mock
     private BookRentalsMessagingOutPort bookRentalsPublisher;
@@ -35,16 +35,15 @@ class ExecuteRentalActionServiceShould {
             .action(RentalActionType.RENT).build();
     private static final BookRentals ANY_BOOK_RENTALS = mock(BookRentals.class);
 
-
     @Test
     void verifyIfBookRentalsAreSavedAndPublished() throws Exception {
-        given(bookRentalsPersistenceOutPort.findByBookId(ANY_RENTAL_ACTION.bookId)).willReturn(Optional.of(ANY_BOOK_RENTALS));
+        given(bookRentalsRepository.findByBookId(ANY_RENTAL_ACTION.bookId)).willReturn(Optional.of(ANY_BOOK_RENTALS));
 
         executeRentalActionService.executeAction(ANY_RENTAL_ACTION);
 
-        InOrder inOrder = Mockito.inOrder(ANY_BOOK_RENTALS, bookRentalsPersistenceOutPort, bookRentalsPublisher);
+        InOrder inOrder = Mockito.inOrder(ANY_BOOK_RENTALS, bookRentalsRepository, bookRentalsPublisher);
         inOrder.verify(ANY_BOOK_RENTALS).trackRentalActivity(any());
-        inOrder.verify(bookRentalsPersistenceOutPort).save(ANY_BOOK_RENTALS);
+        inOrder.verify(bookRentalsRepository).save(ANY_BOOK_RENTALS);
         inOrder.verify(bookRentalsPublisher).sendMessage(ANY_BOOK_RENTALS);
     }
 }
