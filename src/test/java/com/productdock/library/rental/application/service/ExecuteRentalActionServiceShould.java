@@ -31,10 +31,10 @@ class ExecuteRentalActionServiceShould {
     @Mock
     private BookRentalsMessagingOutPort bookRentalsPublisher;
 
-    private static final RentalAction ANY_RENTAL_ACTION = new RentalAction(
-            "1",
-            "test@productdock.com",
-            RentalActionType.RENT);
+    private static final RentalAction ANY_RENTAL_ACTION = RentalAction.builder()
+            .bookId("1")
+            .userId("test@productdock.com")
+            .action(RentalActionType.RENT).build();
     private static final BookRentals ANY_BOOK_RENTALS = mock(BookRentals.class);
 
 
