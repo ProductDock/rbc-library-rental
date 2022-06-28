@@ -24,11 +24,11 @@ class GetBookRentalsServiceShould {
     private GetBookRentalsService getBookRentalsService;
 
     @Mock
-    private BookRentalsPersistenceOutPort bookRentalsPersistenceOutPort;
+    private BookRentalsPersistenceOutPort rentalRecordRepository;
 
     @Test
     void getBookRentalRecords_whenMissingRecords() {
-        given(bookRentalsPersistenceOutPort.findByBookId(BOOK_ID)).willReturn(Optional.empty());
+        given(rentalRecordRepository.findByBookId(BOOK_ID)).willReturn(Optional.empty());
 
         var bookRecords = getBookRentalsService.getBookCopiesRentalState(BOOK_ID);
 
@@ -37,7 +37,7 @@ class GetBookRentalsServiceShould {
 
     @Test
     void getBookRentalRecords() {
-        given(bookRentalsPersistenceOutPort.findByBookId(BOOK_ID)).willReturn(ANY_BOOK_RENTALS);
+        given(rentalRecordRepository.findByBookId(BOOK_ID)).willReturn(ANY_BOOK_RENTALS);
 
         var bookRecords = getBookRentalsService.getBookCopiesRentalState(BOOK_ID);
 
