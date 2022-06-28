@@ -20,13 +20,13 @@ import static org.mockito.Mockito.verify;
 class CancelExpiredReservationServiceShould {
 
     @InjectMocks
-    private CancelExpiredReservationsService job;
+    private CancelExpiredReservationsService service;
 
     @Mock
     private BookRentalsPersistenceOutPort bookRentalsRepository;
 
     @Mock
-    private ReservationExpirationPolicy reservationHoldPolicy;
+    private ReservationExpirationPolicy reservationExpirationPolicy;
 
     private static final BookRentals ANY_RENTAL_RECORD = mock(BookRentals.class);
     private static final Collection<BookRentals> ANY_RENTAL_RECORD_COLLECTION = List.of(ANY_RENTAL_RECORD);
@@ -35,9 +35,9 @@ class CancelExpiredReservationServiceShould {
     void cancelExpiredReservations() {
         given(bookRentalsRepository.findWithReservations()).willReturn(ANY_RENTAL_RECORD_COLLECTION);
 
-        job.cancelExpiredReservations();
+        service.cancelExpiredReservations();
 
-        verify(ANY_RENTAL_RECORD).removeExpiredReservations(reservationHoldPolicy);
+        verify(ANY_RENTAL_RECORD).removeExpiredReservations(reservationExpirationPolicy);
         verify(bookRentalsRepository).save(ANY_RENTAL_RECORD);
     }
 }
