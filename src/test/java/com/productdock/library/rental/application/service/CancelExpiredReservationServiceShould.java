@@ -15,6 +15,7 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static java.util.List.of;
 
 @ExtendWith(MockitoExtension.class)
 class CancelExpiredReservationServiceShould {
@@ -28,16 +29,15 @@ class CancelExpiredReservationServiceShould {
     @Mock
     private ReservationExpirationPolicy reservationExpirationPolicy;
 
-    private static final BookRentals ANY_RENTAL_RECORD = mock(BookRentals.class);
-    private static final Collection<BookRentals> ANY_RENTAL_RECORD_COLLECTION = List.of(ANY_RENTAL_RECORD);
+    private static final BookRentals BOOK_WITH_EXPIRED_RESERVATION = mock(BookRentals.class);
 
     @Test
     void cancelExpiredReservations() {
-        given(bookRentalsRepository.findWithReservations()).willReturn(ANY_RENTAL_RECORD_COLLECTION);
+        given(bookRentalsRepository.findWithReservations()).willReturn(of(BOOK_WITH_EXPIRED_RESERVATION));
 
         service.cancelExpiredReservations();
 
-        verify(ANY_RENTAL_RECORD).removeExpiredReservations(reservationExpirationPolicy);
-        verify(bookRentalsRepository).save(ANY_RENTAL_RECORD);
+        verify(BOOK_WITH_EXPIRED_RESERVATION).removeExpiredReservations(reservationExpirationPolicy);
+        verify(bookRentalsRepository).save(BOOK_WITH_EXPIRED_RESERVATION);
     }
 }
