@@ -13,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -31,19 +29,24 @@ class ExecuteRentalActionServiceShould {
     @Mock
     private BookRentalsMessagingOutPort bookRentalsPublisher;
 
+    @Mock
+    private BookRentalsAssembler bookRentalsAssembler;
+
     private static final RentalAction ANY_RENTAL_ACTION = RentalAction.builder()
+            .bookId("1")
             .action(RentalActionType.RENT).build();
-    private static final BookRentals ANY_BOOK_RENTALS = mock(BookRentals.class);
+    private static final BookRentals BOOK_RENTALS = mock(BookRentals.class);
 
     @Test
-    void verifyIfBookRentalsAreSavedAndPublished() throws Exception {
-        given(bookRentalsRepository.findByBookId(ANY_RENTAL_ACTION.bookId)).willReturn(Optional.of(ANY_BOOK_RENTALS));
+    void executeAndPublishRentalAction() throws Exception {
+        given(bookRentalsAssembler.of(ANY_RENTAL_ACTION.bookId)).willReturn(BOOK_RENTALS);
 
         executeRentalActionService.executeAction(ANY_RENTAL_ACTION);
 
-        InOrder inOrder = Mockito.inOrder(ANY_BOOK_RENTALS, bookRentalsRepository, bookRentalsPublisher);
-        inOrder.verify(ANY_BOOK_RENTALS).trackRentalActivity(any());
-        inOrder.verify(bookRentalsRepository).save(ANY_BOOK_RENTALS);
-        inOrder.verify(bookRentalsPublisher).sendMessage(ANY_BOOK_RENTALS);
+        InOrder inOrder = Mockito.inOrder(BOOK_RENTALS, bookRentalsRepository, bookRentalsPublisher);
+        inOrder.verify(BOOK_RENTALS).trackRentalActivity(any());
+        inOrder.verify(bookRentalsRepository).save(BOOK_RENTALS);
+        inOrder.verify(bookRentalsPublisher).sendMessage(BOOK_RENTALS);
     }
+
 }
