@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.Date;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithRentRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.rentedBookCopy;
 import static org.mockito.Mockito.mock;
 
 
@@ -23,7 +23,7 @@ class BookCopyMapperShould {
 
     @Test
     void mapDomainBookCopyRentalStateToEntityBookCopyRentalState() {
-        var domainRentalState = bookCopyRentalStateWithRentRequest();
+        var domainRentalState = rentedBookCopy();
 
         var entityRentalState = bookCopyMapper.toEntity(domainRentalState);
 

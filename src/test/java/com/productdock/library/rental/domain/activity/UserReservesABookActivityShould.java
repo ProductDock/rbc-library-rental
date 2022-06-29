@@ -1,5 +1,6 @@
 package com.productdock.library.rental.domain.activity;
 
+import com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother;
 import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalStatus;
 import com.productdock.library.rental.domain.exception.BookRentalException;
@@ -10,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithReserveRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.reservedBookCopy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -22,7 +23,7 @@ class UserReservesABookActivityShould {
 
     @Test
     void reserveABook_whenUserHadReservedItAlready() {
-        var previousRentalState = Optional.of(bookCopyRentalStateWithReserveRequest());
+        var previousRentalState = Optional.of(reservedBookCopy());
 
         assertThatThrownBy(() -> userReservesABookActivity.changeStatusFrom(previousRentalState))
                 .isInstanceOf(BookRentalException.class);

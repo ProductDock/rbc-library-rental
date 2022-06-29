@@ -1,5 +1,6 @@
 package com.productdock.library.rental.domain.activity;
 
+import com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother;
 import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalStatus;
 import com.productdock.library.rental.domain.exception.BookRentalException;
@@ -10,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithRentRequest;
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithReserveRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.rentedBookCopy;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.reservedBookCopy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -23,9 +24,7 @@ class UserBorrowsABookActivityShould {
 
     @Test
     void rentABook_whenUserHadReservedItAlready() {
-        var previousRentalState = bookCopyRentalStateWithReserveRequest();
-
-        var newRentalState = userBorrowsABookActivity.changeStatusFrom(Optional.of(previousRentalState));
+        var newRentalState = userBorrowsABookActivity.changeStatusFrom(Optional.of(reservedBookCopy()));
 
         assertThat(newRentalState.get().getStatus()).isEqualTo(RentalStatus.RENTED);
         assertThat(newRentalState.get().getPatron()).isNull();
@@ -34,18 +33,14 @@ class UserBorrowsABookActivityShould {
 
     @Test
     void rentABook_whenUserHadNoInteractionWithItBefore() {
-        Optional<BookRentals.BookCopyRentalState> previousRentalState = Optional.empty();
-
-        var newRentalState = userBorrowsABookActivity.changeStatusFrom(previousRentalState);
+        var newRentalState = userBorrowsABookActivity.changeStatusFrom(Optional.empty());
 
         assertThat(newRentalState.get().getStatus()).isEqualTo(RentalStatus.RENTED);
     }
 
     @Test
     void rentABook_whenUserHadRentedItAlready() {
-        var previousRentalState = Optional.of(bookCopyRentalStateWithRentRequest());
-
-        assertThatThrownBy(() -> userBorrowsABookActivity.changeStatusFrom(previousRentalState))
+        assertThatThrownBy(() -> userBorrowsABookActivity.changeStatusFrom(Optional.of(rentedBookCopy())))
                 .isInstanceOf(BookRentalException.class);
     }
 }

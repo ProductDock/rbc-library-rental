@@ -7,32 +7,25 @@ import java.util.Date;
 
 public class BookCopyRentalStateMother {
 
-    private static final String defaultUserEmail = "default@gmail.com";
+    private static final String defaultPatron = "default@gmail.com";
     private static final Date defaultDate = new Date();
-    private static final RentalStatus rentStatus = RentalStatus.RENTED;
-    private static final RentalStatus reserveStatus = RentalStatus.RESERVED;
 
-    public static BookRentals.BookCopyRentalState bookCopyRentalStateWithRentRequest() {
+    public static BookRentals.BookCopyRentalState rentedBookCopy() {
         return BookRentals.BookCopyRentalState.builder()
-                .patron(defaultUserEmail)
+                .patron(defaultPatron)
                 .date(defaultDate)
-                .status(rentStatus)
+                .status(RentalStatus.RENTED)
                 .build();
     }
 
-    public static BookRentals.BookCopyRentalState bookCopyRentalStateWithReserveRequest() {
-        return BookRentals.BookCopyRentalState.builder()
-                .patron(defaultUserEmail)
-                .date(defaultDate)
-                .status(reserveStatus)
-                .build();
+    public static BookRentals.BookCopyRentalState reservedBookCopy() {
+        return reservedBookCopyBuilder().build();
     }
 
-    public static BookRentals.BookCopyRentalState bookCopyRentalStateWithReserveRequest(Date reservationDate) {
+    public static BookRentals.BookCopyRentalState.BookCopyRentalStateBuilder reservedBookCopyBuilder() {
         return BookRentals.BookCopyRentalState.builder()
-                .patron(defaultUserEmail)
-                .date(reservationDate)
-                .status(reserveStatus)
-                .build();
+                .patron(defaultPatron)
+                .date(defaultDate)
+                .status(RentalStatus.RESERVED);
     }
 }

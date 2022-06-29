@@ -11,8 +11,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithRentRequest;
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithReserveRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.*;
 import static com.productdock.library.rental.data.provider.domain.BookRentalsMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -29,14 +28,14 @@ class BookRentalsShould {
 
     private static final Date NOT_EXPIRED_DATE = mock(Date.class);
     private static final Date EXPIRED_DATE = mock(Date.class);
-    private static final BookRentals.BookCopyRentalState EXPIRED_RESERVATION = bookCopyRentalStateWithReserveRequest(EXPIRED_DATE);
-    private static final BookRentals.BookCopyRentalState NOT_EXPIRED_RESERVATION = bookCopyRentalStateWithReserveRequest(NOT_EXPIRED_DATE);
+    private static final BookRentals.BookCopyRentalState EXPIRED_RESERVATION = reservedBookCopyBuilder().date(EXPIRED_DATE).build();
+    private static final BookRentals.BookCopyRentalState NOT_EXPIRED_RESERVATION = reservedBookCopyBuilder().date(NOT_EXPIRED_DATE).build();
 
     @Test
     void addRentRecord_whenUserAlreadyReservedTheBook() {
         var bookRentalsWithReserveRequest = bookRentalsWithReserveRequest();
         var bookCopyRentalState = bookRentalsWithReserveRequest.getBookCopiesRentalState().get(0);
-        var bookCopyRentalStateWithRentRequest = bookCopyRentalStateWithRentRequest();
+        var bookCopyRentalStateWithRentRequest = rentedBookCopy();
 
         given(userRentalActivity.getInitiator()).willReturn(bookCopyRentalState.getPatron());
         given(userRentalActivity.changeStatusFrom(Optional.of(bookCopyRentalState)))
@@ -76,7 +75,7 @@ class BookRentalsShould {
     @Test
     void addRentRecord_whenUserHadNotRentedOrReservedItAlready() {
         var bookRentalsWithNoRequests = bookRentalsWithNoRequests();
-        var bookCopyRentalState = bookCopyRentalStateWithRentRequest();
+        var bookCopyRentalState = rentedBookCopy();
         bookCopyRentalState.setPatron("newUser@gmail.com");
 
         given(userRentalActivity.getInitiator()).willReturn("newUser@gmail.com");

@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithRentRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.rentedBookCopy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -30,7 +30,7 @@ class UserReturnsABookActivityShould {
 
     @Test
     void returnABook_whenUserHadRentedItAlready() {
-        var previousRentalState = bookCopyRentalStateWithRentRequest();
+        var previousRentalState = rentedBookCopy();
 
         var newRentalState = userReturnsABookActivity.changeStatusFrom(Optional.of(previousRentalState));
 
