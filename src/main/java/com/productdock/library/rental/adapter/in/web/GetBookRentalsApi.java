@@ -11,10 +11,10 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
-@RequestMapping("api/rental/record")
+@RequestMapping("api/rental/book/")
 public record GetBookRentalsApi(GetBookRentalsQuery getBookRentalsQuery, BookCopyRentalStateMapper bookCopyRentalStateMapper) {
 
-    @GetMapping("/{bookId}")
+    @GetMapping("/{bookId}/rentals")
     public Collection<BookCopyRentalStateDto> getByBookId(@PathVariable("bookId") String bookId) {
         log.debug("GET request received - api/rental/record/{}", bookId);
         var bookCopiesRentalState = getBookRentalsQuery.getBookCopiesRentalState(bookId);

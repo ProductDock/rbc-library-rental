@@ -64,7 +64,7 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
 
     @Test
     void shouldCreateThreeRentalRecords_whenThreeDifferentUsersRentABook() throws Exception {
-        makeRentalRequest(RentalActionType.RENT)
+        makeRentalRequest(RentalActionType.RENT, PATRON_1)
                 .andExpect(status().isOk());
         makeRentalRequest(RentalActionType.RENT, PATRON_2)
                 .andExpect(status().isOk());
@@ -75,7 +75,7 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(5))
                 .until(ifFileExists(TEST_FILE));
 
-        BookRentalsMessage bookRentalsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        var bookRentalsMessage = getBookRentalsMessageFrom(TEST_FILE);
         assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
         assertThat(bookRentalsMessage.getRentalRecords()).hasSize(3);
     }
@@ -89,7 +89,7 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(5))
                 .until(ifFileExists(TEST_FILE));
 
-        BookRentalsMessage bookRentalsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        var bookRentalsMessage = getBookRentalsMessageFrom(TEST_FILE);
         assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
         assertThat(bookRentalsMessage.getRentalRecords()).isNotNull();
     }
@@ -105,9 +105,9 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(4))
                 .until(ifFileExists(TEST_FILE));
 
-        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(1);
+        var bookRentalsMessage = getBookRentalsMessageFrom(TEST_FILE);
+        assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(bookRentalsMessage.getRentalRecords()).hasSize(1);
     }
 
     @Test
@@ -120,9 +120,9 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(4))
                 .until(ifFileExists(TEST_FILE));
 
-        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords()).isEmpty();
+        var bookRentalsMessage = getBookRentalsMessageFrom(TEST_FILE);
+        assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(bookRentalsMessage.getRentalRecords()).isEmpty();
     }
 
     @Test
@@ -135,9 +135,9 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(4))
                 .until(ifFileExists(TEST_FILE));
 
-        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(1);
+        var bookRentalsMessage = getBookRentalsMessageFrom(TEST_FILE);
+        assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(bookRentalsMessage.getRentalRecords()).hasSize(1);
     }
 
     @Test
@@ -151,9 +151,9 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(4))
                 .until(ifFileExists(TEST_FILE));
 
-        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
-        assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
-        assertThat(rentalRecordsMessage.getRentalRecords()).hasSize(1);
+        var bookRentalsMessage = getBookRentalsMessageFrom(TEST_FILE);
+        assertThat(bookRentalsMessage.getBookId()).isEqualTo(FIRST_BOOK);
+        assertThat(bookRentalsMessage.getRentalRecords()).hasSize(1);
     }
 
     @Test
@@ -166,7 +166,7 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(4))
                 .until(ifFileExists(TEST_FILE));
 
-        var rentalRecordsMessage = getRentalRecordsMessageFrom(TEST_FILE);
+        var rentalRecordsMessage = getBookRentalsMessageFrom(TEST_FILE);
         assertThat(rentalRecordsMessage.getBookId()).isEqualTo(FIRST_BOOK);
         assertThat(rentalRecordsMessage.getRentalRecords()).isEmpty();
     }
@@ -204,11 +204,11 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
         return checkForFile;
     }
 
-    private BookRentalsMessage getRentalRecordsMessageFrom(String testFile) throws IOException, ClassNotFoundException {
+    private BookRentalsMessage getBookRentalsMessageFrom(String testFile) throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(testFile);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        var rentalRecordsMessage = (BookRentalsMessage) objectInputStream.readObject();
+        var bookRentalsMessage = (BookRentalsMessage) objectInputStream.readObject();
         objectInputStream.close();
-        return rentalRecordsMessage;
+        return bookRentalsMessage;
     }
 }

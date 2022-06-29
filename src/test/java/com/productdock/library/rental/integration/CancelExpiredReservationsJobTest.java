@@ -50,7 +50,7 @@ class CancelExpiredReservationsJobTest extends KafkaTestBase {
                 .atMost(Duration.ofSeconds(8))
                 .until(reservationCanceled(FIRST_BOOK));
 
-        mockMvc.perform(get("/api/rental/record/" + FIRST_BOOK)
+        mockMvc.perform(get("/api/rental/book/" + FIRST_BOOK + "/rentals")
                         .with(jwt().jwt(jwt -> jwt.claim("email", PATRON))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").value(hasSize(0)));
