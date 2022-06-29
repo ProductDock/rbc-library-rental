@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableKafka
 @SpringBootApplication
-@EnableAutoConfiguration
 @EnableMongoRepositories
 @EnableMongock
 @EnableScheduling
