@@ -3,11 +3,14 @@ package com.productdock.library.rental.domain.ds;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.util.Objects;
+
 @AllArgsConstructor
 @Builder
 public class RentalAction {
 
-    public String bookId;
-    public String userId;
-    public RentalActionType action;
+    public final String bookId;
+    public final String userId;
+    public final RentalActionType action;
+
 }
