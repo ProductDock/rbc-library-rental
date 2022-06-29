@@ -2,23 +2,28 @@ package com.productdock.library.rental.application.service;
 
 import com.productdock.library.rental.application.port.out.persistence.BookRentalsPersistenceOutPort;
 import com.productdock.library.rental.domain.BookRentals;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class GetBookRentalsServiceShould {
 
-    public static final String BOOK_ID = "1";
-    private static final Optional<BookRentals> ANY_BOOK_RENTALS = Optional.of(mock(BookRentals.class));
+    private static final List<BookRentals.BookCopyRentalState> COPIES = List.of(new BookRentals.BookCopyRentalState());
+    private static final BookRentals BOOK_RENTALS = BookRentals.builder().bookCopiesRentalState(COPIES).build();
 
     @InjectMocks
     private GetBookRentalsService getBookRentalsService;
@@ -26,22 +31,20 @@ class GetBookRentalsServiceShould {
     @Mock
     private BookRentalsPersistenceOutPort rentalRecordRepository;
 
-    @Test
-    void getBookRentalRecords_whenMissingRecords() {
-        given(rentalRecordRepository.findByBookId(BOOK_ID)).willReturn(Optional.empty());
+    @ParameterizedTest
+    @MethodSource("testArguments")
+    void getBookCopiesRentalState_whenNotInRepository(Optional bookRentals, List<BookRentals.BookCopyRentalState> copies) {
+        given(rentalRecordRepository.findByBookId(any())).willReturn(bookRentals);
 
-        var bookRecords = getBookRentalsService.getBookCopiesRentalState(BOOK_ID);
+        var bookCopiesRentalState = getBookRentalsService.getBookCopiesRentalState(any());
 
-        assertThat(bookRecords).isEmpty();
+        assertThat(bookCopiesRentalState).isEqualTo(copies);
     }
 
-    @Test
-    void getBookRentalRecords() {
-        given(rentalRecordRepository.findByBookId(BOOK_ID)).willReturn(ANY_BOOK_RENTALS);
-
-        var bookRecords = getBookRentalsService.getBookCopiesRentalState(BOOK_ID);
-
-        assertThat(ANY_BOOK_RENTALS).isPresent();
-        assertThat(bookRecords).isEqualTo(ANY_BOOK_RENTALS.get().getBookCopiesRentalState());
+    static Stream<Arguments> testArguments() {
+        return Stream.of(
+                Arguments.of(Optional.empty(), new ArrayList<>()),
+                Arguments.of(Optional.of(BOOK_RENTALS), COPIES)
+        );
     }
 }
