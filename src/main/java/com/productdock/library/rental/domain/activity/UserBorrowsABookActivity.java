@@ -13,8 +13,8 @@ public class UserBorrowsABookActivity extends UserRentalActivity {
     }
 
     @Override
-    public Optional<BookRentals.BookCopyRentalState> changeStatusFrom(Optional<BookRentals.BookCopyRentalState> previousRecord) {
-        if (previousRecord.isPresent() && !previousRecord.get().isReservation()) {
+    public Optional<BookRentals.BookCopyRentalState> changeStatusFrom(Optional<BookRentals.BookCopyRentalState> previousState) {
+        if (previousState.isPresent() && !previousState.get().isReservation()) {
             throw new BookRentalException("User has already rented this book!");
         }
         BookRentals.BookCopyRentalState bookCopyRentalState = new BookRentals.BookCopyRentalState(getInitiator(), RentalStatus.RENTED);
