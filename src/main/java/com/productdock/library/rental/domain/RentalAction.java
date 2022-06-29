@@ -5,7 +5,6 @@ import lombok.Builder;
 
 @AllArgsConstructor
 @Builder
-@DataStructure
 public class RentalAction {
 
     public final String bookId;
