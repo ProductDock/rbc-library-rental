@@ -2,7 +2,7 @@ package com.productdock.library.rental.integration;
 
 
 import com.productdock.library.rental.adapter.out.mongo.BookRentalStateRepository;
-import com.productdock.library.rental.domain.ds.RentalActionType;
+import com.productdock.library.rental.domain.RentalActionType;
 import com.productdock.library.rental.integration.kafka.KafkaTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,11 @@
-package com.productdock.library.rental.domain.ds;
+package com.productdock.library.rental.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 @AllArgsConstructor
 @Builder
+@DataStructure
 public class RentalAction {
 
     public final String bookId;

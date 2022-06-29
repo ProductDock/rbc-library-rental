@@ -1,6 +1,6 @@
 package com.productdock.library.rental.domain.activity;
 
-import com.productdock.library.rental.domain.ds.RentalActionType;
+import com.productdock.library.rental.domain.RentalActionType;
 
 public class UserRentalActivityFactory {
 

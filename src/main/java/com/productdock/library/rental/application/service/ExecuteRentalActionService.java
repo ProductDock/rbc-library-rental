@@ -3,7 +3,7 @@ package com.productdock.library.rental.application.service;
 import com.productdock.library.rental.application.port.in.ExecuteRentalActionUseCase;
 import com.productdock.library.rental.application.port.out.messaging.BookRentalsMessagingOutPort;
 import com.productdock.library.rental.application.port.out.persistence.BookRentalsPersistenceOutPort;
-import com.productdock.library.rental.domain.ds.RentalAction;
+import com.productdock.library.rental.domain.RentalAction;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
