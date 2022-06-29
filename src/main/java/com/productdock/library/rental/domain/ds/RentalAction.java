@@ -3,8 +3,6 @@ package com.productdock.library.rental.domain.ds;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
-import java.util.Objects;
-
 @AllArgsConstructor
 @Builder
 public class RentalAction {

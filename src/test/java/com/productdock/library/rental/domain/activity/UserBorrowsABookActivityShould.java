@@ -1,7 +1,5 @@
 package com.productdock.library.rental.domain.activity;
 
-import com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother;
-import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalStatus;
 import com.productdock.library.rental.domain.exception.BookRentalException;
 import org.junit.jupiter.api.Test;

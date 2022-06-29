@@ -11,7 +11,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.*;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.rentedBookCopy;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.reservedBookCopyBuilder;
 import static com.productdock.library.rental.data.provider.domain.BookRentalsMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;

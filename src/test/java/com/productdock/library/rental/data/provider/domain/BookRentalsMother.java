@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.rentedBookCopy;
-import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.reservedBookCopy;
 
 public class BookRentalsMother {
 

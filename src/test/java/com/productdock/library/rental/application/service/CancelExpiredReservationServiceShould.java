@@ -9,13 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collection;
-import java.util.List;
-
+import static java.util.List.of;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static java.util.List.of;
 
 @ExtendWith(MockitoExtension.class)
 class CancelExpiredReservationServiceShould {
