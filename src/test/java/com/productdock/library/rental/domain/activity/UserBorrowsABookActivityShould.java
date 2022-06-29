@@ -1,5 +1,6 @@
 package com.productdock.library.rental.domain.activity;
 
+import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalStatus;
 import com.productdock.library.rental.domain.exception.BookRentalException;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,9 @@ class UserBorrowsABookActivityShould {
 
     @Test
     void rentABook_whenUserHadRentedItAlready() {
-        assertThatThrownBy(() -> userBorrowsABookActivity.changeStatusFrom(Optional.of(rentedBookCopy())))
+        Optional<BookRentals.BookCopyRentalState> previousState = Optional.of(rentedBookCopy());
+
+        assertThatThrownBy(() -> userBorrowsABookActivity.changeStatusFrom(previousState))
                 .isInstanceOf(BookRentalException.class);
     }
 }
