@@ -5,7 +5,7 @@ import com.productdock.library.rental.domain.RentalStatus;
 
 import java.util.Date;
 
-public class BookCopyMother {
+public class BookCopyRentalStateMother {
 
     private static final String defaultUserEmail = "default@gmail.com";
     private static final Date defaultDate = new Date();

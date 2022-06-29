@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyMother.bookCopyRentalStateWithRentRequest;
-import static com.productdock.library.rental.data.provider.domain.BookCopyMother.bookCopyRentalStateWithReserveRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithRentRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithReserveRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

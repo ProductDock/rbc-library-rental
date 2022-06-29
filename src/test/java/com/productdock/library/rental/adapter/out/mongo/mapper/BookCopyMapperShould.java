@@ -1,19 +1,14 @@
 package com.productdock.library.rental.adapter.out.mongo.mapper;
 
-import com.productdock.library.rental.adapter.out.kafka.mapper.BookRentalsMessageMapper;
 import com.productdock.library.rental.adapter.out.mongo.entity.BookCopyRentalState;
 import com.productdock.library.rental.domain.RentalStatus;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 
-import static com.productdock.library.rental.data.provider.domain.BookCopyMother.bookCopyRentalStateWithRentRequest;
+import static com.productdock.library.rental.data.provider.domain.BookCopyRentalStateMother.bookCopyRentalStateWithRentRequest;
 import static org.mockito.Mockito.mock;
 
 
