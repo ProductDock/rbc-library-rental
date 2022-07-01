@@ -26,6 +26,10 @@ spring:
 mongock:
   enabled: false
 
+logging:
+  level:
+    com.productdock.library.rental: DEBUG
+
 reservations:
   auto-canceling:
     scheduled: '*/2 * * * * *'

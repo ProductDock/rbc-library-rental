@@ -54,7 +54,13 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-out/
+out/*
+!out/kafka
+!out/mongo
+!out/messaging
+!out/persistence
+
+
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
