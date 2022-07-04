@@ -1,7 +1,7 @@
 spring:
   kafka:
     enabled: true
-    bootstrap-servers: ${kafka.server.url:localhost:9092}
+    bootstrap-servers: ${kafka.server.url:localhost:9093}
     producer:
       client-id: kafka-message-producer
       acks: all
@@ -19,7 +19,7 @@ spring:
       authentication-database: rental
       host: ${mongo.server.url:localhost}
       port: ${mongo.server.port:28017}
-      username: ${mongo.username:root1}
+      username: ${mongo.username:root}
       password: ${mongo.password:root1}
       database: rental
 
@@ -31,6 +31,7 @@ spring:
           jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
 
 server:
+  port: 8085
   error:
     include-message: always
 
@@ -39,7 +40,7 @@ mongock:
 
 logging:
   level:
-    com.productdock.library.rental: ${logging.level:INFO}
+    com.productdock.library.rental: ${logging.level:DEBUG}
 
 reservations:
   auto-canceling:
@@ -49,3 +50,4 @@ reservations:
         unit: DAYS
         value: 4
       week-policy: WORKDAYS
+
