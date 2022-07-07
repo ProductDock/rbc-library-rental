@@ -18,7 +18,7 @@ public class KafkaMessageProducer {
     public ProducerRecord<String, String> createKafkaRecord(String topic, BookRentalStatusChanged bookRentalStatusChanged) throws JsonProcessingException {
         log.debug("Create kafka record on topic {} with message: {}", topic, bookRentalStatusChanged);
         var serialisedMessage = serialiseMessage(bookRentalStatusChanged);
-        return new ProducerRecord<>(topic, UUID.randomUUID().toString(), serialisedMessage);
+        return new ProducerRecord<>(topic, bookRentalStatusChanged.getBookId(), serialisedMessage);
     }
 
     private String serialiseMessage(BookRentalStatusChanged bookRentalStatusChanged) throws JsonProcessingException {
