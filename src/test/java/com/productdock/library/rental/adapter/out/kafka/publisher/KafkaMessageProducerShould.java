@@ -18,13 +18,11 @@ class KafkaMessageProducerShould {
     @InjectMocks
     private KafkaMessageProducer kafkaMessageProducer;
 
-    private static final String BOOK_STATUS_TOPIC = "test-book-status";
-
     @Test
     void produceMessage() throws JsonProcessingException {
         var rentalRecordsMessage = defaultRentalRecordsMessageBuilder().rentalRecords(Collections.emptyList()).build();
 
-        var producerRecord = kafkaMessageProducer.createKafkaRecord(BOOK_STATUS_TOPIC, rentalRecordsMessage);
+        var producerRecord = kafkaMessageProducer.createKafkaRecord("any_topic", rentalRecordsMessage);
 
         Gson gson = new Gson();
         String desiredValue = "{\"bookId\":\"" + rentalRecordsMessage.getBookId() +

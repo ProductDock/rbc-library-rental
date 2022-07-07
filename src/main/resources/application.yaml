@@ -12,7 +12,7 @@ spring:
       auto-offset-reset: latest
       group-id: ${consumer.group:group}
     topic:
-      book-status: ${kafka.topic:book-status}
+      publishing: rentals
 
   data:
     mongodb:

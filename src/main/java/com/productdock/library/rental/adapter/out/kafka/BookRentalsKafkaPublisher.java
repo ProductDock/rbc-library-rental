@@ -21,7 +21,7 @@ public class BookRentalsKafkaPublisher implements BookRentalsMessagingOutPort {
         this.publisher = publisher;
     }
 
-    @Value("${spring.kafka.topic.book-status}")
+    @Value("${spring.kafka.topic.publishing}")
     private String kafkaTopic;
 
     @Override

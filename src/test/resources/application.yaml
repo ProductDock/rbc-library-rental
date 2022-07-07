@@ -20,8 +20,7 @@ spring:
       auto-offset-reset: earliest
       group-id: rbc-library
     topic:
-      book-status: test-book-status
-      bad-rental-request: test-bad-rental-request
+      publishing: test-rentals
 
 mongock:
   enabled: false

@@ -22,7 +22,7 @@ public class KafkaTestConsumer {
     private RentalRecordsMessageDeserializer rentalRecordsMessageDeserializer;
 
 
-    @KafkaListener(topics = "${spring.kafka.topic.book-status}")
+    @KafkaListener(topics = "${spring.kafka.topic.publishing}")
     public void receive(ConsumerRecord<String, String> consumerRecord) throws JsonProcessingException {
         LOGGER.info("received payload='{}'", consumerRecord.toString());
         var rentalRecordsMessage = rentalRecordsMessageDeserializer.deserializeRentalRecordsMessage(consumerRecord);

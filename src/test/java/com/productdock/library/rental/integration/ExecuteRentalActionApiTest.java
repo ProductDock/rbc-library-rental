@@ -48,7 +48,7 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
     @Autowired
     private KafkaTestConsumer consumer;
 
-    @Value("${spring.kafka.topic.book-status}")
+    @Value("${spring.kafka.topic.publishing}")
     private String topic;
 
     @BeforeEach
