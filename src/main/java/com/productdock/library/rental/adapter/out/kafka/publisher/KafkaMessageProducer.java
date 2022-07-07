@@ -19,7 +19,7 @@ public class KafkaMessageProducer {
         return new ProducerRecord<>(topic, bookRentalStatusChanged.getBookId(), serialisedMessage);
     }
 
-    private String serialiseMessageToJson(BookRentalStatusChanged bookRentalStatusChanged) throws JsonProcessingException {
-        return OBJECT_MAPPER.writeValueAsString(bookRentalStatusChanged);
+    private String serialiseMessageToJson(Object message) throws JsonProcessingException {
+        return OBJECT_MAPPER.writeValueAsString(message);
     }
 }
