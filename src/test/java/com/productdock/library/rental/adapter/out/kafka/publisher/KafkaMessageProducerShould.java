@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 
-import static com.productdock.library.rental.data.provider.out.kafka.RentalRecordsMessageMother.defaultRentalRecordsMessageBuilder;
+import static com.productdock.library.rental.data.provider.out.kafka.BookRentalStatusChangedMother.defaultRentalRecordsMessageBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)

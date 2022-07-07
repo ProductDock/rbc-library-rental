@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.productdock.library.rental.data.provider.out.kafka.MessageRentalRecordMother.defaultRentalRecord;
 
-public class RentalRecordsMessageMother {
+public class BookRentalStatusChangedMother {
 
     private static final String defaultBookId = "1";
 
@@ -19,7 +19,7 @@ public class RentalRecordsMessageMother {
         return defaultRentalRecordsMessageBuilder().build();
     }
 
-    public static BookRentalStatusChanged.BookRentalsMessageBuilder defaultRentalRecordsMessageBuilder() {
+    public static BookRentalStatusChanged.BookRentalStatusChangedBuilder defaultRentalRecordsMessageBuilder() {
         return BookRentalStatusChanged.builder()
                 .bookId(defaultBookId)
                 .rentalRecords(defaultRentalRecords);

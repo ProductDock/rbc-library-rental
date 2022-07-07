@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Slf4j
 @Component
 public class KafkaMessageProducer {
@@ -17,11 +15,11 @@ public class KafkaMessageProducer {
 
     public ProducerRecord<String, String> createKafkaRecord(String topic, BookRentalStatusChanged bookRentalStatusChanged) throws JsonProcessingException {
         log.debug("Create kafka record on topic {} with message: {}", topic, bookRentalStatusChanged);
-        var serialisedMessage = serialiseMessage(bookRentalStatusChanged);
+        var serialisedMessage = serialiseMessageToJson(bookRentalStatusChanged);
         return new ProducerRecord<>(topic, bookRentalStatusChanged.getBookId(), serialisedMessage);
     }
 
-    private String serialiseMessage(BookRentalStatusChanged bookRentalStatusChanged) throws JsonProcessingException {
+    private String serialiseMessageToJson(BookRentalStatusChanged bookRentalStatusChanged) throws JsonProcessingException {
         return OBJECT_MAPPER.writeValueAsString(bookRentalStatusChanged);
     }
 }
