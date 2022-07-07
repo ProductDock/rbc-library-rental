@@ -1,6 +1,6 @@
 package com.productdock.library.rental.adapter.out.kafka.mapper;
 
-import com.productdock.library.rental.adapter.out.kafka.BookRentalsMessage;
+import com.productdock.library.rental.adapter.out.kafka.BookRentalStatusChanged;
 import com.productdock.library.rental.domain.BookRentals;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class BookRentalsMessageMapperShould {
     }
 
     private void assertThatRecordsAreMatching(List<BookRentals.BookCopyRentalState> bookCopiesRentalState,
-                                              List<BookRentalsMessage.RentalRecord> rentalRecordRequests) {
+                                              List<BookRentalStatusChanged.RentalRecord> rentalRecordRequests) {
         assertThat(bookCopiesRentalState).hasSameSizeAs(rentalRecordRequests);
         var bookCopy = bookCopiesRentalState.get(0);
         var rentalRecordRequest = rentalRecordRequests.get(0);
@@ -35,7 +35,7 @@ class BookRentalsMessageMapperShould {
     }
 
     private void assertThatBookCopyIsMatching(BookRentals.BookCopyRentalState bookCopiesRentalState,
-                                              BookRentalsMessage.RentalRecord rentalRecordRequest) {
+                                              BookRentalStatusChanged.RentalRecord rentalRecordRequest) {
         try (var softly = new AutoCloseableSoftAssertions()) {
             softly.assertThat(bookCopiesRentalState.getPatron()).isEqualTo(rentalRecordRequest.getPatron());
             softly.assertThat(bookCopiesRentalState.getStatus()).isEqualTo(rentalRecordRequest.getStatus());

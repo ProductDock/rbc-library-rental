@@ -1,7 +1,7 @@
 package com.productdock.library.rental.integration;
 
 
-import com.productdock.library.rental.adapter.out.kafka.BookRentalsMessage;
+import com.productdock.library.rental.adapter.out.kafka.BookRentalStatusChanged;
 import com.productdock.library.rental.adapter.out.mongo.BookRentalStateRepository;
 import com.productdock.library.rental.domain.RentalActionType;
 import com.productdock.library.rental.integration.kafka.KafkaTestBase;
@@ -204,10 +204,10 @@ class ExecuteRentalActionApiTest extends KafkaTestBase {
         return checkForFile;
     }
 
-    private BookRentalsMessage getBookRentalsMessageFrom(String testFile) throws IOException, ClassNotFoundException {
+    private BookRentalStatusChanged getBookRentalsMessageFrom(String testFile) throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(testFile);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        var bookRentalsMessage = (BookRentalsMessage) objectInputStream.readObject();
+        var bookRentalsMessage = (BookRentalStatusChanged) objectInputStream.readObject();
         objectInputStream.close();
         return bookRentalsMessage;
     }

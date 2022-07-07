@@ -1,7 +1,7 @@
 package com.productdock.library.rental.integration.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.productdock.library.rental.adapter.out.kafka.BookRentalsMessage;
+import com.productdock.library.rental.adapter.out.kafka.BookRentalStatusChanged;
 import com.productdock.library.rental.kafka.RentalRecordsMessageDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -29,11 +29,11 @@ public class KafkaTestConsumer {
         writeRecordToFile(rentalRecordsMessage);
     }
 
-    private void writeRecordToFile(BookRentalsMessage bookRentalsMessage) {
+    private void writeRecordToFile(BookRentalStatusChanged bookRentalStatusChanged) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream("testRecord.txt");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(bookRentalsMessage);
+            objectOutputStream.writeObject(bookRentalStatusChanged);
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception e) {

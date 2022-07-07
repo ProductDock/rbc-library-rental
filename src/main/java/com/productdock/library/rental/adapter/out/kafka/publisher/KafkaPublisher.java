@@ -1,7 +1,7 @@
 package com.productdock.library.rental.adapter.out.kafka.publisher;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.productdock.library.rental.adapter.out.kafka.BookRentalsMessage;
+import com.productdock.library.rental.adapter.out.kafka.BookRentalStatusChanged;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,9 @@ public class KafkaPublisher {
         this.kafkaMessageProducer = kafkaMessageProducer;
     }
 
-    public void sendMessage(BookRentalsMessage bookRentalsMessage, String kafkaTopic) throws ExecutionException, InterruptedException, JsonProcessingException {
-        log.debug("Sent kafka message: {} on kafka topic: {}", bookRentalsMessage, kafkaTopic);
-        var kafkaRecord = kafkaMessageProducer.createKafkaRecord(kafkaTopic, bookRentalsMessage);
+    public void sendMessage(BookRentalStatusChanged bookRentalStatusChanged, String kafkaTopic) throws ExecutionException, InterruptedException, JsonProcessingException {
+        log.debug("Sent kafka message: {} on kafka topic: {}", bookRentalStatusChanged, kafkaTopic);
+        var kafkaRecord = kafkaMessageProducer.createKafkaRecord(kafkaTopic, bookRentalStatusChanged);
         kafkaTemplate.send(kafkaRecord).get();
     }
 }

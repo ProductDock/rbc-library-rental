@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BookRentalsMessage implements Serializable {
+public class BookRentalStatusChanged implements Serializable {
 
     private String bookId;
     private List<RentalRecord> rentalRecords;
 
-    public BookRentalsMessage(String bookId) {
+    public BookRentalStatusChanged(String bookId) {
         this.bookId = bookId;
     }
 

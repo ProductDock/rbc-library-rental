@@ -26,7 +26,7 @@ public class BookRentalsKafkaPublisher implements BookRentalsMessagingOutPort {
 
     @Override
     public void sendMessage(BookRentals bookRentals) throws ExecutionException, InterruptedException, JsonProcessingException {
-        BookRentalsMessage message = bookRentalsMessageMapper.toMessage(bookRentals);
+        BookRentalStatusChanged message = bookRentalsMessageMapper.toMessage(bookRentals);
         publisher.sendMessage(message, kafkaTopic);
     }
 
