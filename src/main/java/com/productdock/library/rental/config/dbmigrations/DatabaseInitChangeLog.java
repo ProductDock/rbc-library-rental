@@ -108,6 +108,16 @@ public class DatabaseInitChangeLog {
                         .build())
                 .build());
 
+        calendar.set(2022, Calendar.JUNE, 7);
+        bookRentalStateRepository.save(BookRentalState.builder()
+                .bookId("54")
+                .bookCopyRentalState(BookCopyRentalState.builder()
+                        .userEmail("mladen.marinkovic@productdock.com")
+                        .status(RentalStatus.RENTED)
+                        .date(calendar.getTime())
+                        .build())
+                .build());
+
         calendar.set(2021, Calendar.NOVEMBER, 1);
         bookRentalStateRepository.save(BookRentalState.builder()
                 .bookId("55")
@@ -173,6 +183,16 @@ public class DatabaseInitChangeLog {
                 .bookId("67")
                 .bookCopyRentalState(BookCopyRentalState.builder()
                         .userEmail("nemanja.vasiljevic@productdock.com")
+                        .status(RentalStatus.RENTED)
+                        .date(calendar.getTime())
+                        .build())
+                .build());
+
+        calendar.set(2022, Calendar.JUNE, 29);
+        bookRentalStateRepository.save(BookRentalState.builder()
+                .bookId("68")
+                .bookCopyRentalState(BookCopyRentalState.builder()
+                        .userEmail("vladimir.vukoman@productdock.com")
                         .status(RentalStatus.RENTED)
                         .date(calendar.getTime())
                         .build())
