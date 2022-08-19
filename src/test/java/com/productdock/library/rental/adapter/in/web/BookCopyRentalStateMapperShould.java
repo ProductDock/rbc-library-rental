@@ -48,6 +48,7 @@ class BookCopyRentalStateMapperShould {
         try (var softly = new AutoCloseableSoftAssertions()) {
             softly.assertThat(bookCopyRentalState.getStatus()).isEqualTo(bookCopyRentalStateDto.status);
             softly.assertThat(bookCopyRentalState.getPatron()).isEqualTo(bookCopyRentalStateDto.email);
+            softly.assertThat(bookCopyRentalState.getDate()).isEqualTo(bookCopyRentalStateDto.date);
         }
     }
 }
