@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static com.productdock.library.rental.data.provider.out.mongo.BookCopyRentalStateMother.defaultBookCopyRentalStateBuilder;
@@ -31,6 +28,8 @@ class GetBookRentalsApiTest extends KafkaTestBase {
     private static final String PATRON = "test1@productdock.com";
     private static final Date DATE_21_06_2022 = new Date(1655805600000L);
     private static final Date DATE_17_06_2022 = new Date(1655460000000L);
+    private static final String FORMATTED_DATE_21_06_2022 = "2022-06-21T10:00:00.000+00:00";
+    private static final String FORMATTED_DATE_17_06_2022 = "2022-06-17T10:00:00.000+00:00";
 
     @Autowired
     private MockMvc mockMvc;
@@ -47,8 +46,6 @@ class GetBookRentalsApiTest extends KafkaTestBase {
     void shouldGetBookRecords() throws Exception {
         givenAnyRentalRecord();
 
-        var dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
-
         mockMvc.perform(get("/api/rental/book/" + FIRST_BOOK + "/rentals")
                         .with(jwt().jwt(jwt -> jwt.claim("email", PATRON))))
                 .andExpect(status().isOk())
@@ -59,8 +56,8 @@ class GetBookRentalsApiTest extends KafkaTestBase {
                         containsInAnyOrder("::email1::", "::email1::")))
                 .andExpect(jsonPath("$.[*].date",
                         containsInAnyOrder(
-                                dateFormatter.format(ZonedDateTime.ofInstant(DATE_17_06_2022.toInstant(), ZoneOffset.UTC)),
-                                dateFormatter.format(ZonedDateTime.ofInstant(DATE_21_06_2022.toInstant(), ZoneOffset.UTC))
+                                FORMATTED_DATE_21_06_2022,
+                                FORMATTED_DATE_17_06_2022
                         )));
     }
 
