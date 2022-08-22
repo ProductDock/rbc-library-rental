@@ -52,7 +52,7 @@ class GetBookRentalsServiceShould {
 
         var bookCopiesRentalState = getBookRentalsService.getBookCopiesRentalState(any());
 
-        assertThat(bookCopiesRentalState.size()).isEqualTo(copies.size());
+        assertThat(bookCopiesRentalState).hasSize(copies.size());
     }
 
     static Stream<Arguments> testArguments() {
