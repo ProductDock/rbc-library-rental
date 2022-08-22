@@ -1,6 +1,5 @@
 package com.productdock.library.rental.application.port.in;
 
-import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalWithUserProfile;
 
 import java.io.IOException;
