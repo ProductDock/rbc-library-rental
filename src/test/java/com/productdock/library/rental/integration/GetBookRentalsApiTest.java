@@ -4,16 +4,26 @@ import com.productdock.library.rental.adapter.out.mongo.BookRentalStateRepositor
 import com.productdock.library.rental.adapter.out.mongo.entity.BookRentalState;
 import com.productdock.library.rental.domain.RentalStatus;
 import com.productdock.library.rental.integration.kafka.KafkaTestBase;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 
 import static com.productdock.library.rental.data.provider.out.mongo.BookCopyRentalStateMother.defaultBookCopyRentalStateBuilder;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -38,6 +48,19 @@ class GetBookRentalsApiTest extends KafkaTestBase {
     @Autowired
     private BookRentalStateRepository bookRentalStateRepository;
 
+    public static MockWebServer mockUserProfilesBackEnd;
+
+    @BeforeAll
+    static void setUp() throws IOException {
+        mockUserProfilesBackEnd = new MockWebServer();
+        mockUserProfilesBackEnd.start(8085);
+    }
+
+    @AfterAll
+    static void tearDown() throws IOException {
+        mockUserProfilesBackEnd.shutdown();
+    }
+
     @BeforeEach
     final void before() {
         bookRentalStateRepository.deleteAll();
@@ -46,16 +69,22 @@ class GetBookRentalsApiTest extends KafkaTestBase {
     @Test
     void shouldGetBookRecords() throws Exception {
         givenAnyRentalRecord();
+        mockUserProfilesBackEnd.enqueue(new MockResponse()
+                .setBody("[{\"fullName\": \"Test test\", \"image\": \"image\", \"email\": \"::email1::\"}, " +
+                        "{\"fullName\": \"Test test\", \"image\": \"image\", \"email\": \"::email2::\"}]")
+                .addHeader("Content-Type", "application/json"));
 
         var dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 
         mockMvc.perform(get("/api/rental/book/" + FIRST_BOOK + "/rentals")
-                        .with(jwt().jwt(jwt -> jwt.claim("email", PATRON))))
+                        .with(jwt().jwt(jwt -> {
+                            jwt.claim("email", PATRON);
+                        })))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").value(hasSize(2)))
                 .andExpect(jsonPath("$.[*].status",
                         containsInAnyOrder(RentalStatus.RENTED.toString(), RentalStatus.RESERVED.toString())))
-                .andExpect(jsonPath("$.[*].email",
+                .andExpect(jsonPath("$.[*].user.email",
                         containsInAnyOrder("::email1::", "::email1::")))
                 .andExpect(jsonPath("$.[*].date",
                         containsInAnyOrder(

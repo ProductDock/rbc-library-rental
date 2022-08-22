@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class BookCopyRentalStateDto {
 
-    public String email;
+    public UserProfileDto user;
     public RentalStatus status;
     public Date date;
 }

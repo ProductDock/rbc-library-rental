@@ -1,0 +1,7 @@
+jwt:
+  public.key: ${rental.jwt.public.key}
+
+user:
+  profiles:
+    service:
+      url: ${USER_PROFILES_SERVICE_URL}

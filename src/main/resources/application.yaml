@@ -23,13 +23,6 @@ spring:
       password: ${mongo.password:root1}
       database: rental
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: accounts.google.com
-          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
-
 server:
   error:
     include-message: always
