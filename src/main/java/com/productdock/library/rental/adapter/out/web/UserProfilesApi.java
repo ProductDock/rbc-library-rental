@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.productdock.library.rental.application.port.out.web.UserProfilesClient;
 import com.productdock.library.rental.domain.UserProfile;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 @Component
+@Slf4j
 public class UserProfilesApi implements UserProfilesClient {
 
     private String userProfilesServiceUrl;
@@ -32,6 +34,7 @@ public class UserProfilesApi implements UserProfilesClient {
 
     @Override
     public List<UserProfile> getUserProfilesByEmails(List<String> emails) throws IOException, InterruptedException {
+        log.debug("Get user profiles from UserProfiles API service by emails {}", emails);
         var jwt =((Jwt) SecurityContextHolder.getContext().getAuthentication().getCredentials()).getTokenValue();
         var uri = new DefaultUriBuilderFactory(userProfilesServiceUrl)
                 .builder()
