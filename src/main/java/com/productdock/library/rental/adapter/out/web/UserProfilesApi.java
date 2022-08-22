@@ -28,14 +28,14 @@ public class UserProfilesApi implements UserProfilesClient {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public UserProfilesApi(@Value("${user.profiles.service.url}/api/user-profiles") String userProfilesServiceUrl){
+    public UserProfilesApi(@Value("${user.profiles.service.url}/api/user-profiles") String userProfilesServiceUrl) {
         this.userProfilesServiceUrl = userProfilesServiceUrl;
     }
 
     @Override
     public List<UserProfile> getUserProfilesByEmails(List<String> emails) throws IOException, InterruptedException {
         log.debug("Get user profiles from UserProfiles API service by emails {}", emails);
-        var jwt =((Jwt) SecurityContextHolder.getContext().getAuthentication().getCredentials()).getTokenValue();
+        var jwt = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getCredentials()).getTokenValue();
         var uri = new DefaultUriBuilderFactory(userProfilesServiceUrl)
                 .builder()
                 .queryParam("userEmails", emails)
@@ -46,6 +46,7 @@ public class UserProfilesApi implements UserProfilesClient {
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return objectMapper.readValue(response.body(), new TypeReference<List<UserProfile>>(){});
+        return objectMapper.readValue(response.body(), new TypeReference<List<UserProfile>>() {
+        });
     }
 }
