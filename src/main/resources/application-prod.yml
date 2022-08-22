@@ -1,5 +1,5 @@
 jwt:
-  public.key: ${rental.jwt.public.key}
+  public.key: ${RENTAL_JWT_PUBLIC_KEY}
 
 user:
   profiles:
