@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.productdock.library.rental.application.port.out.web.UserProfilesClient;
 import com.productdock.library.rental.domain.UserProfile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,7 @@ public class UserProfilesApi implements UserProfilesClient {
     private HttpClient client = HttpClient.newHttpClient();
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
     public UserProfilesApi(@Value("${user.profiles.service.url}/api/user-profiles") String userProfilesServiceUrl){
         this.userProfilesServiceUrl = userProfilesServiceUrl;
     }
