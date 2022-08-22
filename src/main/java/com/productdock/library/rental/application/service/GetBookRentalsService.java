@@ -30,13 +30,13 @@ class GetBookRentalsService implements GetBookRentalsQuery {
     @Override
     public Collection<RentalWithUserProfile> getBookCopiesRentalState(String bookId) throws URISyntaxException, IOException, InterruptedException {
         log.debug("Get book copies from rental record for the {} book", bookId);
-        var rentals = getRentalsWithBookId(bookId);
-        List<String> userEmails = getUserEmailsFromRentals(rentals);
+        var rentals = getRentalsByBookId(bookId);
+        var userEmails = getUserEmailsFromRentals(rentals);
         var userProfiles = userProfilesClient.getUserProfilesByEmails(userEmails);
         return matchUserProfilesWithRentalRecords(userProfiles, rentals);
     }
 
-    private List<BookRentals.BookCopyRentalState> getRentalsWithBookId(String bookId) {
+    private List<BookRentals.BookCopyRentalState> getRentalsByBookId(String bookId) {
         return rentalRecordRepository
                 .findByBookId(bookId)
                 .map(BookRentals::getBookCopiesRentalState)
@@ -50,7 +50,7 @@ class GetBookRentalsService implements GetBookRentalsQuery {
     private List<RentalWithUserProfile> matchUserProfilesWithRentalRecords(List<UserProfile> userProfiles, List<BookRentals.BookCopyRentalState> rentalRecords) {
         var userProfilesMap = createUserProfilesMap(userProfiles);
         List<RentalWithUserProfile> rentalsWithUser = new ArrayList<>();
-        for (BookRentals.BookCopyRentalState rentalRecord : rentalRecords) {
+        for (var rentalRecord : rentalRecords) {
             if (userProfilesMap.containsKey(rentalRecord.getPatron())) {
                 rentalsWithUser.add(RentalWithUserProfile.builder()
                         .user(userProfilesMap.get(rentalRecord.getPatron()))
