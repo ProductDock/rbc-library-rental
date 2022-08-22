@@ -38,3 +38,11 @@ reservations:
         unit: SECONDS
         value: 4
       week-policy: ALL_DAYS
+
+jwt:
+  public.key: classpath:test.pub
+
+user:
+  profiles:
+    service:
+      url: http://localhost:8085/api/user-profiles

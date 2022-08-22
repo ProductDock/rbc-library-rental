@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 @Slf4j
@@ -15,7 +17,7 @@ import java.util.Collection;
 public record GetBookRentalsApi(GetBookRentalsQuery getBookRentalsQuery, BookCopyRentalStateMapper bookCopyRentalStateMapper) {
 
     @GetMapping("/{bookId}/rentals")
-    public Collection<BookCopyRentalStateDto> getByBookId(@PathVariable("bookId") String bookId) {
+    public Collection<BookCopyRentalStateDto> getByBookId(@PathVariable("bookId") String bookId) throws URISyntaxException, IOException, InterruptedException {
         log.debug("GET request received - api/rental/record/{}", bookId);
         var bookCopiesRentalState = getBookRentalsQuery.getBookCopiesRentalState(bookId);
         return bookCopyRentalStateMapper.toDtoCollection(bookCopiesRentalState);

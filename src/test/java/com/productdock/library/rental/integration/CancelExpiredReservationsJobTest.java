@@ -4,6 +4,10 @@ package com.productdock.library.rental.integration;
 import com.productdock.library.rental.adapter.out.mongo.BookRentalStateRepository;
 import com.productdock.library.rental.domain.RentalActionType;
 import com.productdock.library.rental.integration.kafka.KafkaTestBase;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 
@@ -28,13 +33,26 @@ import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 class CancelExpiredReservationsJobTest extends KafkaTestBase {
 
     private static final String FIRST_BOOK = "1";
-    private static final String PATRON = "test1@productdock.com";
+    private static final String PATRON = "test@productdock.com";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private BookRentalStateRepository bookRentalStateRepository;
+
+    public static MockWebServer mockUserProfilesBackEnd;
+
+    @BeforeAll
+    static void setUp() throws IOException {
+        mockUserProfilesBackEnd = new MockWebServer();
+        mockUserProfilesBackEnd.start(8085);
+    }
+
+    @AfterAll
+    static void tearDown() throws IOException {
+        mockUserProfilesBackEnd.shutdown();
+    }
 
     @BeforeEach
     final void before() {
@@ -45,6 +63,9 @@ class CancelExpiredReservationsJobTest extends KafkaTestBase {
     void shouldCancelReservation_whenReservationExpires() throws Exception {
         makeRentalRequest(RentalActionType.RESERVE)
                 .andExpect(status().isOk());
+        mockUserProfilesBackEnd.enqueue(new MockResponse()
+                .setBody("[]")
+                .addHeader("Content-Type", "application/json"));
 
         await()
                 .atMost(Duration.ofSeconds(8))
