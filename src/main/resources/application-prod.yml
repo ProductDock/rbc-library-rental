@@ -1,7 +1,7 @@
 jwt:
-  public.key: file:${RENTAL_JWT_PUBLIC_KEY}
+  public.key: file:${rental.jwt.public.key}
 
 user:
   profiles:
     service:
-      url: ${USER_PROFILES_SERVICE_URL}
+      url: ${user.profiles.service.url}
