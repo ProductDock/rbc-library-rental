@@ -80,7 +80,7 @@ class GetBookRentalsApiTest extends KafkaTestBase {
                 .andExpect(jsonPath("$.[*].status",
                         containsInAnyOrder(RentalStatus.RENTED.toString(), RentalStatus.RESERVED.toString())))
                 .andExpect(jsonPath("$.[*].user.email",
-                        containsInAnyOrder("::email1::", "::email1::")))
+                        containsInAnyOrder("::email1::", "::email2::")))
                 .andExpect(jsonPath("$.[*].date",
                         containsInAnyOrder(
                                 dateFormatter.format(ZonedDateTime.ofInstant(DATE_17_06_2022.toInstant(), ZoneOffset.UTC)),
@@ -96,7 +96,7 @@ class GetBookRentalsApiTest extends KafkaTestBase {
                 .build();
 
         var rentedInteraction = defaultBookCopyRentalStateBuilder()
-                .userEmail("::email1::")
+                .userEmail("::email2::")
                 .status(RentalStatus.RENTED)
                 .date(DATE_21_06_2022)
                 .build();
