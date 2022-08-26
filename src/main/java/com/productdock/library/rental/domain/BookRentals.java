@@ -34,12 +34,14 @@ public class BookRentals {
         add(newRecord);
     }
 
+    public Collection<BookCopyRentalState> findExpiredReservations(ReservationExpirationPolicy policy) {
+        return findReservations().stream().filter(res -> policy.isReservationExpired(res.date)).toList();
+    }
+
     public void removeExpiredReservations(ReservationExpirationPolicy policy) {
-        for (var bookCopy : findReservations()) {
-            if (policy.isReservationExpired(bookCopy.date)) {
-                log.debug("Removing expired book reservation for user with id: {} for book with id: {}", bookId, bookCopy.patron);
-                remove(Optional.of(bookCopy));
-            }
+        for (var bookCopy : findExpiredReservations(policy)) {
+            log.debug("Removing expired book reservation for user with id: {} for book with id: {}", bookId, bookCopy.patron);
+            remove(Optional.of(bookCopy));
         }
     }
 

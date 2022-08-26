@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
-class BookRentalsRepositoryShould {
+class BookRentalsPersistenceAdapterShould {
 
     private static final String BOOK_ID = "1";
     private static final Collection<BookRentalState> BOOK_RENTAL_STATE_WITH_RESERVATIONS =
@@ -35,7 +35,7 @@ class BookRentalsRepositoryShould {
     private static final BookRentals BOOK_RENTALS = mock(BookRentals.class);
 
     @InjectMocks
-    private BookRentalsRepository bookRentalsRepository;
+    private BookRentalsPersistenceAdapter bookRentalsRepository;
 
     @Mock
     private BookRentalStateRepository bookRentalStateRepository;
