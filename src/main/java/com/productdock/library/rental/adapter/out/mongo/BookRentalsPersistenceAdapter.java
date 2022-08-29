@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 @Slf4j
 @AllArgsConstructor
-public class BookRentalsRepository implements BookRentalsPersistenceOutPort {
+public class BookRentalsPersistenceAdapter implements BookRentalsPersistenceOutPort {
 
     private BookRentalStateRepository entityRepository;
     private BookRentalStateMapper mapper;

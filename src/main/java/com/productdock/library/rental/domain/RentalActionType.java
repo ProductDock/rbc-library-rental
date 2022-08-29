@@ -4,5 +4,6 @@ public enum RentalActionType {
     RENT,
     RESERVE,
     RETURN,
-    CANCEL_RESERVATION
+    CANCEL_RESERVATION,
+    SCHEDULED_CANCEL_RESERVATION,
 }
