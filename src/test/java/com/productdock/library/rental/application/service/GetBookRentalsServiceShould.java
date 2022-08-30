@@ -6,18 +6,14 @@ import com.productdock.library.rental.domain.BookRentals;
 import com.productdock.library.rental.domain.RentalWithUserProfile;
 import com.productdock.library.rental.domain.UserProfile;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,21 +40,24 @@ class GetBookRentalsServiceShould {
     private UserProfilesClient userProfilesClient;
 
     @SneakyThrows
-    @ParameterizedTest
-    @MethodSource("testArguments")
-    void getBookCopiesRentalState_whenNotInRepository(Optional bookRentals, List<RentalWithUserProfile> copies, List<String> userEmails) {
-        given(rentalRecordRepository.findByBookId(any())).willReturn(bookRentals);
-        given(userProfilesClient.getUserProfilesByEmails(userEmails)).willReturn(USER_PROFILES);
+    @Test
+    void getBookCopiesRentalState_whenNotInRepository() {
+        given(rentalRecordRepository.findByBookId(any())).willReturn(Optional.empty());
 
         var bookCopiesRentalState = getBookRentalsService.getBookCopiesRentalState(any());
 
-        assertThat(bookCopiesRentalState).hasSize(copies.size());
+        assertThat(bookCopiesRentalState).isEmpty();
     }
 
-    static Stream<Arguments> testArguments() {
-        return Stream.of(
-                Arguments.of(Optional.empty(), new ArrayList<>(), new ArrayList<>()),
-                Arguments.of(Optional.of(BOOK_RENTALS), RENTALS_WITH_USER_PROFILES, USER_EMAILS)
-        );
+    @SneakyThrows
+    @Test
+    void getBookCopiesRentalState_whenInRepository() {
+        var bookRentals = Optional.of(BOOK_RENTALS);
+        given(rentalRecordRepository.findByBookId(any())).willReturn(bookRentals);
+        given(userProfilesClient.getUserProfilesByEmails(USER_EMAILS)).willReturn(USER_PROFILES);
+
+        var bookCopiesRentalState = getBookRentalsService.getBookCopiesRentalState(any());
+
+        assertThat(bookCopiesRentalState).hasSize(RENTALS_WITH_USER_PROFILES.size());
     }
 }
