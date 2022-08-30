@@ -31,6 +31,9 @@ class GetBookRentalsService implements GetBookRentalsQuery {
     public Collection<RentalWithUserProfile> getBookCopiesRentalState(String bookId) throws URISyntaxException, IOException, InterruptedException {
         log.debug("Get book copies from rental record for the {} book", bookId);
         var rentals = getRentalsByBookId(bookId);
+        if(rentals.isEmpty()){
+            return new ArrayList<>();
+        }
         var userEmails = getUserEmailsFromRentals(rentals);
         var userProfiles = userProfilesClient.getUserProfilesByEmails(userEmails);
         return matchUserProfilesWithRentalRecords(userProfiles, rentals);
