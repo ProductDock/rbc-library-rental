@@ -53,4 +53,5 @@ class CancelExpiredReservationServiceShould {
         verify(bookRentalsRepository).save(BOOK_WITH_EXPIRED_RESERVATION);
         verify(bookRentalsPublisher).sendMessage(BOOK_WITH_EXPIRED_RESERVATION);
     }
+
 }
