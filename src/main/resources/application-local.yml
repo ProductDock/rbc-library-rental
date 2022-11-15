@@ -1,10 +1,7 @@
 jwt:
   public.key: classpath:app-local.pub
 
-server:
-  port: 8083
-
 user:
   profiles:
     service:
-      url: http://localhost:8085
+      url: ${user.profiles.service.url:http://localhost:8085}
