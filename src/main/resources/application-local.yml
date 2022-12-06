@@ -7,5 +7,4 @@ MONGO_USERNAME: root
 MONGO_PASSWORD: root1
 
 CONSUMER_GROUP: group
-KAFKA_TOPIC: book-status
 KAFKA_SERVER_URL: localhost:9093
