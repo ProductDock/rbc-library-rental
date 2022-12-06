@@ -1,7 +1,7 @@
 spring:
   kafka:
     enabled: true
-    bootstrap-servers: ${kafka.server.url:localhost:9093}
+    bootstrap-servers: ${KAFKA_SERVER_URL}
     producer:
       client-id: kafka-message-producer
       acks: all
@@ -10,17 +10,17 @@ spring:
     consumer:
       enable-auto-commit: true
       auto-offset-reset: latest
-      group-id: ${consumer.group:group}
+      group-id: ${CONSUMER_GROUP}
     topic:
-      book-status: ${kafka.topic:book-status}
+      book-status: ${KAFKA_TOPIC}
 
   data:
     mongodb:
       authentication-database: rental
-      host: ${mongo.server.url:localhost}
-      port: ${mongo.server.port:28017}
-      username: ${mongo.username:root}
-      password: ${mongo.password:root1}
+      host: ${MONGO_SERVER_URL}
+      port: ${MONGO_SERVER_PORT}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
       database: rental
 
 server:
@@ -32,7 +32,7 @@ mongock:
 
 logging:
   level:
-    com.productdock.library.rental: ${logging.level:DEBUG}
+    com.productdock.library.rental: INFO
 
 reservations:
   auto-canceling:
@@ -43,3 +43,10 @@ reservations:
         value: 4
       week-policy: WORKDAYS
 
+jwt:
+  public.key: file:${RENTAL_JWT_PUBLIC_KEY}
+
+user:
+  profiles:
+    service:
+      url: ${USER_PROFILES_SERVICE_URL}
