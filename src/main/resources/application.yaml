@@ -10,7 +10,7 @@ spring:
     consumer:
       enable-auto-commit: true
       auto-offset-reset: latest
-      group-id: ${CONSUMER_GROUP}
+      group-id: rental-group
     topic:
       book-status: book-status
 
@@ -44,7 +44,7 @@ reservations:
       week-policy: WORKDAYS
 
 jwt:
-  public.key: file:${RENTAL_JWT_PUBLIC_KEY}
+  public.key: file:${USER_PROFILES_JWT_PUBLIC_KEY}
 
 user:
   profiles:
