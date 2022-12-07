@@ -1,7 +1,9 @@
-jwt:
-  public.key: classpath:app-local.pub
+USER_PROFILES_JWT_PUBLIC_KEY: src/main/resources/app-local.pub
+USER_PROFILES_SERVICE_URL: http://localhost:8085
 
-user:
-  profiles:
-    service:
-      url: ${user.profiles.service.url:http://localhost:8085}
+MONGO_SERVER_URL: localhost
+MONGO_SERVER_PORT: 28017
+MONGO_USERNAME: root
+MONGO_PASSWORD: root1
+
+KAFKA_SERVER_URL: localhost:9093
