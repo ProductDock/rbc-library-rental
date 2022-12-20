@@ -34,6 +34,8 @@ logging:
   level:
     com.productdock.library.rental: INFO
 
+log-to-file: ${LOG_TO_FILE}
+
 reservations:
   auto-canceling:
     scheduled: '0 0 8 * * *'
