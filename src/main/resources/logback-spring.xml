@@ -2,6 +2,7 @@
 <configuration>
 
     <property name="LOGS" value="./logs" />
+    <springProperty scope="context" name="FileLoggingEnabled" source="file-logging-enabled"/>
 
     <appender name="Console"
               class="ch.qos.logback.core.ConsoleAppender">
@@ -32,12 +33,22 @@
     </appender>
 
     <root level="info">
-        <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </root>
 
     <logger level="debug" name="com.productdock.library.rental" additivity="false">
-        <appender-ref ref="RollingFile" />
+        <appender-ref ref="Console" />
     </logger>
+
+    <if condition='"${FileLoggingEnabled}".equals("true")'>
+        <then>
+            <root level="info">
+                <appender-ref ref="RollingFile"/>
+            </root>
+            <logger level="debug" name="com.productdock.library.rental" additivity="false">
+                <appender-ref ref="RollingFile"/>
+            </logger>
+        </then>
+    </if>
 
 </configuration>
