@@ -7,4 +7,4 @@ MONGO_USERNAME: root
 MONGO_PASSWORD: root1
 
 KAFKA_SERVER_URL: localhost:9093
-LOG_TO_FILE: true
+LOG_TO_FILE: false

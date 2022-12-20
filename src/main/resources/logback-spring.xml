@@ -2,7 +2,7 @@
 <configuration>
 
     <property name="LOGS" value="./logs" />
-    <springProperty scope="context" name="LogToFile" source="log-to-file"/>
+    <springProperty scope="context" name="LogToFile" source="log.to.file"/>
 
     <appender name="Console"
               class="ch.qos.logback.core.ConsoleAppender">
