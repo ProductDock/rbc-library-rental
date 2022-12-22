@@ -52,3 +52,14 @@ user:
   profiles:
     service:
       url: ${USER_PROFILES_SERVICE_URL}
+
+management:
+  server:
+    port: 8087
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
