@@ -1,39 +1,46 @@
-## PD Library rental service
+## PD Library Rental
 
-## Build and run by executing following steps manually
+Rental is one of the services that makes PD Library.
 
-### Production
+It keeps track of who and when rented a book. 
+It provides functionalities for renting, reserving and returning a book.
+It is not concerned by the book metadata, like authors, titles, etc. It only cares about rental aspect of books.
 
-Production is running in GCP.
+### Delivery mechanism
 
-1. #### Follow [usual steps](https://cloud.google.com/compute/docs/instances/connecting-to-instance) for connecting to a VM running in GCP
-   Connect via SSH to a **rbc-library-rental-vm**.
-2. #### Go to a folder where backend is:
-    ``` 
-    cd /home/pd-library/rbc-library-rental
-    ``` 
-3. #### This is a Git repository. Pull most recent version from main:
-    ```  
-   sudo git checkout main
-   sudo git pull
-    ``` 
-4. #### Maven is already installed, so you can build new jar with maven:
+* REST API served over [Gateway](https://github.com/ProductDock/rbc-library-gateway)
 
-   **!!! Important: You need to switch to a root user !!!**
+### Security
 
-   _Why? Otherwise it will download entire .m2 repository to a home folder of a user who made SSH connection._
-    ```  
-    sudo su
-   ../apache-maven-3.8.5/bin/mvn package -P prod
-    ``` 
-5. #### Restart rbc-library-rental-vm to run a new jar
+* Protected by the User Profile JWT token issued by the [PD Library User Profile](https://github.com/ProductDock/rbc-library-user-profiles) service
 
-   **rbc-library-rental-vm** is configured with startup-script. Startup script already contains instructions for running
-   the jar:
+### Dependencies
 
-   **Startup-script content:**
+1. Mongo database
+2. Kafka
 
-    ```
-    #! /bin/bash
-    SPRING_DATASOURCE_PASSWORD=<REAL_PASS_HERE> java -jar /home/pd-library/rbc-library-rental/target/rbc-library-rental-0.0.1-SNAPSHOT.jar
-    ```
+Dependencies can be run from [Infrastructure](https://github.com/ProductDock/rbc-library-infrastructure) project,
+by [docker compose](https://docs.docker.com/compose/) scripts.
+
+### Build and run locally
+
+Locally, application can be started in two ways.
+
+* From source code
+* From latest published Docker image
+
+#### From source code (Run from IntelliJ)
+
+_Suitable when developing features in this project._
+
+1. Set [Spring Profile](https://docs.spring.io/spring-boot/docs/1.1.4.RELEASE/reference/html/boot-features-profiles.html) to local by following these steps:
+- Open "Edit Configurations"
+- in the section "Library Application" find the field "Program arguments";
+- enter the following command: --spring.profiles.active=local
+2. Press Run or Debug Library Application
+
+#### From latest published Docker image
+
+_Suitable when developing features in other projects, and you need this one as a dependency._
+
+For this purpose see [Infrastructure](https://github.com/ProductDock/rbc-library-infrastructure) project.  
